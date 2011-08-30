@@ -1,37 +1,15 @@
 <?php
 /*
 *	Filename: bb.admin.add,match.php
-*	Version: 1.2
 *	Description: Page used to record a matches details.
 */
-/* -- Change History --
-20080311 - 0.1b - Initial creation of file. got as far as working out the layout
-20080312 - 1.0b - After 4+ hours of coding it is working shape. there are two bugs that can wait until tommrrow!
-20080314 - 1.1b - Fixed he remaining bugs. one was he date was he wrong way round, the oher was a mispelling in the SQL?!
-20080316 - 1.2b - Updated a query to account for a DB change.
-20080318 - 1.3b - Fixed the error where the join table was not getting filled out correctly
-20080402 - 1.4b - Edited page so you can select a location/stadium that this match took place in.
-		   1.5b - Match result for teams (W,L or D) is automaticlly generated!
-20080409 - 1.6b - changed it so todays date is the default.
-20080411 - 1.7b - Modified bb_match sql string to take into account db modification (cas totals for easy ref)
-20080427 - 1.8b - Added the option to select the match from a fixture (note fixture is marked s complete but if there is a bracket then it doesnt show!).
-20080428 - 1.8.1b - Corrected small bug that stopped matches being submotted manually!
-		 - 1.9b - Finally fixed the calculate league points bug. it was a lot more complicated then I thought
-		 - 1.9.1b - extended the size of the number that can be entered into winnings
-20080730 - 1.0 - bump to Version 1 for public release.
-20090819 - 1.1 - linked to add.match_player once a match has been submitted. date of match also defualts back to the previous Thursday. see [58] for more details!
-20091128 - 1.1.1 - escaped the text that goes in the post to prevent certain chars messing up the insert of the post into the DB (tracker [204])
-20100308 - 1.2 - Updated the prefix for the custom bb tables in the Database (tracker [224])
-
-*/
-
 
 //Check the file is not being accessed directly
 if (!function_exists('add_action')) die('You cannot run this file directly. Naughty Person');
 ?>
 <div class="wrap">
 	<h2>Record a match</h2>
-	<p>Use the following page to Record a match that took place in the league.</p>
+	<p>Use the following page to record the details of a match that took place in the league.</p>
 
 <?php
 if (isset($_POST['bblm_match_add'])) {
@@ -291,14 +269,29 @@ if ($comp['round']) {
 
 
 //Generate the team_comp update queries
-if ($comp['round']) {
-	//If the comp rounds the points then there is a slightly differnt sql string (in determining points values)
-	$tAcompsql = 'UPDATE `'.$wpdb->prefix.'team_comp` SET `tc_played` = tc_played+1, `tc_'.$bblm_safe_input['tAres'].'` = tc_'.$bblm_safe_input['tAres'].'+1, `tc_tdfor` = tc_tdfor+'.$bblm_safe_input['tAtd'].', `tc_tdagst` = tc_tdagst+'.$bblm_safe_input['tBtd'].', `tc_casfor` = tc_casfor+'.$bblm_safe_input['tAcas'].', `tc_casagst` = tc_casagst+'.$bblm_safe_input['tBcas'].', `tc_int` = tc_int+'.$bblm_safe_input['tAint'].', `tc_comp` = tc_comp+'.$bblm_safe_input['tAcomp'].', `tc_points` = '.$tApointsinc.' WHERE t_id = '.$teamA['id'].' AND c_id = '.$bblm_safe_input['mcomp'].' AND div_id = '.$bblm_safe_input['mdiv'];
-	$tBcompsql = 'UPDATE `'.$wpdb->prefix.'team_comp` SET `tc_played` = tc_played+1, `tc_'.$bblm_safe_input['tBres'].'` = tc_'.$bblm_safe_input['tBres'].'+1, `tc_tdfor` = tc_tdfor+'.$bblm_safe_input['tBtd'].', `tc_tdagst` = tc_tdagst+'.$bblm_safe_input['tAtd'].', `tc_casfor` = tc_casfor+'.$bblm_safe_input['tBcas'].', `tc_casagst` = tc_casagst+'.$bblm_safe_input['tAcas'].', `tc_int` = tc_int+'.$bblm_safe_input['tBint'].', `tc_comp` = tc_comp+'.$bblm_safe_input['tBcomp'].', `tc_points` = '.$tBpointsinc.' WHERE t_id = '.$teamB['id'].' AND c_id = '.$bblm_safe_input['mcomp'].' AND div_id = '.$bblm_safe_input['mdiv'];
+if (13 == $bblm_safe_input['mdiv']) {
+	//This is a cross Divisional game. As a result, the original home divisions need to be used rather then the generic "Cross Divisions table"
+	if ($comp['round']) {
+		//If the comp rounds the points then there is a slightly differnt sql string (in determining points values)
+		$tAcompsql = 'UPDATE `'.$wpdb->prefix.'team_comp` SET `tc_played` = tc_played+1, `tc_'.$bblm_safe_input['tAres'].'` = tc_'.$bblm_safe_input['tAres'].'+1, `tc_tdfor` = tc_tdfor+'.$bblm_safe_input['tAtd'].', `tc_tdagst` = tc_tdagst+'.$bblm_safe_input['tBtd'].', `tc_casfor` = tc_casfor+'.$bblm_safe_input['tAcas'].', `tc_casagst` = tc_casagst+'.$bblm_safe_input['tBcas'].', `tc_int` = tc_int+'.$bblm_safe_input['tAint'].', `tc_comp` = tc_comp+'.$bblm_safe_input['tAcomp'].', `tc_points` = '.$tApointsinc.' WHERE t_id = '.$teamA['id'].' AND c_id = '.$bblm_safe_input['mcomp'].' AND div_id = '.$_POST['tAcddiv'];
+		$tBcompsql = 'UPDATE `'.$wpdb->prefix.'team_comp` SET `tc_played` = tc_played+1, `tc_'.$bblm_safe_input['tBres'].'` = tc_'.$bblm_safe_input['tBres'].'+1, `tc_tdfor` = tc_tdfor+'.$bblm_safe_input['tBtd'].', `tc_tdagst` = tc_tdagst+'.$bblm_safe_input['tAtd'].', `tc_casfor` = tc_casfor+'.$bblm_safe_input['tBcas'].', `tc_casagst` = tc_casagst+'.$bblm_safe_input['tAcas'].', `tc_int` = tc_int+'.$bblm_safe_input['tBint'].', `tc_comp` = tc_comp+'.$bblm_safe_input['tBcomp'].', `tc_points` = '.$tBpointsinc.' WHERE t_id = '.$teamB['id'].' AND c_id = '.$bblm_safe_input['mcomp'].' AND div_id = '.$_POST['tBcddiv'];
+	}
+	else {
+		$tAcompsql = 'UPDATE `'.$wpdb->prefix.'team_comp` SET `tc_played` = tc_played+1, `tc_'.$bblm_safe_input['tAres'].'` = tc_'.$bblm_safe_input['tAres'].'+1, `tc_tdfor` = tc_tdfor+'.$bblm_safe_input['tAtd'].', `tc_tdagst` = tc_tdagst+'.$bblm_safe_input['tBtd'].', `tc_casfor` = tc_casfor+'.$bblm_safe_input['tAcas'].', `tc_casagst` = tc_casagst+'.$bblm_safe_input['tBcas'].', `tc_int` = tc_int+'.$bblm_safe_input['tAint'].', `tc_comp` = tc_comp+'.$bblm_safe_input['tAcomp'].', `tc_points` = tc_points+'.$tApointsinc.' WHERE t_id = '.$teamA['id'].' AND c_id = '.$bblm_safe_input['mcomp'].' AND div_id = '.$_POST['tAcddiv'];
+		$tBcompsql = 'UPDATE `'.$wpdb->prefix.'team_comp` SET `tc_played` = tc_played+1, `tc_'.$bblm_safe_input['tBres'].'` = tc_'.$bblm_safe_input['tBres'].'+1, `tc_tdfor` = tc_tdfor+'.$bblm_safe_input['tBtd'].', `tc_tdagst` = tc_tdagst+'.$bblm_safe_input['tAtd'].', `tc_casfor` = tc_casfor+'.$bblm_safe_input['tBcas'].', `tc_casagst` = tc_casagst+'.$bblm_safe_input['tAcas'].', `tc_int` = tc_int+'.$bblm_safe_input['tBint'].', `tc_comp` = tc_comp+'.$bblm_safe_input['tBcomp'].', `tc_points` = tc_points+'.$tBpointsinc.' WHERE t_id = '.$teamB['id'].' AND c_id = '.$bblm_safe_input['mcomp'].' AND div_id = '.$_POST['tBcddiv'];
+	}
 }
 else {
-	$tAcompsql = 'UPDATE `'.$wpdb->prefix.'team_comp` SET `tc_played` = tc_played+1, `tc_'.$bblm_safe_input['tAres'].'` = tc_'.$bblm_safe_input['tAres'].'+1, `tc_tdfor` = tc_tdfor+'.$bblm_safe_input['tAtd'].', `tc_tdagst` = tc_tdagst+'.$bblm_safe_input['tBtd'].', `tc_casfor` = tc_casfor+'.$bblm_safe_input['tAcas'].', `tc_casagst` = tc_casagst+'.$bblm_safe_input['tBcas'].', `tc_int` = tc_int+'.$bblm_safe_input['tAint'].', `tc_comp` = tc_comp+'.$bblm_safe_input['tAcomp'].', `tc_points` = tc_points+'.$tApointsinc.' WHERE t_id = '.$teamA['id'].' AND c_id = '.$bblm_safe_input['mcomp'].' AND div_id = '.$bblm_safe_input['mdiv'];
-	$tBcompsql = 'UPDATE `'.$wpdb->prefix.'team_comp` SET `tc_played` = tc_played+1, `tc_'.$bblm_safe_input['tBres'].'` = tc_'.$bblm_safe_input['tBres'].'+1, `tc_tdfor` = tc_tdfor+'.$bblm_safe_input['tBtd'].', `tc_tdagst` = tc_tdagst+'.$bblm_safe_input['tAtd'].', `tc_casfor` = tc_casfor+'.$bblm_safe_input['tBcas'].', `tc_casagst` = tc_casagst+'.$bblm_safe_input['tAcas'].', `tc_int` = tc_int+'.$bblm_safe_input['tBint'].', `tc_comp` = tc_comp+'.$bblm_safe_input['tBcomp'].', `tc_points` = tc_points+'.$tBpointsinc.' WHERE t_id = '.$teamB['id'].' AND c_id = '.$bblm_safe_input['mcomp'].' AND div_id = '.$bblm_safe_input['mdiv'];
+	//This is not a cross divisional game. the div passed through the form is fine
+	if ($comp['round']) {
+		//If the comp rounds the points then there is a slightly differnt sql string (in determining points values)
+		$tAcompsql = 'UPDATE `'.$wpdb->prefix.'team_comp` SET `tc_played` = tc_played+1, `tc_'.$bblm_safe_input['tAres'].'` = tc_'.$bblm_safe_input['tAres'].'+1, `tc_tdfor` = tc_tdfor+'.$bblm_safe_input['tAtd'].', `tc_tdagst` = tc_tdagst+'.$bblm_safe_input['tBtd'].', `tc_casfor` = tc_casfor+'.$bblm_safe_input['tAcas'].', `tc_casagst` = tc_casagst+'.$bblm_safe_input['tBcas'].', `tc_int` = tc_int+'.$bblm_safe_input['tAint'].', `tc_comp` = tc_comp+'.$bblm_safe_input['tAcomp'].', `tc_points` = '.$tApointsinc.' WHERE t_id = '.$teamA['id'].' AND c_id = '.$bblm_safe_input['mcomp'].' AND div_id = '.$bblm_safe_input['mdiv'];
+		$tBcompsql = 'UPDATE `'.$wpdb->prefix.'team_comp` SET `tc_played` = tc_played+1, `tc_'.$bblm_safe_input['tBres'].'` = tc_'.$bblm_safe_input['tBres'].'+1, `tc_tdfor` = tc_tdfor+'.$bblm_safe_input['tBtd'].', `tc_tdagst` = tc_tdagst+'.$bblm_safe_input['tAtd'].', `tc_casfor` = tc_casfor+'.$bblm_safe_input['tBcas'].', `tc_casagst` = tc_casagst+'.$bblm_safe_input['tAcas'].', `tc_int` = tc_int+'.$bblm_safe_input['tBint'].', `tc_comp` = tc_comp+'.$bblm_safe_input['tBcomp'].', `tc_points` = '.$tBpointsinc.' WHERE t_id = '.$teamB['id'].' AND c_id = '.$bblm_safe_input['mcomp'].' AND div_id = '.$bblm_safe_input['mdiv'];
+	}
+	else {
+		$tAcompsql = 'UPDATE `'.$wpdb->prefix.'team_comp` SET `tc_played` = tc_played+1, `tc_'.$bblm_safe_input['tAres'].'` = tc_'.$bblm_safe_input['tAres'].'+1, `tc_tdfor` = tc_tdfor+'.$bblm_safe_input['tAtd'].', `tc_tdagst` = tc_tdagst+'.$bblm_safe_input['tBtd'].', `tc_casfor` = tc_casfor+'.$bblm_safe_input['tAcas'].', `tc_casagst` = tc_casagst+'.$bblm_safe_input['tBcas'].', `tc_int` = tc_int+'.$bblm_safe_input['tAint'].', `tc_comp` = tc_comp+'.$bblm_safe_input['tAcomp'].', `tc_points` = tc_points+'.$tApointsinc.' WHERE t_id = '.$teamA['id'].' AND c_id = '.$bblm_safe_input['mcomp'].' AND div_id = '.$bblm_safe_input['mdiv'];
+		$tBcompsql = 'UPDATE `'.$wpdb->prefix.'team_comp` SET `tc_played` = tc_played+1, `tc_'.$bblm_safe_input['tBres'].'` = tc_'.$bblm_safe_input['tBres'].'+1, `tc_tdfor` = tc_tdfor+'.$bblm_safe_input['tBtd'].', `tc_tdagst` = tc_tdagst+'.$bblm_safe_input['tAtd'].', `tc_casfor` = tc_casfor+'.$bblm_safe_input['tBcas'].', `tc_casagst` = tc_casagst+'.$bblm_safe_input['tAcas'].', `tc_int` = tc_int+'.$bblm_safe_input['tBint'].', `tc_comp` = tc_comp+'.$bblm_safe_input['tBcomp'].', `tc_points` = tc_points+'.$tBpointsinc.' WHERE t_id = '.$teamB['id'].' AND c_id = '.$bblm_safe_input['mcomp'].' AND div_id = '.$bblm_safe_input['mdiv'];
+	}
 }
 
 //Run the team_comp update queries
@@ -499,7 +492,17 @@ if(isset($_POST['bblm_matchcomp_select'])) {
 
 <tr><td>Teams</td>
 	<?php
-	$existingteamssql = "SELECT T.t_name, T.t_id FROM ".$wpdb->prefix."team T, ".$wpdb->prefix."team_comp C WHERE T.t_id = C.t_id AND C.c_id = ".$_POST['bblm_mcomp']." AND C.div_id = ".$_POST['bblm_mdiv'];
+
+	if (13 == $_POST['bblm_mdiv']) {
+		//Cross Division has been selected, All the teams in the compeition are slected
+		$existingteamssql = "SELECT T.t_name, T.t_id FROM ".$wpdb->prefix."team T, ".$wpdb->prefix."team_comp C WHERE T.t_id = C.t_id AND C.c_id = ".$_POST['bblm_mcomp'];
+	}
+	else {
+		//Just select the temas in this division
+		$existingteamssql = "SELECT T.t_name, T.t_id FROM ".$wpdb->prefix."team T, ".$wpdb->prefix."team_comp C WHERE T.t_id = C.t_id AND C.c_id = ".$_POST['bblm_mcomp']." AND C.div_id = ".$_POST['bblm_mdiv'];
+	}
+
+
 	if ($extteam = $wpdb->get_results($existingteamssql)) {
 		//copy for later. should be replaced with a reset object or something.
 		$extteam2 = $extteam;
@@ -542,8 +545,32 @@ if(isset($_POST['bblm_matchcomp_select'])) {
 <?php
 } //end of if fixture, else match
 //now normal flow of page resumes.
-?>
 
+	if (13 == $_POST['bblm_mdiv'] || 13 == $div_id) {
+		//if this is a cross-divisional game then I need the admin to input the actual divisions the teams are in!. Not ideal
+?>
+<tr><td><strong>Original Division</strong></td><td>	  <select name="tAcddiv" id="tAcddiv">
+	<?php
+	$divsql = 'SELECT div_id, div_name FROM '.$wpdb->prefix.'division ORDER BY div_id';
+	if ($divs = $wpdb->get_results($divsql)) {
+		foreach ($divs as $div) {
+			print("<option value=\"".$div->div_id."\">".$div->div_name."</option>\n");
+		}
+	}
+	?>
+	</select></td><td>Vs</td><td>	  <select name="tBcddiv" id="tBcddiv">
+	<?php
+	$divsql = 'SELECT div_id, div_name FROM '.$wpdb->prefix.'division ORDER BY div_id';
+	if ($divs = $wpdb->get_results($divsql)) {
+		foreach ($divs as $div) {
+			print("<option value=\"".$div->div_id."\">".$div->div_name."</option>\n");
+		}
+	}
+	?>
+	</select></td><td class="comment">The Divisions the teams actually belong in!</td></tr>
+<?
+	}
+?>
 
 
 <tr><td>Score:</td><td><input name="tAtd" type="text" size="3" maxlength="2" value="0"></td><td>Vs</td><td><input name="tBtd" type="text" size="3" maxlength="2" value="0"></td><td class="comment">The FInal Score of the teams</td></tr>
@@ -582,7 +609,7 @@ if(isset($_POST['bblm_matchcomp_select'])) {
 ?>
 
 	<p class="submit">
-	<input type="submit" name="bblm_match_add" tabindex="4" value="Submit match details" title="submit match details"/>
+	<input type="submit" name="bblm_match_add" value="Submit match details" title="submit match details" class="button-primary"/>
 	</p>
 
 	</form>
@@ -596,7 +623,7 @@ else if (!isset($finished)) {
 ?>
 	<form name="bblm_addmatch" method="post" id="post">
 
-	<p>There are two ways of recording a match details, you can select the details from a fixture, or select the Competition and division that the match took place in:</p>
+	<p>There are two ways of recording details of a match; You can select the details from a fixture that has been entered, or select the Competition and division that the match took place in:</p>
 
 	<p><input type="radio" value="M" name="bblm_mtype" checked=\"yes\"> New Match - Select a Competition and Division below:</p>
 	<fieldset id='addmatchdiv'><legend>Select a Competition</legend>
@@ -615,7 +642,7 @@ else if (!isset($finished)) {
 	?>
 	</select>
 
-	  <label for="bblm_mdiv" class="selectit">Division:</label>
+	  <label for="bblm_mdiv">Division:</label>
 	  <select name="bblm_mdiv" id="bblm_mdiv">
 	<?php
 	$divsql = 'SELECT div_id, div_name FROM '.$wpdb->prefix.'division ORDER BY div_id';
@@ -630,7 +657,7 @@ else if (!isset($finished)) {
 
 <p><input type="radio" value="F" name="bblm_mtype"> Fixture - Please select the fixture from the below list:</p>
 	<fieldset id='selectfixturediv'><legend>Select a Fixture</legend>
-	  <label for="bblm_fid" class="selectit">Fixture:</label>
+	  <label for="bblm_fid">Fixture:</label>
 	  <select name="bblm_fid" id="bblm_fid">
 	<?php
 	$fixturesql = 'SELECT F.f_id, UNIX_TIMESTAMP(F.f_date) AS mdate, C.c_name, D.div_name, T.t_name AS TA, R.t_name AS TB FROM '.$wpdb->prefix.'fixture F, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'division D, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'team R WHERE F.f_teamA = T.t_id AND F.f_teamB = R.t_id AND F.c_id = C.c_id AND F.div_id = D.div_id AND F.f_complete = 0 ORDER BY mdate ASC, F.c_id DESC, F.div_id DESC';
@@ -640,14 +667,14 @@ else if (!isset($finished)) {
 		}
 	}
 	else {
-		print("<option vlaue=\"x\">There are currently no fixtures lined up, please use the above option</option>\n");
+		print("<option vlaue=\"x\">There are currently no fixtures lined up, please use the above option for manual entry.</option>\n");
 	}
 	?>
 	</select>
 
 	</fieldset>
 	<p class="submit">
-	<input type="submit" name="bblm_matchcomp_select" tabindex="4" value="Continue" title="Continue with selection"/>
+	<input type="submit" name="bblm_matchcomp_select" value="Continue" title="Continue with selection" class="button-primary"/>
 	</p>
 	</form>
 <?php

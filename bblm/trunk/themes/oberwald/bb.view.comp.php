@@ -4,37 +4,7 @@ Template Name: View Competition
 */
 /*
 *	Filename: bb.view.comp.php
-*	Version: 1.5
-*	Description: Page template to view a comps details.
-*/
-/* -- Change History --
-20080317 - 0.1a - initial creation with Alex here!
-20080429 - 0.1b - started from scratch. have a working tourney brackets and fixed league tables and have impleented matches.
-20080501 - 0.2b - added fixtures and matches to the page
-20080505 - 0.3b - Added team and player stats to the page. team stats is a bit messy.
-20080603 - 0.4b - modified the stat SQL to ensure that errors are handled better
-20060604 - 0.5b - Fixed te bug where the divisional standings where getting split (because the output wasnt ordered by div!)
-20060701 - 0.6b - Some major re-work adding zebra stripes, table classes etc
-20080702 - 0.6.1b - added some thead and tbody tags to the sortable tables
-20080707 - 0.6.2b - Fixed seom validation errors
-20080717 - 0.7b - swapped CA and CF, improved sidebar SQL, general HTML clean up
-20080723 - 0.8b - added support for 16 team tourney
-20080730 - 1.0 - bump to Version 1 for public release.
-20080814 - 1.1 - fixed the date chacking below as the upcoming/active/recent status for comps was incorrect (formed 1.0.1)
-20090110 - 1.1.1 - fixed the html markup on the fixtures table to bring it into line with the fixtres page
-20090606 - 1.1.2 - editied the teams summery to remove the "To Be Determined" Team
-		 - 1.1.2r1 - Began bulk changes to the page. Corrected spelling error ("the winners where..."), implemented the DYK code and fixed a bit that made the headings of the standings teables incorrect..
-		 		   - as a trial, I converted the top players (on SPP) to use the new team_GUID field)
-20090614 - 1.1.2r2 - Ammended the Top player SQL so it works. I eliminated 3 tables! (a wp2bb, dev posts and '.$wpdb->prefix.'comp [as it was only checking for a c.counts =1 which is irellivent here!])
-				   - I converted the top player lists into a Loop
-				   - I refined the SQL for the player stats
-				   - I refined the SQL for the Devision rankings
-		 - 1.2 - Added additional reporting params and called it complete for now!
-20090825 - 1.3 - Added the Top Killer this season to the top players list. This is placed outside the loop
-20090830 - 1.4 - Added the highest attendance
-20090831 - 1.4.1 - fixed a mistake with the highest attendenca. the fina;.semi bit was showing all the time!
-20091129 - 1.4.2 - Added condition checking around the highest attendance so that it checked that a match had been played in that cat (nonsemi of final/semi of final) before output (tracker [210])
-20100123 - 1.5 - Updated the prefix for the custom bb tables in the Database (tracker [225])
+*	Description: Page template to view a competitions details.
 */
 ?>
 <?php get_header(); ?>
@@ -202,7 +172,7 @@ Template Name: View Competition
 					//We have something other than a tournament. Begin normal printout
 					//May need to split this in the future, depending on league requirements
 					//$standingssql = 'SELECT P.post_title, P.guid, C.*, D.div_name, SUM(C.tc_tdfor-C.tc_tdagst) AS TDD, SUM(C.tc_casfor-C.tc_casagst) AS CASD FROM '.$wpdb->posts.' P, '.$wpdb->prefix.'bb2wp J, '.$wpdb->prefix.'team_comp C, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'division D WHERE T.t_show = 1 AND C.div_id = D.div_id AND T.t_id = C.t_id AND T.t_id = J.tid AND J.prefix = \'t_\' AND J.pid = P.ID AND C.c_id = '.$cd->c_id.' GROUP BY C.t_id ORDER BY D.div_id ASC, C.tc_points DESC, TDD DESC, CASD DESC';
-					$standingssql = 'SELECT T.t_name, T.t_guid, C.*, D.div_name, SUM(C.tc_tdfor-C.tc_tdagst) AS TDD, SUM(C.tc_casfor-C.tc_casagst) AS CASD FROM '.$wpdb->prefix.'team_comp C, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'division D WHERE T.t_show = 1 AND C.div_id = D.div_id AND T.t_id = C.t_id AND C.c_id = '.$cd->c_id.' GROUP BY C.t_id ORDER BY D.div_id ASC, C.tc_points DESC, TDD DESC, CASD DESC, C.tc_tdfor DESC, C.tc_casfor DESC, T.t_name ASC';
+					$standingssql = 'SELECT T.t_name, T.t_guid, C.*, D.div_name, D.div_id, SUM(C.tc_tdfor-C.tc_tdagst) AS TDD, SUM(C.tc_casfor-C.tc_casagst) AS CASD FROM '.$wpdb->prefix.'team_comp C, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'division D WHERE T.t_show = 1 AND C.div_id = D.div_id AND T.t_id = C.t_id AND C.c_id = '.$cd->c_id.' GROUP BY C.t_id ORDER BY D.div_id ASC, C.tc_points DESC, TDD DESC, CASD DESC, C.tc_tdfor DESC, C.tc_casfor DESC, T.t_name ASC';
 					if ($standings = $wpdb->get_results($standingssql)) {
 						$is_first_div = 1;
 						$zebracount = 1;
@@ -213,7 +183,15 @@ Template Name: View Competition
 									print("</table>\n");
 									$zebracount = 1;
 								}
-								print("<h4>$stand->div_name</h4>\n<table>\n <tr>\n  <th>Team</th>\n  <th>Pld</th>\n  <th>W</th>\n  <th>D</th>\n  <th>L</th>\n  <th>TF</th>\n  <th>TA</th>\n  <th>TD</th>\n  <th>CF</th>\n  <th>CA</th>\n  <th>CD</th>\n  <th>PTS</th>\n </tr>\n");
+								//cross division hardcode
+								if (14 == $stand->div_id) {
+									print("<h3>** New World Confrence (NWC) **</h3>");
+								}
+								if (16 == $stand->div_id) {
+									print("<h3>** Old World Confrence (OWC) **</h3>");
+								}
+								//end cross division hard code
+								print("<h4>".$stand->div_name."</h4>\n<table>\n <tr>\n  <th>Team</th>\n  <th>Pld</th>\n  <th>W</th>\n  <th>D</th>\n  <th>L</th>\n  <th>TF</th>\n  <th>TA</th>\n  <th>TD</th>\n  <th>CF</th>\n  <th>CA</th>\n  <th>CD</th>\n  <th>PTS</th>\n </tr>\n");
 							}
 							$lastdiv = $stand->div_name;
 							if ($zebracount % 2) {
