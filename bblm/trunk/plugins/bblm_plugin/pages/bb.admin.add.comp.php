@@ -1,23 +1,7 @@
 <?php
 /*
 *	Filename: bb.admin.add.comp.php
-*	Version: 1.1
-*	Description: Page used to add a new Competition to the BBLM.
-*/
-/* -- Change History --
-20080310 - 1.0b - Initial creation of file.
-20080311 - 1.1b - Corrected one of the sql so correct Prefix was inserted!
-20080407 - 1.2b - Ammended input to take into account new c_showstandings field in db
-				- Added a option for comp_counts
-				- added general attributes such as maxlength
-				- Changed the bblm_pround from a binary input box to a checkbox
-				- moved the date and set the default to today
-				- modified the sql to take this into acount.
-20080425 - 1.3b - modified the sql input to rflect changes to '.$wpdb->prefix.'comp table.
-20080719 - 1.3.1b - modified the create SQL so that the standings are not shwon by default.
-20080730 - 1.0 - bump to Version 1 for public release.
-20100123 - 1.1 - Updated the prefix for the custom bb tables in the Database (tracker [224])
-
+*	Description: Page used to add a new Competition to the League.
 */
 
 //Check the file is not being accessed directly
@@ -25,134 +9,57 @@ if (!function_exists('add_action')) die('You cannot run this file directly. Naug
 
 ?>
 <div class="wrap">
-	<h2>Start a competition</h2>
-	<p>Use the following form to Start a new competition in the HDWSBBL.</p>
+	<h2>New Competition</h2>
+	<p>Use the following page to start a new competition in the League.</p>
 
 <?php
 if(isset($_POST['bblm_comp_submit'])) {
-/*	print("<pre>");
-	print_r($_POST);
-	print("</pre>");
-	print("<hr />");*/
-
-
-	$bblm_safe_input = array();
-
-	//think about a for each
-	if (get_magic_quotes_gpc()) {
-		$_POST['bblm_cname'] = stripslashes($_POST['bblm_cname']);
-		$_POST['bblm_cdesc'] = stripslashes($_POST['bblm_cdesc']);
-		$_POST['bblm_sname'] = stripslashes($_POST['bblm_sname']);
-
-	}
-
-	$bblm_safe_input['cname'] = $wpdb->escape($_POST['bblm_cname']);
-	$bblm_safe_input['cdesc'] = $wpdb->escape($_POST['bblm_cdesc']);
-	$bblm_safe_input['sname'] = $wpdb->escape($_POST['bblm_sname']);
-
-
-	$bblm_safe_input['series'] = $_POST['bblm_cseries'];
-	$bblm_safe_input['season'] = $_POST['bblm_cseason'];
-	$bblm_safe_input['type'] = $_POST['bblm_ctype'];
-	$bblm_safe_input['pwin'] = $_POST['bblm_pwin'];
-	$bblm_safe_input['ploss'] = $_POST['bblm_ploss'];
-	$bblm_safe_input['pdraw'] = $_POST['bblm_pdraw'];
-	$bblm_safe_input['ptd'] = $_POST['bblm_ptd'];
-	$bblm_safe_input['pcas'] = $_POST['bblm_pcas'];
-	$bblm_safe_input['csdate'] = $_POST['bblm_csdate'] ." 00:00:01";
-
-	//Set the default "on" result from a checkbox to a 1
-	if (on == $_POST['bblm_pround']) {
-		$_POST['bblm_pround'] = 1;
-	}
-	else {
-		$_POST['bblm_pround'] = 0;
-	}
-	$bblm_safe_input['pround'] = $_POST['bblm_pround'];
-	$bblm_safe_input['counts'] = $_POST['bblm_counts'];
-
-	//generate time NOW. (for page)
-	$bblm_date_now = date('Y-m-j H:i:59');
 
 	//pull parent page from somewhere
 	$options = get_option('bblm_config');
 	$bblm_page_parent = htmlspecialchars($options['page_comp'], ENT_QUOTES);
 
-	//filter page body
-	$bblm_removable = array("<pre>","</pre>","<p>","&nbsp;");
-	$bblm_page_content = $bblm_safe_input['cdesc'];
-	$bblm_page_content = str_replace($bblm_removable,"",$bblm_page_content);
-	$bblm_page_content = str_replace("</p>","\n\n",$bblm_page_content);
+	$my_post = array(
+		'post_title' => wp_filter_nohtml_kses($_POST['bblm_cname']),
+		'post_content' => wp_filter_kses($_POST['bblm_cdesc']),
+		'post_type' => 'page',
+		'post_status' => 'publish',
+		'comment_status' => 'closed',
+		'ping_status' => 'closed',
+		'post_parent' => $bblm_page_parent
+	);
+	if ($bblm_submission = wp_insert_post( $my_post )) {
+		add_post_meta($bblm_submission, '_wp_page_template', 'bb.view.comp.php');
 
-	//snaitise page title
-	$bblm_page_title = $bblm_safe_input['cname'];
+		$bblm_csdate = $_POST['bblm_csdate'] ." 17:00:01";
+		$bblmdatasql = 'INSERT INTO `'.$wpdb->prefix.'comp` (`c_id`, `c_name`, `series_id`, `sea_id`, `ct_id`, `c_active`, `c_counts`, `c_pW`, `c_pL`, `c_pD`, `c_ptd`, `c_pcas`, `c_pround`, `c_sdate`, `c_edate`, `c_showstandings`, `c_show`, `type_id`) VALUES (\'\', \''.wp_filter_nohtml_kses($_POST['bblm_cname']).'\', \''.$_POST['bblm_cseries'].'\', \''.$_POST['bblm_cseason'].'\', \''.$_POST['bblm_ctype'].'\', \'1\', \''.$_POST['bblm_counts'].'\', \''.$_POST['bblm_pwin'].'\', \''.$_POST['bblm_ploss'].'\', \''.$_POST['bblm_pdraw'].'\', \''.$_POST['bblm_ptd'].'\', \''.$_POST['bblm_pcas'].'\', \''.$_POST['bblm_pround'].'\', \''.$bblm_csdate.'\', \'0000-00-00 00:00:00\', \'0\', \'1\', \'1\')';
+		$wpdb->query($bblmdatasql);
 
-	//convert page title to slug
-	$bblm_page_slug = sanitize_title($bblm_safe_input['sname']);
+		$bblmmappingsql = 'INSERT INTO `'.$wpdb->prefix.'bb2wp` (`bb2wp_id`, `tid`, `pid`, `prefix`) VALUES (\'\',\''.$wpdb->insert_id.'\', \''.$bblm_submission.'\', \'c_\')';
+		$wpdb->query($bblmmappingsql);
 
-	//generate GUID
-	$bblm_guid = get_bloginfo('wpurl');
-	$bblm_guid .= "/competitions/";
-	$bblm_guid .= $bblm_page_slug;
+		//Add a new Term to the database
+		wp_insert_term(
+			wp_filter_nohtml_kses($_POST['bblm_cname']), // the term
+			'post_competitions' // the taxonomy
+		);
 
-$postsql = 'INSERT INTO '.$wpdb->posts.' (`ID`, `post_author`, `post_date`, `post_date_gmt`, `post_content`, `post_title`, `post_category`, `post_excerpt`, `post_status`, `comment_status`, `ping_status`, `post_password`, `post_name`, `to_ping`, `pinged`, `post_modified`, `post_modified_gmt`, `post_content_filtered`, `post_parent`, `guid`, `menu_order`, `post_type`, `post_mime_type`, `comment_count`) VALUES (\'\', \'1\', \''.$bblm_date_now.'\', \''.$bblm_date_now.'\', \''.$bblm_page_content.'\', \''.$bblm_page_title.'\', \'0\', \'\', \'publish\', \'closed\', \'closed\', \'\', \''.$bblm_page_slug.'\', \'\', \'\', \''.$bblm_date_now.'\', \''.$bblm_date_now.'\', \'\', \''.$bblm_page_parent.'\', \''.$bblm_guid.'\', \'0\', \'page\', \'\', \'0\')';
-
-
-$compsql = 'INSERT INTO `'.$wpdb->prefix.'comp` (`c_id`, `c_name`, `series_id`, `sea_id`, `ct_id`, `c_active`, `c_counts`, `c_pW`, `c_pL`, `c_pD`, `c_ptd`, `c_pcas`, `c_pround`, `c_sdate`, `c_edate`, `c_showstandings`, `c_show`, `type_id`) VALUES (\'\', \''.$bblm_page_title.'\', \''.$bblm_safe_input['series'].'\', \''.$bblm_safe_input['season'].'\', \''.$bblm_safe_input['type'].'\', \'1\', \''.$bblm_safe_input['counts'].'\', \''.$bblm_safe_input['pwin'].'\', \''.$bblm_safe_input['ploss'].'\', \''.$bblm_safe_input['pdraw'].'\', \''.$bblm_safe_input['ptd'].'\', \''.$bblm_safe_input['pcas'].'\', \''.$bblm_safe_input['pround'].'\', \''.$bblm_safe_input['csdate'].'\', \'0000-00-00 00:00:00\', \'0\', \'1\', \'1\')';
-//print("<p>".$compsql."</p>");
-
-
-if (FALSE !== $wpdb->query($postsql)) {
-	$bblm_post_number = $wpdb->insert_id;//captured from SQL string
-}
-else {
-	$wpdb->print_error();
-}
-
-$postmetasql = 'INSERT INTO '.$wpdb->postmeta.' (`meta_id`, `post_id`, `meta_key`, `meta_value`) VALUES (\'\', \''.$bblm_post_number.'\', \'_wp_page_template\', \'bb.view.comp.php\')';
-
-if (FALSE !== $wpdb->query($postmetasql)) {
-	$sucess = TRUE;
-}
-else {
-	$wpdb->print_error();
-}
-
-
-//compsql moved up top!
-
-if (FALSE !== $wpdb->query($compsql)) {
-	$bblm_comp_number = $wpdb->insert_id;//captured from SQL string
-}
-else {
-	$wpdb->print_error();
-}
-
-$joinsql = 'INSERT INTO `'.$wpdb->prefix.'bb2wp` (`bb2wp_id`, `tid`, `pid`, `prefix`) VALUES (\'\', \''.$bblm_comp_number.'\', \''.$bblm_post_number.'\', \'c_\')';
-
-if (FALSE !== $wpdb->query($joinsql)) {
-	$sucess = TRUE;
-}
-else {
-	$wpdb->print_error();
-}
-
-// Now we flush the re-write rules to make them regenerate the rules to include our new page.
-	$wp_rewrite->flush_rules();
-
+		$success = 1;
+		$addattempt = 1;
+	} //end of if post insertion was successful
 
 ?>
 	<div id="updated" class="updated fade">
-	<p>
+		<p>
 	<?php
-	if ($sucess) {
-		print("Competition has been added. <a href=\"".$bblm_guid."\" title=\"View the new Competition\">View page</a>");
+	if ($success) {
+		print("Competition has been started. <a href=\"".get_permalink($bblm_submission)."\" title=\"View the new Championship\">View page</a>");
 	}
 	else {
-		print("Something went wrong");
+		print("Something went wrong! Please try again.");
 	}
-	?>
-</p>
+?>
+		</p>
 	</div>
 <?php
 //end of submit if
@@ -161,113 +68,98 @@ else {
 
 	<form name="bblm_addcomp" method="post" id="post">
 
-	<fieldset id='addcompdiv'><legend>Competition Details</legend>
-		<div>
-		  <label for="bblm_cname" class="selectit">Competition title</label>
-		  <input type="text" name="bblm_cname" size="50" tabindex="1" value="" id="bblm_cname" maxlength="50">
-
-		  <label for="bblm_sname" class="selectit">Slug</label>
-		  <input type="text" name="bblm_sname" size="50" tabindex="2" value="" id="bblm_sname" maxlength="50">
-
-		  <label for="bblm_cseries" class="selectit">Cup Series</label>
-		  <select name="bblm_cseries" id="bblm_cseries">
+		<table class="form-table">
+			<tr valign="top">
+				<th scope="row"><label for="bblm_cname">Competition Name</label></th>
+				<td><input type="text" name="bblm_cname" size="50" value="" id="bblm_cname" maxlength="50" class="regular-text"/></td>
+			</tr>
+			<tr valign="top">
+				<th scope="row"><label for="bblm_cseries">Championship</label></th>
+				<td><select name="bblm_cseries" id="bblm_cseries">
 		<?php
 		$seriessql = 'SELECT series_id, series_name FROM '.$wpdb->prefix.'series order by series_name';
 
 		if ($seriess = $wpdb->get_results($seriessql)) {
 			foreach ($seriess as $cup) {
-				print("<option value=\"$cup->series_id\">".$cup->series_name."</option>\n");
+				print("					<option value=\"$cup->series_id\">".$cup->series_name."</option>\n");
 			}
 		}
 		?>
-		</select>
-
-		  <label for="bblm_cseason" class="selectit">Season</label>
-		  <select name="bblm_cseason" id="bblm_cseason">
+		</select></td>
+			</tr>
+			<tr valign="top">
+				<th scope="row"><label for="bblm_cseason">Season</label></th>
+				<td><select name="bblm_cseason" id="bblm_cseason">
 		<?php
 		$seasonsql = 'SELECT sea_id, sea_name FROM '.$wpdb->prefix.'season WHERE sea_active = 1 order by sea_name';
 
 		if ($seasons = $wpdb->get_results($seasonsql)) {
 			foreach ($seasons as $sea) {
-				print("<option value=\"$sea->sea_id\">".$sea->sea_name."</option>\n");
+				print("					<option value=\"$sea->sea_id\">".$sea->sea_name."</option>\n");
 			}
 		}
 		?>
-		</select>
-
-		  <label for="bblm_ctype" class="selectit">Type</label>
-		  <select name="bblm_ctype" id="bblm_ctype">
+		</select></td>
+			</tr>
+			<tr valign="top">
+				<th scope="row"><label for="bblm_ctype">Format</label></th>
+				<td><select name="bblm_ctype" id="bblm_ctype">
 		<?php
 		$typesql = 'SELECT ct_id, ct_name FROM '.$wpdb->prefix.'comp_type ORDER BY ct_name';
 
 		if ($types = $wpdb->get_results($typesql)) {
 			foreach ($types as $type) {
-				print("<option value=\"$type->ct_id\">".$type->ct_name."</option>\n");
+				print("					<option value=\"$type->ct_id\">".$type->ct_name."</option>\n");
 			}
 		}
 		?>
-		</select>
+		</select></td>
+			</tr>
+			<tr valign="top">
+				<th scope="row"><label for="bblm_csdate">Start Date (YYYY-MM-DD)</label></th>
+				<td><input type="text" name="bblm_csdate" size="11" value="<?php print(date('Y-m-d')); ?>" maxlength="10" class="regular-text"/></td>
+			</tr>
+			<tr valign="top">
+				<th scope="row"><label for="bblm_cdesc">Description</label></th>
+				<td><p><textarea rows="10" cols="50" name="bblm_cdesc" id="bblm_cdesc" class="large-text"></textarea></p></td>
+			</tr>
+			<tr valign="top">
+				<th scope="row"><label for="bblm_pwin">Points for a Win</label></th>
+				<td><input type="text" name="bblm_pwin" size="2" value="0" maxlength="2" class="regular-text"/></td>
+			</tr>
+			<tr valign="top">
+				<th scope="row"><label for="bblm_pdraw">Points for a Draw</label></th>
+				<td><input type="text" name="bblm_pdraw" size="2" value="0" maxlength="2" class="regular-text"/></td>
+			</tr>
+			<tr valign="top">
+				<th scope="row"><label for="bblm_ploss">Points for a Loss</label></th>
+				<td><input type="text" name="bblm_ploss" size="2" value="0" maxlength="2" class="regular-text"/></td>
+			</tr>
+			<tr valign="top">
+				<th scope="row"><label for="bblm_ptd">League points per TD</label></th>
+				<td><input type="text" name="bblm_ptd" size="2" value="0" maxlength="2" class="regular-text"/></td>
+			</tr>
+			<tr valign="top">
+				<th scope="row"><label for="bblm_pcas">League points per CAS</label></th>
+				<td><input type="text" name="bblm_pcas" size="2" value="0" maxlength="2" class="regular-text"/></td>
+			</tr>
+			<tr valign="top">
+				<th scope="row"><label for="bblm_counts">Does the competition count?</label></th>
+				<td><select name="bblm_counts" id="bblm_counts">
+					<option value="1">Yes - Games played in this competition count towards statistics</option>
+					<option value="0">No - This competition is purley for fun!</option>
+				</select></td>
+			</tr>
+			<tr valign="top">
+				<th scope="row"><label for="bblm_pround">Round points by number of games played?</label></th>
+				<td><select name="bblm_pround" id="bblm_pround">
+					<option value="0">No</option>
+					<option value="1">Yes</option>
+				</select></td>
+			</tr>
+		</table>
 
-		<label for="bblm_csdate" class="selectit">Start Date</label>
-		<input type="text" name="bblm_csdate" size="11" tabindex="9" value="<?php print(date('Y-m-d')); ?>" maxlength="10">
-
-	</fieldset>
-
-	<fieldset id="postdivrich"><legend>Competition Description</legend>
-	<script type="text/javascript" src="../wp-includes/js/tinymce/tiny_mce.js"></script>
-	<script type="text/javascript">
-	<!--
-		tinyMCE.init({
-		theme : "advanced",
-		mode : "exact",
-		elements : "bblm_cdesc",
-		width : "565",
-		height : "200"
-		});
-	-->
-	</script>
-
-	<div>
-	  <textarea class='mceEditor' rows='10' cols='40' name='bblm_cdesc' tabindex='3' id='bblm_cdesc'></textarea>
-	</div>
-	</fieldset>
-
-
-	<fieldset id='addteamdiv2'><legend>Competition Settings</legend>
-
-
-		  <label for="bblm_pwin" class="selectit">Points for winning?</label>
-		  <input type="text" name="bblm_pwin" size="2" tabindex="3" value="0" maxlength="2">
-
-		  <label for="bblm_pdraw" class="selectit">Points for Drawing</label>
-		  <input type="text" name="bblm_pdraw" size="2" tabindex="5" value="0" maxlength="2">
-
-		  <label for="bblm_ploss" class="selectit">Points for Losing?</label>
-		  <input type="text" name="bblm_ploss" size="2" tabindex="4" value="0" maxlength="2">
-
-		  <label for="bblm_ptd" class="selectit">Points for a TD</label>
-		  <input type="text" name="bblm_ptd" size="1" tabindex="6" value="0" maxlength="2">
-
-		  <label for="bblm_pcas" class="selectit">Points for a CAS</label>
-		  <input type="text" name="bblm_pcas" size="2" tabindex="7" value="0" maxlength="2">
-
-		  <p>Does the Competition count?</p>
-		  <ul>
-			<li><input type="radio" value="1" name="bblm_counts" checked="yes"> <strong>Yes</strong> - Games played in this competition count towards statistics.</li>
-			<li><input type="radio" value="0" name="bblm_counts"> <strong>No</strong> - This competition is purley for fun!.</li>
-	      </ul>
-
-	      <label for="bblm_pround" class="selectit">Round points by munber of games played?</label>
-	      <input type="checkbox" name="bblm_pround">
-
-		</div>
-	</fieldset>
-
-
-
-	<p class="submit">
-	<input type="submit" name="bblm_comp_submit" tabindex="4" value="Start Competition" title="Add the Competition"/>
-	</p>
+	<p class="submit"><input type="submit" name="bblm_comp_submit" id="bblm_comp_submit" value="Start Competition" title="Add the Competition" class="button-primary"/></p>
 
 	</form>
 </div>

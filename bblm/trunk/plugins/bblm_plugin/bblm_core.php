@@ -3,115 +3,13 @@
 Plugin Name: Blood Bowl League Manager System (BBLM)
 Plugin URI: http://www.hdwsbbl.co.uk/
 Description: Everthing you need to run a Blood Bowl League via Wordpress!
-Version: 1.3.1 (r1)
-Author: Andrew Morris (Blacksnotling / Hexalon)
-Author URI: http://www.blacksnotling.com/
+Version: 1.4.1
+Author: Blacksnotling
+Author URI: http://www.hdwsbbl.co.uk/
 */
-/*
-/************ Change History *********
-20071023 - V0.0 - creation of file.
-20071023 - V0.1b - Added removal of Adin feeds.
-20071023 - V0.2b - Added Custom Login Box.
-20080218 - V0.3b - Added some holder files to the admin panel to get a feel for the layout..
-20080227 - V0.3.1b - added the master "Blood Bowl" page to the admin scection along with add race
-20080303 - V0.3.2b - Some more re-arranging of the admin layout.. Renamed this from a plugin to a System
-20080304 - V0.5b - Integrated the Add Race Page in. Created the bblm Options page.
-20080305 - V0.6b - Added "add Team" to the system and updated options page.
-20080305 - V0.7b - Updated options page for page_series.
-20080305 - V0.8b - updated the addteam and add race pages to take into account changed db schema.
-20080307 - V0.9b - Added the "Add Series" page to the league.
-20080310 - V0.10b - Added the "Add Comp" page to the league + updated options page
-20080311 - V0.11b - Added the Assign teams to comp page.
-20080312 - V0.12b - Begun work on add match record.
-20080313 - V0.12.1b - add.match page up and running. only two bugs to squish
-20080314 - V0.13b - fixes add.match bugs!!! Did some work on the recent matchs sidebar.
-20080316 - V0.13.5b - changed add.match & add.series due to a change to the DB schema.
-20080318 - V0.14b - Fixed an error in add.match
-20080319 - V0.15b - Removed the major/minor switch from add.series. finished recent match widgit.
-20080320 - V0.16b - Added the add.position funconality
-20080320 - V0.16.1b - Began Work on Add.Player!
-20080321 - V0.16.2b - more Work on Add.Player!
-20080322 - V0.17b - completed Work on Add.Player!
-20080322 - V0.18b - Added add/hire.journeyman (not to be confused with add player).
-20080324 - V0.18.1b - Tydied up the hire.journeyman page
-20080326 - V0.19b - Made some db changes to bb_player page and updated add.player as a result
-20080326 - V0.19.1b - started work on add.match_player
-20080331 - V0.20b - Completed add.match_player (to Alpha). Now I need to Crush some bugs!
-20080401 - V0.20.1b - Crushed add.match_player bug.
-20080402 - V0.21b - Edited options for stadium and created add.stadium. had to modify bb_team and add.team due to small change.
-20080402 - V0.22b - edited add.team so home stadium can be selected, did varius other updates to the same page. corrected a bug on add. stadium
-		   V0.23b - match result on add.match is automatically generated (no drop-downs). location of match can be selected
-20080405 - V0.24b - went through all the admin files and looked for dev_ refrences rather the the correct $Rwpdb->
-		   V0.24.1b - began work on delete.player
-20080406 - V0.25b - Finished work on delete.player
-20080407 - V0.26b - Overauled add.comp(after modifying db) and began (and completed!) work on add.award
-		 - V0.26.1b - Began Work on end.comp
-20080408 - V0.27b - Finished work on end.com and modified add.team to capture roster info.
-20080409 - V0.28b - Removed dashboard crippler and custom login due to WordPress 2.5 upgrade.
-20080414 - V0.29b - Added back custom login script.
-20080417 - V0.30b - fixed the bug that calculated the TV wrong on add.player_match. added a new option and changed the default selection on add.player
-20080419 - V0.31b - Fixed the bugg on delete.player where the match list was not getting generated properly
-20080420 - V0.32b - Created add.season. Re-organised the core pages to include a new Matches One.
-20080421 - V0.33b - created the bb_fixture table add.fixture. (+ modified appropiate plugin menus).
-20080425 - V0.34b - modified add.comp fter modifying db schema, created add.comp_brackets.
-20080426 - V0.34.1b - finished add.comp.brackets.
-20080427 - V0.35b - modified add.match to take a fixture as input
-20080428 - V0.36b - fixed the bug that recorded league points incorectly.
-		 - V0.37b - Addad a new option for the default TBD team for fixture purposes
-		 - V0.38b - Ammended add.comp_brackets to include links to teams (and escape the resulting text)
-20080526 - V0.39b - Added Warzone Filtering
-		 - V0.40b - Added the core of edit.match
-20080531 - V0.41b - Streamlined the sql code for edit.match_trivia
-				  - Began work on edit.match_comments but ran into issues with the initial sql string!
-		 - V0.42b - Added Warzone cat and season parent page to the options page.
-		 - V0.43b - Changed the page parent on add.season from stats to season.
-		 - V0.44b - Changed the filter warone function to use the option from the db
-20080602 - V0.45b - Modified add.award to reflect change in db (a_cup)
-		 - V0.46b - Re-wrote end.comp from the ground up
-		 - V0.47b - Created end.season and added it to the menu
-20080615 - V0.48b - Added templating for Warzone Singles (from http://boren.nu/downloads/custom_post_templates.phps)
-20080719 - V0.48.1b - modified add.comp so that the standings are not shown by default
-		 - V0.49b - updated edit.match for coach comments and updated edit.match.comments
-		 - V0.50b - added rename.player
-20080722 - v0.50.1b - fixed rename.player!
-20080723 - V0.51b - added edt.fixture
-20080727 - V0.51.1b - Finished edit.fixture, added link to generate summary
-20080728 - V0.51.2b - some more work on generate summary
-20080729 - V0.52b - Finished generate Summary!
-20080730 - 1.0 - bump to Version 1 for public release.
-20080808 - 1.0 (r1) - Added links to edit.team and edit.player
-20080822 - 1.0 (r2) - removed links to rename.player, delete.player and add.journeyman.
-		 			  - added the link to the new jm report
-20080823 - 1.0 (r3) - added link to edit.comp_brackets
-20081226 - 1.0 (r4) - Added a new setting to the options page to record the path of the wp install from the root of the server. I did this so images can be found using file_exists
-20090109 - 1.0 (r5) - Fixed the new 2.7 login box for FireFIx. Chrome / Safari need a box more tweaking
-20090120 - 1.0 (r6) - Added the new function to update tv to the core so it is available to all the plugin pages.
-20090124 - 1.1 - Bump to the 1.1 release.
-20090126 - 1.1 (r1) - modification of add.match_player. began work on potential re-write
-20090127 - 1.1 (r2) - finished work on add.match_player
-20090130 - 1.1 (r3) - Began work on Did You Know management page. Incorperated page in Core below.
-20090805 - 1.2 - Bump to 1.2 release
-20090818 - 1.2 (r1) - began work towards 1.3 today I revised the remove player part of edit.player
-20090819 - 1.2 (r2) - Added a link between add.match and add.match_player and fiddled with soem code on those pages.
-20090831 - 1.2 (r3) - SOme slight changes to manage DYK. - added filter and increased the length of the DYK title. changed the summary generation around a bit
-20090901 - 1.2 (r4) - Modified add player to incorporate new player types (mercs),
-20090902 - 1.3 - added mercs to the JM report. bumped to 1.3 in preperation for go-live!
-20091130 - 1.3.1 - added an update_player function to the core and updated edit.player (tracker [197])
-					- Added a link to the new competition management page
-20100123 - 1.3.1 (r1) - Updated the prefix for the custom bb tables in the Database (tracker [224])
-*/
-
 //stop people from accessing the file directly and causing errors.
 if (!function_exists('add_action')) die('You cannot run this file directly. Naughty Person');
 
-/************ Removal of Dashboard **********/
-/*
-//No longer required in WordPress 2.5
-add_action('admin_head', 'bblm_remove_dashboard_js', 1);
-
-function bblm_remove_dashboard_js() {
-	remove_action('admin_head', 'index_js');
-}*/
 /************ Custom Login Box **********/
 
 function bblm_custom_login() {
@@ -273,4 +171,54 @@ function bblm_update_player($pid, $counts = 1) {
 	}
 	return true;
 }
+
+/**
+ * Defnes a new capability, bblm_manage_league which is used to authorise access to the acmin section
+ * http://www.garyc40.com/2010/04/ultimate-guide-to-roles-and-capabilities/
+ *
+ */
+add_action( 'init', 'bblm_roles_init' );
+
+function bblm_roles_init() {
+	$roles_object = get_role( 'administrator' );
+	$roles_object->add_cap('bblm_manage_league');
+}
+
+/**
+ * Defnes the new Taxonomies used within BBLM
+ *
+ */
+function bblm_tax_init() {
+	bblm_tax_team_init();
+	bblm_tax_comp_init();
+}
+
+function bblm_tax_team_init() {
+  // create a new taxonomy
+  register_taxonomy(
+    'post_teams',
+    'post',
+    array(
+      'label' => __('Teams'),
+      'sort' => true,
+      'args' => array('orderby' => 'term_order'),
+      'rewrite' => array('slug' => 'team-post'),
+    )
+  );
+}
+
+function bblm_tax_comp_init() {
+  // create a new taxonomy
+  register_taxonomy(
+    'post_competitions',
+    'post',
+    array(
+      'label' => __('Competitions'),
+      'sort' => true,
+      'args' => array('orderby' => 'term_order'),
+      'rewrite' => array('slug' => 'competition-post'),
+    )
+  );
+}
+add_action( 'init', 'bblm_tax_init' );
 ?>
