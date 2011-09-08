@@ -4,37 +4,7 @@ Template Name: View Team
 */
 /*
 *	Filename: bb.view.team.php
-*	Version: 1.2
 *	Description: .Page template to display
-*/
-/* -- Change History --
-20080305 - 0.1a - Intital creation of file
-20080317 - 0.1b - Mass adding of stuff with Alex here!
-20080417 - 0.2b - Added in players and TV quickly for help debugging
-20080418 - 0.3b - db was being called incorectly. have fixed it.
-20080604 - 2.0b - Started again from scratch
-20080608 - 2.1b - Complemented season beakdowm, comp breakdown and recent form
-20080609 - 2.2b - Implemented recent matches
-20080610 - 2.3b - added zebra striping and other classes to the tables, awards, sidebars and other bits and bobs.
-20080611 - 2.4b - added Breadbrumbs
-20080617 - 2.5b - Added "Currently participating in:" to the sidebar
-20080619 - 2.5.1b - swapped the TDf anf TDa on the seaon report as it was the wrong way round!
-20080622 - 2.5.2b - Added a missing closing tag to a table.
-20080623 - 2.5.3b - Review of table classes
-20080624 - 2.6b -fixed the "participating in" sidebar bit. ammended the awards list layout (in page and sidebar)
-20080625 - 2.7b - moved a whole ot of info the the side bards, added win % and fixed a small bug (see 2.5.1 but for comps!)
-20080702 - 2.7.1b - added some thead and tbody tags to the sortable tables
-20080707 - 2.7.2b - fixed a potential error when calcuating win %
-20080717 - 2.7.3b - Swapped Att for winnings in the recent matches due to the db being messed up!
-20080722 - 2.7.4b - deleted a rogue </ul> from the sidebar that was messing it up when a team was inactive / etween season
-20080730 - 1.0 - bump to Version 1 for public release.
-20080831 - 1.0.1 - emergancy fix to restore the roster link for teams who havn't had their debut.
-20090710 - 1.0.2 - Added DYK code to page
-20090715 - 1.0.2r1 - Began revision of page. I added team logos, the Captain is highlighted, and more information is added to the match history.
-20090716 - 1.0.2r2 - Finished match comments code, added team fixtures and reviewed the awards code
-		 - 1.1 - rounded off changes and calling them complete for now.
-20091129 - 1.1.1 - The table for season perfromace incorrectly said competition. I have corrected this to Season! (tracker [219]
-20100123 - 1.2 - Updated the prefix for the custom bb tables in the Database (tracker [225])
 */
 ?>
 <?php get_header(); ?>
@@ -75,7 +45,11 @@ Template Name: View Team
 			$overallsql = "SELECT SUM(T.tc_played) AS OP, SUM(T.tc_W) AS OW, SUM(T.tc_L) AS OL, SUM(T.tc_D) AS OD, SUM(T.tc_tdfor) AS OTF, SUM(T.tc_tdagst) AS OTA, SUM(T.tc_comp) AS OC, SUM(T.tc_casfor) AS OCASF, SUM(T.tc_casagst) AS OCASA, SUM(T.tc_int) AS OINT FROM ".$wpdb->prefix."team_comp T, ".$wpdb->prefix."comp C WHERE C.c_counts = 1 AND C.c_id = T.c_id AND T.tc_played > 0 AND T.t_id = ".$tid;
 
 			if ($oh = $wpdb->get_row($overallsql)) {
-				if (NULL != $oh->OP) {
+				if (NULL == $oh->OP) {
+					$has_played = 0;
+					print("	<div class=\"info\">\n		<p>This Team has not yet made their debut in the HDWSBBL. Stay tuned to see how this team develops.</p>\n	</div>\n");
+				}
+				else {
 ?>
 				<h3>Career Statistics for <?php the_title(); ?></h3>
 				<table>
@@ -228,7 +202,10 @@ Template Name: View Team
 			else {
 				print("<div class=\"info\">\n	<p>No players have been found for this team.</p>\n	</div>\n");
 			}
+		} //end of if a team has played a match
 
+
+		//The next part is displayed regardless of if a team hs plyed  match or not (google code issue 18)
 				$fixturesql = 'SELECT F.f_teamA, F.f_teamB, UNIX_TIMESTAMP(F.f_date) AS fdate, D.div_name, T.t_name AS tA, T.t_guid AS tAlink, Y.t_name AS tB, Y.t_guid AS tBlink, P.post_title AS Comp, P.guid AS CompLink FROM '.$wpdb->prefix.'fixture F, '.$wpdb->prefix.'division D, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'team Y, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE C.c_id = J.tid AND J.prefix = \'c_\' AND J.pid = P.ID AND (F.f_teamA = '.$tid.' OR F.f_teamB = '.$tid.') AND F.div_id = D.div_id AND F.f_teamA = T.t_id AND F.f_teamB = Y.t_id AND C.c_id = F.c_id AND C.c_counts = 1 AND F.f_complete = 0 ORDER BY f_date ASC LIMIT 0, 30 ';
 
 			if ($fixtures = $wpdb->get_results($fixturesql)) {
@@ -280,47 +257,7 @@ Template Name: View Team
 				print("</table>\n");
 			} //end of if fixtures SQL
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+		if ($has_played) {
 ?>
 				<h3>Recent Matches</h3>
 <?php
@@ -446,11 +383,7 @@ Template Name: View Team
 
 
 				}//end of count stats
-				else {
-					$has_played = 0;
-					print("	<div class=\"info\">\n		<p>This Team has not yet made their debut in the HDWSBBL. Stay tuned to see how this team develops.</p>\n	</div>\n");
-				}
-			}//end of db stats query
+			}//end of if plyed a match
 
 		//Did You Know Display Code
 		if (function_exists(bblm_display_dyk)) {
