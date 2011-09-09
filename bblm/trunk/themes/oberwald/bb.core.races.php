@@ -4,19 +4,7 @@ Template Name: Race Listing
 */
 /*
 *	Filename: bb.core.races.php
-*	Version: 1.1
 *	Description: Page template to list the races in the league
-*/
-/* -- Change History --
-20080218 - 0.0a - Intital creation of file. a quick and dirty solution.
-20080219 - 0.1a - addmendment of links to be permalinks and not generated ones.
-20080226 - 0.1.1a - Moved into a new directory sturucture.
-20080415 - 1.0b - re-write from the ground up. simple list of races that have been created.
-20080613 - 1,1b - Added breadbrumbs to the page
-20080730 - 1.0 - bump to Version 1 for public release.
-20090712 - 1.0.1 - Added DKY code to page
-20100123 - 1.1 - Updated the prefix for the custom bb tables in the Database (tracker [225])
-
 */
 ?>
 <?php get_header(); ?>
@@ -30,7 +18,7 @@ Template Name: Race Listing
 				<h2><?php the_title(); ?></h2>
 				<?php the_content('Read the rest of this entry &raquo;'); ?>
 <?php
-				$racesql = "SELECT P.post_title, P.guid FROM ".$wpdb->prefix."race R, ".$wpdb->posts." P, ".$wpdb->prefix."bb2wp J WHERE R.r_id = J.tid AND P.ID = J.pid and J.prefix = 'r_' ORDER BY P.post_title ASC";
+				$racesql = "SELECT P.post_title, P.guid FROM ".$wpdb->prefix."race R, ".$wpdb->posts." P, ".$wpdb->prefix."bb2wp J WHERE R.r_id = J.tid AND P.ID = J.pid and J.prefix = 'r_' and R.r_show = 1 ORDER BY P.post_title ASC";
 				if ($races = $wpdb->get_results($racesql)) {
 					print("<ul>\n");
 					foreach ($races as $race) {
