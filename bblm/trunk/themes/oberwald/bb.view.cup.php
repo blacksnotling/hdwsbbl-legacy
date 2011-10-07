@@ -4,29 +4,7 @@ Template Name: View Cup
 */
 /*
 *	Filename: bb.view.cup.php
-*	Version: 1.5
-*	Description: .Page template to display the championship cups (series_
-*/
-/* -- Change History --
-20080611 - 1.0b - Initial creation of file.
-20080613 - 1.1b - Some checking of code after uploading it to live.
-20080615 - 1.1.1b - added a class to the player stat tables
-20080623 - 1.2b - Fixed Validation errors and fixed the sql string to cal the cup winners!
-20080702 - 1.2.1b - added some thead and tbody tags to the sortable tables
-20080717 - 1.3b - brought it in line with view.season
-20080730 - 1.0 - bump to Version 1 for public release.
-20080821 - 1.1 - re-ordered the award output and fixed the bug that displayed the incorrect comp award for players
-20090616 - 1.2 - I added the "average" stats per match and added total Kills
-			   - cleaned up some titles, cleaned some sql,
-			    - ammnded the awards sql so it outputs in the ocrrect order and moved the plaer list into a Loop!
-			    + Added DYK code
-20090825 - 1.3 - Fixed the "killed" number to accuratly reflect the true figure.
-			   - Added the top killers table to the player stats at the bottom
-20090830 - 1.3.1 - fixed a small bug in the player awards, the wrong comp was being outputted!
-		 - 1.4 - Added the highest attendance to the Cup
-20091129 - 1.4.1 - Added condition checking around the highest attendance so that it checked that a match had been played in that cat (nonsemi of final/semi of final) before output (tracker [210])
-20100123 - 1.5 - Updated the prefix for the custom bb tables in the Database (tracker [225])
-
+*	Description: .Page template to display details of a championship cup
 */
 ?>
 <?php get_header(); ?>
@@ -195,6 +173,7 @@ Template Name: View Cup
 					///////////////////////////
 					$options = get_option('bblm_config');
 					$stat_limit = htmlspecialchars($options['display_stats'], ENT_QUOTES);
+					$bblm_star_team = htmlspecialchars($options['team_star'], ENT_QUOTES);
 
 
 
@@ -222,7 +201,7 @@ Template Name: View Cup
 					//For each of the stats, print the top players list. If none are found, display the relevant error
 					foreach ($playerstatsarray as $tpa) {
 						//Generic SQL Call, populated with the stat we are looking for
-						$statsql = 'SELECT Y.post_title, T.t_name AS TEAM, T.t_guid AS TEAMLink, Y.guid, SUM(M.'.$tpa[item].') AS VALUE, R.pos_name FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'match X, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' Y, '.$wpdb->prefix.'position R WHERE P.pos_id = R.pos_id AND P.p_id = J.tid AND J.prefix = \'p_\' AND J.pid = Y.ID AND M.m_id = X.m_id AND X.c_id = C.c_id AND M.p_id = P.p_id AND P.t_id = T.t_id AND M.'.$tpa[item].' > 0 AND C.series_id = '.$cupid.' GROUP BY P.p_id ORDER BY VALUE DESC LIMIT '.$stat_limit;
+						$statsql = 'SELECT Y.post_title, T.t_name AS TEAM, T.t_guid AS TEAMLink, Y.guid, SUM(M.'.$tpa[item].') AS VALUE, R.pos_name FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'match X, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' Y, '.$wpdb->prefix.'position R WHERE P.pos_id = R.pos_id AND P.p_id = J.tid AND J.prefix = \'p_\' AND J.pid = Y.ID AND M.m_id = X.m_id AND X.c_id = C.c_id AND M.p_id = P.p_id AND P.t_id = T.t_id AND M.'.$tpa[item].' > 0 AND C.series_id = '.$cupid.' AND T.t_id != '.$bblm_star_team.' GROUP BY P.p_id ORDER BY VALUE DESC LIMIT '.$stat_limit;
 
 						print("<h4>".$tpa[title]."</h4>\n");
 						if ($topstats = $wpdb->get_results($statsql)) {
@@ -264,7 +243,7 @@ Template Name: View Cup
 				//==================
 				// -- Top Killer --
 				//==================
-					$statsql = 'SELECT O.post_title, O.guid, COUNT(*) AS VALUE , E.pos_name, T.t_name AS TEAM, T.t_guid AS TeamLink FROM `'.$wpdb->prefix.'player_fate` F, '.$wpdb->prefix.'player P, '.$wpdb->prefix.'match M, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' O, '.$wpdb->prefix.'position E, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'comp C WHERE P.t_id = T.t_id AND P.pos_id = E.pos_id AND P.p_id = J.tid AND J.prefix = \'p_\' AND J.pid = O.ID AND (F.f_id = 1 OR F.f_id = 6) AND P.p_id = F.pf_killer AND F.m_id = M.m_id AND M.c_id = C.c_id AND C.type_id = 1 AND C.c_counts = 1 AND C.c_show = 1 AND C.series_id = '.$cupid.' GROUP BY F.pf_killer ORDER BY VALUE DESC LIMIT '.$stat_limit;
+					$statsql = 'SELECT O.post_title, O.guid, COUNT(*) AS VALUE , E.pos_name, T.t_name AS TEAM, T.t_guid AS TeamLink FROM `'.$wpdb->prefix.'player_fate` F, '.$wpdb->prefix.'player P, '.$wpdb->prefix.'match M, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' O, '.$wpdb->prefix.'position E, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'comp C WHERE P.t_id = T.t_id AND P.pos_id = E.pos_id AND P.p_id = J.tid AND J.prefix = \'p_\' AND J.pid = O.ID AND (F.f_id = 1 OR F.f_id = 6) AND P.p_id = F.pf_killer AND F.m_id = M.m_id AND M.c_id = C.c_id AND C.type_id = 1 AND C.c_counts = 1 AND C.c_show = 1 AND C.series_id = '.$cupid.' AND T.t_id != '.$bblm_star_team.' GROUP BY F.pf_killer ORDER BY VALUE DESC LIMIT '.$stat_limit;
 					print("<h4>Top Killers</h4>\n");
 					if ($topstats = $wpdb->get_results($statsql)) {
 						print("<table class=\"expandable\">\n	<tr>\n		<th class=\"tbl_stat\">#</th>\n		<th class=\"tbl_name\">Player</th>\n		<th>Position</th>\n		<th class=\"tbl_name\">Team</th>\n		<th class=\"tbl_stat\">Value</th>\n		</tr>\n");

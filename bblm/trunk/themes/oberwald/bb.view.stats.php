@@ -4,31 +4,7 @@ Template Name: Statistics
 */
 /*
 *	Filename: bb.view.stats.php
-*	Version: 1.4
 *	Description: .Page template to display statistics
-*/
-/* -- Change History --
-20080418 - 0.1b - Initial creation of file.
-20080419 - 0.2b - Begna intial work on stat listing
-20080425 - 0.2.1b - fixed a bug where a comment was not closed and was causing an error
-20080625 - 0.3b - Began re-working the page into its final shape!
-20080629 - 0.4b - Added team breakdown and other assirted stats
-20080702 - 0.4.1b - added some thead and tbody tags to the sortable tables
-20080707 - 0.4.2b - Fixed a divisional error and added some restrictions to a sql query
-		 - 0.5b - commented out the middle section of the page. that will wait until 1.1!
-20080717 - 0.6b - removed the sortable table comment, finished the stat tables off.
-20080718 - 0.7b - fixed the player stats table for active stats. it was calling on '.$wpdb->prefix.'team which i eliminated in 0.6b...
-20080729 - 0.7.1b - re-ordered the champions list to order, team name
-20080730 - 1.0 - bump to Version 1 for public release.
-20090124 - 1.1 - Players who are still acive appear bold in the top players list. a caption also appears explaining the boldness!
-20090330 - 1,2 - Editied to filter out non hdwsbbl details
-20090606 - 1.2.1 - editied the teams summery to remove the "To Be Determined" Team
-20090606 - 1.3 - began the redux of the stats pages
-			    - Added averages to stats, gutted the top player part, added number of deaths, streamline some code, added links to new stats pages.
-20090830 - 1.3.1 - removal of the link to match records and tidy up of the CSS hooks
-20100123 - 1.4 - Updated the prefix for the custom bb tables in the Database (tracker [225])
-20100124 - 1.4.1 - small bug fix that was stopping the number of teams showing!
-
 */
 ?>
 <?php get_header(); ?>
@@ -215,11 +191,12 @@ Template Name: Statistics
 <?php
 				$options = get_option('bblm_config');
 				$stat_limit = htmlspecialchars($options['display_stats'], ENT_QUOTES);
+				$bblm_star_team = htmlspecialchars($options['team_star'], ENT_QUOTES);
 
 				  ////////////////////////
 				 // Active Top Players //
 				////////////////////////
-				$statsql = 'SELECT Y.post_title, T.t_name AS TEAM, T.t_guid AS TEAMLink, Y.guid, SUM(M.mp_spp) AS VALUE, R.pos_name FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' Y, '.$wpdb->prefix.'position R WHERE P.pos_id = R.pos_id AND P.p_id = J.tid AND J.prefix = \'p_\' AND J.pid = Y.ID AND M.p_id = P.p_id AND P.t_id = T.t_id AND M.mp_counts = 1 AND M.mp_spp > 0 AND T.t_active = 1 AND P.p_status = 1 GROUP BY P.p_id ORDER BY VALUE DESC LIMIT '.$stat_limit;
+				$statsql = 'SELECT Y.post_title, T.t_name AS TEAM, T.t_guid AS TEAMLink, Y.guid, SUM(M.mp_spp) AS VALUE, R.pos_name FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' Y, '.$wpdb->prefix.'position R WHERE P.pos_id = R.pos_id AND P.p_id = J.tid AND J.prefix = \'p_\' AND J.pid = Y.ID AND M.p_id = P.p_id AND P.t_id = T.t_id AND M.mp_counts = 1 AND M.mp_spp > 0 AND T.t_active = 1 AND P.p_status = 1 AND T.t_id != '.$bblm_star_team.' GROUP BY P.p_id ORDER BY VALUE DESC LIMIT '.$stat_limit;
 				print("<h4>Top Players (Active)</h4>\n");
 				if ($topstats = $wpdb->get_results($statsql)) {
 					print("<table class=\"expandable\">\n	<tr>\n		<th class=\"tbl_stat\">#</th>\n		<th class=\"tbl_name\">Player</th>\n		<th>Position</th>\n		<th class=\"tbl_name\">Team</th>\n		<th class=\"tbl_stat\">SPP</th>\n		</tr>\n");
@@ -260,7 +237,7 @@ Template Name: Statistics
 				  //////////////////////////
 				 // All time Top Players //
 				//////////////////////////
-				$statsql = 'SELECT Y.post_title, T.t_name AS TEAM, T.t_guid AS TEAMLink, Y.guid, SUM(M.mp_spp) AS VALUE, R.pos_name, T.t_active, P.p_status FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' Y, '.$wpdb->prefix.'position R WHERE P.pos_id = R.pos_id AND P.p_id = J.tid AND J.prefix = \'p_\' AND J.pid = Y.ID AND M.p_id = P.p_id AND P.t_id = T.t_id AND M.mp_spp > 0 AND M.mp_counts = 1 GROUP BY P.p_id ORDER BY VALUE DESC LIMIT '.$stat_limit;
+				$statsql = 'SELECT Y.post_title, T.t_name AS TEAM, T.t_guid AS TEAMLink, Y.guid, SUM(M.mp_spp) AS VALUE, R.pos_name, T.t_active, P.p_status FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' Y, '.$wpdb->prefix.'position R WHERE P.pos_id = R.pos_id AND P.p_id = J.tid AND J.prefix = \'p_\' AND J.pid = Y.ID AND M.p_id = P.p_id AND P.t_id = T.t_id AND M.mp_spp > 0 AND M.mp_counts = 1 AND T.t_id != '.$bblm_star_team.' GROUP BY P.p_id ORDER BY VALUE DESC LIMIT '.$stat_limit;
 				print("<h4>Top Players (All Time)</h4>\n	<p>Players who are <strong>highlighted</strong> are still active in the HDWSBBL.</p>\n");
 				if ($topstats = $wpdb->get_results($statsql)) {
 					print("<table class=\"expandable\">\n	<tr>\n		<th class=\"tbl_stat\">#</th>\n		<th class=\"tbl_name\">Player</th>\n		<th>Position</th>\n		<th class=\"tbl_name\">Team</th>\n		<th class=\"tbl_stat\">SPP</th>\n		</tr>\n");

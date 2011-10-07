@@ -4,25 +4,7 @@ Template Name: View Season
 */
 /*
 *	Filename: bb.view.season.php
-*	Version: 1.4
-*	Description: .Page template to display seasonal information
-*/
-/* -- Change History --
-20080603 - 0.1b - Initial creation of file as a quick listing of stats
-20080712 - 0.2b - impelmented team breakdown, champions list, awards, comps this season and re-defined player stats.
-20080717 - 1.0b - Finished the final bits of SQL and caled it done.
-20080730 - 1.0 - bump to Version 1 for public release.
-20090330 - 1,1 - Editied to filter out non hdwsbbl details
-20090606 - 1.1.1 - editied the teams summery to remove the "To Be Determined" Team
-20090825 - 1.2 - Converted the top player tables into a loop and cleaned the SQL!
-				 Added the number of deaths made during a defined season
-				 Added the averages per match to the top table
-			   - Added the top killers table to the player stats at the bottom
-20090828 - 1.2.1 - fixed a big on the stats tables I did not spot before.
-20090830 - 1.3. - Added the highest attendance for the season
-20090831 - 1.3.1 - fixed a mistake with the highest attendenca. the fina;.semi bit was showing all the time!
-20100123 - 1.4 - Updated the prefix for the custom bb tables in the Database (tracker [225])
-
+*	Description: .Page template to display information of a season.
 */
 ?>
 <?php get_header(); ?>
@@ -199,6 +181,7 @@ Template Name: View Season
 					///////////////////////////
 					$options = get_option('bblm_config');
 					$stat_limit = htmlspecialchars($options['display_stats'], ENT_QUOTES);
+					$bblm_star_team = htmlspecialchars($options['team_star'], ENT_QUOTES);
 
 
 					//Generates an array containing all the Stats that are going to be checked
@@ -225,8 +208,7 @@ Template Name: View Season
 					//For each of the stats, print the top players list. If none are found, display the relevant error
 					foreach ($playerstatsarray as $tpa) {
 						//Generic SQL Call, populated with the stat we are looking for
-						//$statsql = 'SELECT Y.post_title, O.post_title AS TEAM, O.guid AS TEAMLink, Y.guid, SUM(M.'.$tpa[item].') AS VALUE, R.pos_name FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'match X, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' Y, '.$wpdb->prefix.'position R, '.$wpdb->prefix.'bb2wp I, '.$wpdb->posts.' O WHERE P.t_id = I.tid AND I.prefix = \'t_\' AND I.pid = O.ID AND P.pos_id = R.pos_id AND P.p_id = J.tid AND J.prefix = \'p_\' AND J.pid = Y.ID AND M.m_id = X.m_id AND X.c_id = C.c_id AND C.c_counts = 1 AND C.type_id = 1 AND M.'.$tpa[item].' > 0 AND M.p_id = P.p_id AND P.t_id = T.t_id AND M.'.$tpa[item].' > 0 AND C.sea_id = '.$sd->sea_id.' GROUP BY P.p_id ORDER BY VALUE DESC LIMIT '.$stat_limit;
-						$statsql = 'SELECT Y.post_title, T.t_name AS TEAM, T.t_guid AS TEAMLink, Y.guid, SUM(M.'.$tpa[item].') AS VALUE, R.pos_name FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'match X, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' Y, '.$wpdb->prefix.'position R WHERE P.pos_id = R.pos_id AND P.p_id = J.tid AND J.prefix = \'p_\' AND J.pid = Y.ID AND M.m_id = X.m_id AND X.c_id = C.c_id AND C.c_counts = 1 AND C.type_id = 1 AND M.p_id = P.p_id AND P.t_id = T.t_id AND M.'.$tpa[item].' > 0 AND C.sea_id = '.$sd->sea_id.' GROUP BY P.p_id ORDER BY VALUE DESC LIMIT '.$stat_limit;
+						$statsql = 'SELECT Y.post_title, T.t_name AS TEAM, T.t_guid AS TEAMLink, Y.guid, SUM(M.'.$tpa[item].') AS VALUE, R.pos_name FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'match X, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' Y, '.$wpdb->prefix.'position R WHERE P.pos_id = R.pos_id AND P.p_id = J.tid AND J.prefix = \'p_\' AND J.pid = Y.ID AND M.m_id = X.m_id AND X.c_id = C.c_id AND C.c_counts = 1 AND C.type_id = 1 AND M.p_id = P.p_id AND P.t_id = T.t_id AND M.'.$tpa[item].' > 0 AND C.sea_id = '.$sd->sea_id.' AND T.t_id != '.$bblm_star_team.' GROUP BY P.p_id ORDER BY VALUE DESC LIMIT '.$stat_limit;
 
 						print("<h4>".$tpa[title]."</h4>\n");
 						if ($topstats = $wpdb->get_results($statsql)) {
@@ -268,8 +250,7 @@ Template Name: View Season
 				//==================
 				// -- Top Killer --
 				//==================
-					//$statsql = 'SELECT O.post_title, O.guid, COUNT(*) AS VALUE , E.pos_name, T.t_name AS TEAM, T.t_guid AS TeamLink FROM `'.$wpdb->prefix.'player_fate` F, '.$wpdb->prefix.'player P, '.$wpdb->prefix.'match M, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' O, '.$wpdb->prefix.'position E, '.$wpdb->prefix.'team T WHERE P.t_id = T.t_id AND P.pos_id = E.pos_id AND P.p_id = J.tid AND J.prefix = \'p_\' AND J.pid = O.ID AND (F.f_id = 1 OR F.f_id = 6) AND P.p_id = F.pf_killer AND F.m_id = M.m_id AND M.c_id = '.$cd->c_id.' GROUP BY F.pf_killer ORDER BY VALUE DESC LIMIT '.$stat_limit;
-					$statsql = 'SELECT O.post_title, O.guid, COUNT(*) AS VALUE , E.pos_name, T.t_name AS TEAM, T.t_guid AS TeamLink FROM `'.$wpdb->prefix.'player_fate` F, '.$wpdb->prefix.'player P, '.$wpdb->prefix.'match M, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' O, '.$wpdb->prefix.'position E, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'comp C WHERE P.t_id = T.t_id AND P.pos_id = E.pos_id AND P.p_id = J.tid AND J.prefix = \'p_\' AND J.pid = O.ID AND (F.f_id = 1 OR F.f_id = 6) AND P.p_id = F.pf_killer AND F.m_id = M.m_id AND M.c_id = C.c_id AND C.type_id = 1 AND C.c_counts = 1 AND C.c_show = 1 AND C.sea_id = '.$sd->sea_id.' GROUP BY F.pf_killer ORDER BY VALUE DESC LIMIT '.$stat_limit;
+					$statsql = 'SELECT O.post_title, O.guid, COUNT(*) AS VALUE , E.pos_name, T.t_name AS TEAM, T.t_guid AS TeamLink FROM `'.$wpdb->prefix.'player_fate` F, '.$wpdb->prefix.'player P, '.$wpdb->prefix.'match M, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' O, '.$wpdb->prefix.'position E, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'comp C WHERE P.t_id = T.t_id AND P.pos_id = E.pos_id AND P.p_id = J.tid AND J.prefix = \'p_\' AND J.pid = O.ID AND (F.f_id = 1 OR F.f_id = 6) AND P.p_id = F.pf_killer AND F.m_id = M.m_id AND M.c_id = C.c_id AND C.type_id = 1 AND C.c_counts = 1 AND C.c_show = 1 AND C.sea_id = '.$sd->sea_id.' AND T.t_id != '.$bblm_star_team.' GROUP BY F.pf_killer ORDER BY VALUE DESC LIMIT '.$stat_limit;
 					print("<h4>Top Killers</h4>\n");
 					if ($topstats = $wpdb->get_results($statsql)) {
 						print("<table class=\"expandable\">\n	<tr>\n		<th class=\"tbl_stat\">#</th>\n		<th class=\"tbl_name\">Player</th>\n		<th>Position</th>\n		<th class=\"tbl_name\">Team</th>\n		<th class=\"tbl_stat\">Value</th>\n		</tr>\n");

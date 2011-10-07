@@ -4,15 +4,7 @@ Template Name: Statistics - TD
 */
 /*
 *	Filename: bb.view.stats.td.php
-*	Version: 1.1
 *	Description: .Touchdown Related Stats
-*/
-/* -- Change History --
-20090828 - 0.1b - Initial creation of file.
-20090829 - 1.0 - using the cas template, this page has been created
-20091129 - 1.0.1 - the table headings listed the value as CAS. this was corrected to TD (tracker [216])
-20100123 - 1.1 - Updated the prefix for the custom bb tables in the Database (tracker [225])
-
 */
 ?>
 <?php get_header(); ?>
@@ -60,6 +52,7 @@ Template Name: Statistics - TD
 
 				$options = get_option('bblm_config');
 				$stat_limit = htmlspecialchars($options['display_stats'], ENT_QUOTES);
+				$bblm_star_team = htmlspecialchars($options['team_star'], ENT_QUOTES);
 
 				//the default is to show the stats for all time (this comes into pay when showing active players
 				$period_alltime = 1;
@@ -90,7 +83,7 @@ Template Name: Statistics - TD
 				  /////////////////////////
 				 // Top Scoring Players //
 				/////////////////////////
-				$statsql = 'SELECT Y.post_title, T.t_name AS TEAM, T.t_guid AS TEAMLink, Y.guid, SUM(M.mp_td) AS VALUE, R.pos_name, P.p_status, T.t_active FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' Y, '.$wpdb->prefix.'position R WHERE P.pos_id = R.pos_id AND P.p_id = J.tid AND J.prefix = \'p_\' AND J.pid = Y.ID AND M.p_id = P.p_id AND P.t_id = T.t_id AND M.mp_counts = 1 AND M.mp_td > 0 '.$statsqlmodp.'GROUP BY P.p_id ORDER BY VALUE DESC LIMIT '.$stat_limit;
+				$statsql = 'SELECT Y.post_title, T.t_name AS TEAM, T.t_guid AS TEAMLink, Y.guid, SUM(M.mp_td) AS VALUE, R.pos_name, P.p_status, T.t_active FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' Y, '.$wpdb->prefix.'position R WHERE P.pos_id = R.pos_id AND P.p_id = J.tid AND J.prefix = \'p_\' AND J.pid = Y.ID AND M.p_id = P.p_id AND P.t_id = T.t_id AND M.mp_counts = 1 AND M.mp_td > 0 AND T.t_id != '.$bblm_star_team.' '.$statsqlmodp.'GROUP BY P.p_id ORDER BY VALUE DESC LIMIT '.$stat_limit;
 				print("<h4>Top Scoring Players");
 				if (0 == $period_alltime) {
 					print(" (Active)");

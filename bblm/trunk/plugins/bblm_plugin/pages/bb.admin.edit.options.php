@@ -1,25 +1,7 @@
 <?php
 /*
 *	Filename: bb.admin.edit.options.php
-*	Version: 1.2
-*	Description: Page to manage options and settings of the bblm.
-*/
-/* -- Change History --
-20080303 - 0.1b - Initial creation of file. Only Race page is recorded.
-20080304 - 0.2b - Added Team page to be recorded.
-20080305 - 0.3b - Added Series page to be recorded.
-20080310 - 0.4b - Added Competition to be recorded.
-20080312 - 0.5b - Added Match to be recorded.
-20080402 - 0.6b - Added Stadium to be recorded.
-20080405 - 0.7b - Added maxlength and length attributes to all the input fields
-20080417 - 0.8b - Added stats limit option and split page into display and backend options
-20080420 - 0.9b - Added stat to be recorded
-20080428 - 0.10b - Added "TBD" team_id to be recorded
-20080431 - 0.11b - Added Season parent and Warzone Category ID
-20080730 - 1.0 - bump to Version 1 for public release.
-20081226 - 1.1 - Added "Site Directory" so it can locate images of teams and other navigation
-20090901 - 1.2 - Added Merc ID number for when creating players
-
+*	Description: Page to manage options and settings of the League.
 */
 ?>
 <div class="wrap">
@@ -46,8 +28,11 @@
 		$options['page_stadium'] = strip_tags(stripslashes($_POST['bblm_options_page_stadium']));
 		$options['page_stats'] = strip_tags(stripslashes($_POST['bblm_options_page_stats']));
 		$options['page_season'] = strip_tags(stripslashes($_POST['bblm_options_page_season']));
+		$options['page_stars'] = strip_tags(stripslashes($_POST['bblm_options_page_stars']));
 		$options['display_stats'] = strip_tags(stripslashes($_POST['bblm_options_display_stats']));
 		$options['team_tbd'] = strip_tags(stripslashes($_POST['bblm_options_team_tbd']));
+		$options['team_star'] = strip_tags(stripslashes($_POST['bblm_options_team_star']));
+		$options['race_star'] = strip_tags(stripslashes($_POST['bblm_options_race_star']));
 		$options['cat_warzone'] = strip_tags(stripslashes($_POST['bblm_options_cat_warzone']));
 		$options['site_dir'] = strip_tags(stripslashes($_POST['bblm_options_site_dir']));
 		$options['player_merc'] = strip_tags(stripslashes($_POST['bblm_options_player_merc']));
@@ -67,9 +52,12 @@
 	$page_stadium = htmlspecialchars($options['page_stadium'], ENT_QUOTES);
 	$page_stats = htmlspecialchars($options['page_stats'], ENT_QUOTES);
 	$page_season = htmlspecialchars($options['page_season'], ENT_QUOTES);
+	$page_stars = htmlspecialchars($options['page_stars'], ENT_QUOTES);
 	$display_stats = htmlspecialchars($options['display_stats'], ENT_QUOTES);
 	$cat_warzone = htmlspecialchars($options['cat_warzone'], ENT_QUOTES);
 	$team_tbd = htmlspecialchars($options['team_tbd'], ENT_QUOTES);
+	$team_star = htmlspecialchars($options['team_star'], ENT_QUOTES);
+	$race_star = htmlspecialchars($options['race_star'], ENT_QUOTES);
 	$site_dir = htmlspecialchars($options['site_dir'], ENT_QUOTES);
 	$player_merc = htmlspecialchars($options['player_merc'], ENT_QUOTES);
 
@@ -98,28 +86,28 @@
  <tr>
  	<th scope="row" valign="top">Page # - Races</th>
  	<td>
- 		<input id="bblm_options_page_race" name="bblm_options_page_race" type="text" value="<?php echo $page_race ?>" maxlength="3" size="2" />
+ 		<input id="bblm_options_page_race" name="bblm_options_page_race" type="text" value="<?php echo $page_race ?>" maxlength="6" size="2" />
   	 	<label for="bblm_options_page_race">The number in the DB for the Race Page.</label>
  	</td>
  </tr>
  <tr>
  	<th scope="row" valign="top">Page # - Teams</th>
  	<td>
- 		<input id="bblm_options_page_team" name="bblm_options_page_team" type="text" value="<?php echo $page_team ?>" maxlength="3" size="2" />
+ 		<input id="bblm_options_page_team" name="bblm_options_page_team" type="text" value="<?php echo $page_team ?>" maxlength="6" size="2" />
   	 	<label for="bblm_options_page_team">The number in the DB for the Team Page.</label>
  	</td>
  </tr>
  <tr>
  	<th scope="row" valign="top">Page # - Championship Cups</th>
  	<td>
- 		<input id="bblm_options_page_series" name="bblm_options_page_series" type="text" value="<?php echo $page_series ?>" maxlength="3" size="2" />
+ 		<input id="bblm_options_page_series" name="bblm_options_page_series" type="text" value="<?php echo $page_series ?>" maxlength="6" size="2" />
   	 	<label for="bblm_options_page_series">The number in the DB for the Series Page.</label>
  	</td>
  </tr>
  <tr>
  	<th scope="row" valign="top">Page # - Competitions</th>
  	<td>
- 		<input id="bblm_options_page_comp" name="bblm_options_page_comp" type="text" value="<?php echo $page_comp ?>" maxlength="3" size="2" />
+ 		<input id="bblm_options_page_comp" name="bblm_options_page_comp" type="text" value="<?php echo $page_comp ?>" maxlength="6" size="2" />
   	 	<label for="bblm_options_page_comp">The number in the DB for the Competitions Page.</label>
  	</td>
  </tr>
@@ -127,7 +115,7 @@
  <tr>
  	<th scope="row" valign="top">Page # - Match / Results</th>
  	<td>
- 		<input id="bblm_options_page_match" name="bblm_options_page_match" type="text" value="<?php echo $page_match ?>" maxlength="3" size="2" />
+ 		<input id="bblm_options_page_match" name="bblm_options_page_match" type="text" value="<?php echo $page_match ?>" maxlength="6" size="2" />
   	 	<label for="bblm_options_page_match">The number in the DB for the Match / Results Page.</label>
  	</td>
  </tr>
@@ -135,22 +123,29 @@
  <tr>
   	<th scope="row" valign="top">Page # - Stadiums</th>
   	<td>
-  		<input id="bblm_options_page_stadium" name="bblm_options_page_stadium" type="text" value="<?php echo $page_stadium ?>" maxlength="3" size="2" />
+  		<input id="bblm_options_page_stadium" name="bblm_options_page_stadium" type="text" value="<?php echo $page_stadium ?>" maxlength="6" size="2" />
    	 	<label for="bblm_options_page_stadium">The number in the DB for the Stadiums Page.</label>
   	</td>
  </tr>
  <tr>
   	<th scope="row" valign="top">Page # - Statistics</th>
   	<td>
-  		<input id="bblm_options_page_stats" name="bblm_options_page_stats" type="text" value="<?php echo $page_stats ?>" maxlength="3" size="2" />
+  		<input id="bblm_options_page_stats" name="bblm_options_page_stats" type="text" value="<?php echo $page_stats ?>" maxlength="6" size="2" />
    	 	<label for="bblm_options_page_stats">The number in the DB for the Statistics Page.</label>
   	</td>
  </tr>
   <tr>
    	<th scope="row" valign="top">Page # - Season</th>
    	<td>
-   		<input id="bblm_options_page_season" name="bblm_options_page_season" type="text" value="<?php echo $page_season ?>" maxlength="3" size="2" />
+   		<input id="bblm_options_page_season" name="bblm_options_page_season" type="text" value="<?php echo $page_season ?>" maxlength="6" size="2" />
     	 	<label for="bblm_options_page_season">The number in the DB for the Seasons Page.</label>
+   	</td>
+ </tr>
+  <tr>
+   	<th scope="row" valign="top">Page # - Star Players</th>
+   	<td>
+   		<input id="bblm_options_page_stars" name="bblm_options_page_stars" type="text" value="<?php echo $page_stars ?>" maxlength="6" size="2" />
+    	 	<label for="bblm_options_page_stars">The number in the DB for the Star Players Team Page.</label>
    	</td>
  </tr>
   <tr>
@@ -167,6 +162,20 @@
    	 	<label for="bblm_options_team_tbd">The ID number for the team "To be determined".</label>
   	</td>
  </tr>
+ <tr>
+  	<th scope="row" valign="top">Team_id - Star Player Team</th>
+  	<td>
+  		<input id="bblm_options_team_star" name="bblm_options_team_star" type="text" value="<?php echo $team_star ?>" maxlength="3" size="2" />
+   	 	<label for="bblm_options_team_star">The ID number for the team "Star Players".</label>
+  	</td>
+ </tr>
+  <tr>
+   	<th scope="row" valign="top">Race_id - Star Player Race</th>
+   	<td>
+   		<input id="bblm_options_race_star" name="bblm_options_race_star" type="text" value="<?php echo $race_star ?>" maxlength="3" size="2" />
+    	 	<label for="bblm_options_race_star">The ID number for the race "Stars".</label>
+   	</td>
+ </tr>
   <tr>
    	<th scope="row" valign="top">Player ID - Mercenary</th>
    	<td>
@@ -177,9 +186,7 @@
 
 </table>
 
-<p class="submit">
-	<input type="submit" name="bblm_options_submit" tabindex="4" value="Save Options" title="Save Options"/>
-</p>
+<p class="submit"><input type="submit" name="bblm_options_submit" value="Save Options" title="Save Options" class="button-primary"/></p>
 
 </form>
 

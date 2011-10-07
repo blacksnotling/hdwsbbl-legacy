@@ -80,6 +80,7 @@ function bblm_insert_admin_pages() {
 	add_submenu_page('bblm_plugin/pages/bb.admin.core.teamm.php', 'Add Position', 'Add Position', 8, 'bblm_plugin/pages/bb.admin.add.position.php');
 	add_submenu_page('bblm_plugin/pages/bb.admin.core.teamm.php', 'Manage Players', 'Manage Players', 8, 'bblm_plugin/pages/bb.admin.add.player.php');
 	add_submenu_page('bblm_plugin/pages/bb.admin.core.teamm.php', 'Edit Player', 'Edit Player', 8, 'bblm_plugin/pages/bb.admin.edit.player.php');
+	add_submenu_page('bblm_plugin/pages/bb.admin.core.teamm.php', 'Add Star', 'Add Star', 8, 'bblm_plugin/pages/bb.admin.add.star.php');
 	add_submenu_page('bblm_plugin/pages/bb.admin.core.teamm.php', 'JM Report', 'JM Report', 8, 'bblm_plugin/pages/bb.admin.report.jm.php');
 
 }

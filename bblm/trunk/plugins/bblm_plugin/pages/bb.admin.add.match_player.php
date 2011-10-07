@@ -1,34 +1,15 @@
 <?php
 /*
 *	Filename: bb.admin.add.match_player.php
-*	Version: 1.3
-*	Description: One of the big ones, this page records player actions for a game and records and *	increases and permanent injuries.
+*	Description: This page records player actions for a game and captures any increases and permanent injuries.
 */
-/* -- Change History --
-20080326 - 0.1b - Initial creation of file. Step 1 and 2 are in place. working on submitting for step 3
-20080331 - 1.0a - After 3 days without internet conenction I have completed this in Alpha. I am sure there are lots of bugs!
-20080402 - 1.0b - fixed a few bugs. calling this one done!
-20080405 - 1.1b - checked for any refrences to dev_ rather then the correct $wpdb->
-20080409 - 1.2b - changed it to the "changed" checkbox is off by default. corrected anothe rformatting bug in the increase and inj fields.
-20080417 - 1.3b - Fixed bug where the TV was being calculated incorrectly.
-20080730 - 1.0 - bump to Version 1 for public release.
-20090121 - 1.0 (r1) - Began change with a small refresh of some of the styles used
-20090126 - 1.0 (r2) - Added Jaascript to add up SPP values automatically.
-20090127 - 1.0 (r3) - More JS to highlight kill box and added more refrence tables
-		 - 1.1 - Incorperation of new update TV function and a bump to 1.1!
-20090819 - 1.2 - Updated insert statements as the bb_match player_table as been updated with the mp_counts field
-20091128 - 1.2.1 - switched the cas and comp fields to reflect the match report sheet (tracker [203])
-20100308 - 1.3 - Updated the prefix for the custom bb tables in the Database (tracker [224])
-
-*/
-
 
 //Check the file is not being accessed directly
 if (!function_exists('add_action')) die('You cannot run this file directly. Naughty Person');
 ?>
 <div class="wrap">
 	<h2>Record Player Actions for a Match</h2>
-	<p>From this page you can record players actions during a match and also update any player profiles. <strong>Warning</strong>: This time may take some time to work! Please <strong>don't</strong> hit submit multiple times.</p>
+	<p>From this page you can record players actions during a match and also update any player profiles. <strong>Warning</strong>: This may take some time to process all the information! Please <strong>don't</strong> hit submit multiple times!!</p>
 
 <?php
 
@@ -386,9 +367,7 @@ $playersql = 'SELECT P.*, M.mp_inj, M.mp_inc, T.t_name FROM '.$wpdb->prefix.'mat
 
 
 	<input type="hidden" name="bblm_numofplayers" size="2" value="<?php print($p-1); ?>">
-	<p class="submit">
-		<input type="submit" name="bblm_player_increase" tabindex="4" value="Submit These Details" title="Submit These Details "/>
-	</p>
+	<p class="submit"><input type="submit" name="bblm_player_increase" tabindex="4" value="Submit These Details" title="Submit These Details "/ class="button-primary"/></p>
 </form>
 
 <?php
@@ -442,6 +421,8 @@ $matchsql2 = "SELECT M.m_id, UNIX_TIMESTAMP(M.m_date), M.m_teamA AS tAid, M.m_te
 <?php
 			$tAid = $md->tAid;
 			$tBid = $md->tBid;
+			$teamA = $md->tA;
+			$teamB = $md->tB;
 			$ccounts = $md->c_counts;
 	}
 ?>
@@ -454,6 +435,7 @@ $matchsql2 = "SELECT M.m_id, UNIX_TIMESTAMP(M.m_date), M.m_teamA AS tAid, M.m_te
 
 	<h3>Please Detail Participation</h3>
 	<p>Below are all the players who where available to take part in this match. If they took part in this match please ensure that the &quot;Played?&quot; tickbox is selected.</p>
+	<p>There will be a chance to record the actions of any Star Players at the bottom of the page.</p>
 
 
 	<script type="text/javascript">
@@ -500,10 +482,7 @@ $matchsql2 = "SELECT M.m_id, UNIX_TIMESTAMP(M.m_date), M.m_teamA AS tAid, M.m_te
 	}
 	</script>
 
-
-
 	<?php
-//$playersql = "SELECT P.p_id, P.t_id, P.p_name, P.p_num, T.t_name from ".$wpdb->prefix."player P, ".$wpdb->prefix."team T where P.t_id = T.t_id AND (P.t_id = ".$tAid." OR P.t_id = ".$tBid.") AND P.p_status = 1 AND P.p_mng = 0 ORDER BY P.t_id, P.p_num";
 $playersql = 'SELECT P.p_id, P.t_id, P.p_spp, X.post_title AS p_name, P.p_num, T.t_name from '.$wpdb->prefix.'player P, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' X where P.p_id = J.tid AND J.prefix = \'p_\' AND J.pid = X.ID AND P.t_id = T.t_id AND (P.t_id = '.$tAid.' OR P.t_id = '.$tBid.') AND P.p_status = 1 AND P.p_mng = 0 ORDER BY P.t_id, P.p_num';
 	if ($playerlist = $wpdb->get_results($playersql)) {
 		//initiate var for count
@@ -546,6 +525,48 @@ $playersql = 'SELECT P.p_id, P.t_id, P.p_spp, X.post_title AS p_name, P.p_num, T
 			$p++;
 		}
 		print("</table>\n");
+
+		//Once the teams have been outputted - now come the Star Players
+
+		//Determine the Star Player Team (to get the star players)
+		$options = get_option('bblm_config');
+		$bblm_team_star = htmlspecialchars($options['team_star'], ENT_QUOTES);
+
+		$starssql = 'SELECT P.post_name, X.p_id FROM '.$wpdb->prefix.'player X, '.$wpdb->prefix.'posts P, '.$wpdb->prefix.'bb2wp J WHERE J.prefix = \'p_\' AND J.pid = P.ID AND J.tid = X.p_id AND X.t_id = '.$bblm_team_star.' order by P.post_name ASC';
+		if ($stars = $wpdb->get_results($starssql)) {
+			$starlist = "";
+			foreach ($stars as $star) {
+				$starlist .= "<option value=\"".$star->p_id."\">".$star->post_name."</option>\n";
+			}
+			//create a drop down containing the two teams.
+			$teamlist = "	<option value=\"".$tAid."\">".$teamA."</option>\n	<option value=\"".$tBid."\">".$teamB."</option>\n";
+
+			$pmax = $p+4;
+			print("	<h3>Star Players</h3>\n	<p>If Any Star Players took part in the match enter their details below and tick the played box.</p>\n	<table cellspacing=\"0\" class=\"widefat\">\n		<tr>\n			<th>Team</th>\n			<th>Star</th>\n			<th>TD</th>\n			<th>COMP</th>\n			<th>CAS</th>\n			<th>INT</th>\n			<th>MVP</th>\n			<th>SPP</th>\n			<th>Played?</th>\n			<th>Increase? (keep blank)</th>\n</tr>\n");
+			while ($p < $pmax){
+
+				if ($p % 2) {
+					print("		<tr>\n");
+				}
+				else {
+					print("		<tr class=\"alternate\">\n");
+				}
+				print("			<td><select id=\"bblm_tid".$p."\" name=\"bblm_tid".$p."\">".$teamlist."</select></td>\n");
+				print("			<td><select id=\"bblm_pid".$p."\" name=\"bblm_pid".$p."\">".$starlist."</select></td>\n");
+				print("			<td><input type=\"text\" name=\"bblm_td".$p."\" id=\"bblm_td".$p."\" size=\"3\" value=\"0\" maxlength=\"2\" onChange=\"UpdateSPP(".$p.")\"></td>\n");
+				print("			<td><input type=\"text\" name=\"bblm_comp".$p."\" id=\"bblm_comp".$p."\" size=\"3\" value=\"0\" maxlength=\"2\" onChange=\"UpdateSPP(".$p.")\"></td>\n");
+				print("			<td><input type=\"text\" name=\"bblm_cas".$p."\" id=\"bblm_cas".$p."\" size=\"3\" value=\"0\" maxlength=\"2\" onChange=\"UpdateSPP(".$p.")\"></td>\n");
+				print("			<td><input type=\"text\" name=\"bblm_int".$p."\" id=\"bblm_int".$p."\" size=\"3\" value=\"0\" maxlength=\"2\" onChange=\"UpdateSPP(".$p.")\"></td>\n");
+				print("			<td><input type=\"text\" name=\"bblm_mvp".$p."\" id=\"bblm_mvp".$p."\" size=\"3\" value=\"0\" maxlength=\"1\" onChange=\"UpdateSPP(".$p.")\"></td>\n");
+				print("			<td style=\"background-color:#ddd;\"><input type=\"text\" name=\"bblm_spp".$p."\" id=\"bblm_spp".$p."\" size=\"3\" value=\"0\" maxlength=\"2\"></td>\n");
+				print("			<td><input type=\"checkbox\" name=\"bblm_plyd".$p."\"></td>\n    <input type=\"hidden\" name=\"bblm_oldspp".$p."\" id=\"bblm_oldspp".$p."\" size=\"3\" value=\"0\">   <input type=\"hidden\" name=\"mng".$p."\" id=\"mng".$p."\" size=\"3\" value=\"0\">   <td>   <input type=\"text\" name=\"bblm_increase".$p."\" id=\"bblm_increase".$p."\" size=\"10\" value=\"\" maxlength=\"30\"></td>\n<input type=\"hidden\" name=\"bblm_injury".$p."\" size=\"10\" value=\"\" maxlength=\"30\">\n");
+				print("		</tr>\n");
+
+				$p++;
+			}//end of while
+			print("	</table>\n");
+
+		}//end of if stars
 	}
 	else {
 		print("<p><strong>These teams do not have any players registered with them! Please add some to the teams before you can continue.</strong></p>\n");
@@ -640,9 +661,7 @@ $playersql = 'SELECT P.p_id, P.t_id, P.p_spp, X.post_title AS p_name, P.p_num, T
 <?php
 	if (1 !== $noplayers) {
 ?>
-	<p class="submit">
-		<input type="submit" name="bblm_player_actions" tabindex="4" value="Submit These Details" title="Submit These Details "/>
-	</p>
+	<p class="submit"><input type="submit" name="bblm_player_actions" value="Submit These Details" title="Submit These Details" class="button-primary"/></p>
 	</form>
 <?php
 	} // end of no players check
@@ -659,29 +678,28 @@ else {
 ?>
 	<form name="bblm_selectteam" method="post" id="post">
 
-	<p>Below is a list of all the matches that have not yet had their player details filled out. Please select one and press the continue button to complete the match</p>
-	<h3>Select a Match</h3>
+		<p>Below is a list of all the matches that have not yet had their player actions filled out. Please select one and press the continue button to complete the details for the match.</p>
 
-		<label for="bblm_mid" >Match: </label>
-		<select name="bblm_mid" id="bblm_mid">
+		<table class="form-table">
+			<tr valign="top">
+				<th scope="row"><label for="bblm_mid" >Match: </label></th>
+				<td><select name="bblm_mid" id="bblm_mid">
 	<?php
 $matchsql = "SELECT M.m_id, M.m_date, T.t_name AS tA, Q.t_name AS tB, M.m_teamAtd, M.m_teamBtd, M.m_gate, P.guid, C.c_name FROM ".$wpdb->prefix."match M, ".$wpdb->prefix."bb2wp J, ".$wpdb->posts." P, ".$wpdb->prefix."team T, ".$wpdb->prefix."team Q, ".$wpdb->prefix."comp C WHERE C.c_id = M.c_id AND M.m_id = J.tid AND J.pid = P.ID AND J.prefix = 'm_' AND M.m_teamA = T.t_id AND M.m_teamB = Q.t_id AND M.m_complete = 0 ORDER BY m_date DESC, m_id DESC";
 	if ($matches = $wpdb->get_results($matchsql)) {
 		foreach ($matches as $match) {
-			print("			<option value=\"$match->m_id\">".$match->c_name." - ".$match->tA." ".$match->m_teamAtd." vs ".$match->m_teamBtd." ".$match->tB."</option>\n");
+			print("					<option value=\"$match->m_id\">".$match->c_name." - ".$match->tA." ".$match->m_teamAtd." vs ".$match->m_teamBtd." ".$match->tB."</option>\n");
 		}
 	}
 	?>
-	</select>
-
-	<p class="submit">
-	<input type="submit" name="bblm_match_select" value="Enter Details" title="Select the above Match"/>
-	</p>
+				</select></td>
+			</tr>
+		</table>
+		<p class="submit"><input type="submit" name="bblm_match_select" value="Enter Details" title="Select the above Match" class="button-primary"/></p>
 	</form>
 
 <?php
 }//end of final else if
 
 ?>
-
 </div>
