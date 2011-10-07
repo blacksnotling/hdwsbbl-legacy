@@ -1,18 +1,7 @@
 <?php
 /*
 *	Filename: bb.admin.generate.summary.php
-*	Version: 1.2
 *	Description: Generates the weekly Warzone summary.
-*/
-/* -- Change History --
-20080727 - 0.1b - Initial creation of file. (3 hours)
-20080728 - 0.2b - Some more work on file (4 hours)
-20080729 - 1.0b - Finihsed file! (3.5 hours)
-20080730 - 1.0 - bump to Version 1 for public release.
-20090831 - 1.1 - some update work - reformatted the apperance of the second screen, added obituaries and made sure only deaths were counted. also added highest attendance
-20100308 - 1.2 - Updated the prefix for the custom bb tables in the Database (tracker [224])
-
-
 */
 
 
@@ -324,6 +313,8 @@ else if(isset($_POST['bblm_gen_preview'])) {
 				}
 			}
 		}
+		$options = get_option('bblm_config');
+		$bblm_star_team = htmlspecialchars($options['team_star'], ENT_QUOTES);
 
 		$sumoutput .= "<h3>Player Statistics for the ".$lsname." (Week ".$_POST['bblm_sweekno'].")</h3>\n";
 		//modified Copy and Paste from view.comp
@@ -344,10 +335,10 @@ else if(isset($_POST['bblm_gen_preview'])) {
 
 			//load in the SQL based on the comp/season selection
 			if ($is_seasonstat) {
-				$statsql = 'SELECT Y.post_title, O.post_title AS TEAM, O.guid AS TEAMLink, Y.guid, SUM(M.'.$sa[0].') AS VALUE, R.pos_name FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'match X, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' Y, '.$wpdb->prefix.'position R, '.$wpdb->prefix.'bb2wp I, '.$wpdb->posts.' O WHERE P.t_id = I.tid AND I.prefix = \'t_\' AND I.pid = O.ID AND P.pos_id = R.pos_id AND P.p_id = J.tid AND J.prefix = \'p_\' AND J.pid = Y.ID AND M.m_id = X.m_id AND X.c_id = C.c_id AND C.c_counts = 1 AND M.p_id = P.p_id AND P.t_id = T.t_id AND M.'.$sa[0].' > 0 AND C.sea_id = '.$sea_id.' GROUP BY P.p_id ORDER BY VALUE DESC LIMIT 10';
+				$statsql = 'SELECT Y.post_title, O.post_title AS TEAM, O.guid AS TEAMLink, Y.guid, SUM(M.'.$sa[0].') AS VALUE, R.pos_name FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'match X, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' Y, '.$wpdb->prefix.'position R, '.$wpdb->prefix.'bb2wp I, '.$wpdb->posts.' O WHERE P.t_id = I.tid AND I.prefix = \'t_\' AND I.pid = O.ID AND P.pos_id = R.pos_id AND P.p_id = J.tid AND J.prefix = \'p_\' AND J.pid = Y.ID AND M.m_id = X.m_id AND X.c_id = C.c_id AND C.c_counts = 1 AND M.p_id = P.p_id AND P.t_id = T.t_id AND M.'.$sa[0].' > 0 AND C.sea_id = '.$sea_id.' AND T.t_id != '.$bblm_star_team.' GROUP BY P.p_id ORDER BY VALUE DESC LIMIT 10';
 			}
 			else {
-				$statsql = 'SELECT Y.post_title, O.post_title AS TEAM, O.guid AS TEAMLink, Y.guid, SUM(M.'.$sa[0].') AS VALUE, R.pos_name FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'match X, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' Y, '.$wpdb->prefix.'position R, '.$wpdb->prefix.'bb2wp I, '.$wpdb->posts.' O WHERE P.t_id = I.tid AND I.prefix = \'t_\' AND I.pid = O.ID AND P.pos_id = R.pos_id AND P.p_id = J.tid AND J.prefix = \'p_\' AND J.pid = Y.ID AND M.m_id = X.m_id AND X.c_id = C.c_id AND C.c_counts = 1 AND M.p_id = P.p_id AND P.t_id = T.t_id AND M.'.$sa[0].' > 0 AND C.c_id = '.$_POST['bblm_splstat'].' GROUP BY P.p_id ORDER BY VALUE DESC LIMIT 10';
+				$statsql = 'SELECT Y.post_title, O.post_title AS TEAM, O.guid AS TEAMLink, Y.guid, SUM(M.'.$sa[0].') AS VALUE, R.pos_name FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'team T, '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'match X, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' Y, '.$wpdb->prefix.'position R, '.$wpdb->prefix.'bb2wp I, '.$wpdb->posts.' O WHERE P.t_id = I.tid AND I.prefix = \'t_\' AND I.pid = O.ID AND P.pos_id = R.pos_id AND P.p_id = J.tid AND J.prefix = \'p_\' AND J.pid = Y.ID AND M.m_id = X.m_id AND X.c_id = C.c_id AND C.c_counts = 1 AND M.p_id = P.p_id AND P.t_id = T.t_id AND M.'.$sa[0].' > 0 AND C.c_id = '.$_POST['bblm_splstat'].' AND T.t_id != '.$bblm_star_team.' GROUP BY P.p_id ORDER BY VALUE DESC LIMIT 10';
 			}
 			if ($topstats = $wpdb->get_results($statsql)) {
 			$sumoutput .= "<h4>".$sa[1]."</h4>\n";

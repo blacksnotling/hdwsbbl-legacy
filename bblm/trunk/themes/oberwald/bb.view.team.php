@@ -4,7 +4,7 @@ Template Name: View Team
 */
 /*
 *	Filename: bb.view.team.php
-*	Description: .Page template to display
+*	Description: Page template to display
 */
 ?>
 <?php get_header(); ?>
@@ -195,9 +195,30 @@ Template Name: View Team
 					$is_first = 0;
 				}
 				print("			</ul>\n");
-				if ($ti->t_roster) {
-					print("<p><a href=\"".$rosterlink."/\" title=\"View the teams full roster \">View Full Roster &gt;&gt;</a></p>");
+
+				/*		Star Player who have played for this team	*/
+				//grab the ID of the "Star Player team
+				$options = get_option('bblm_config');
+				$bblm_star_team = htmlspecialchars($options['team_star'], ENT_QUOTES);
+
+				$starplayerssql = 'SELECT P.post_title, P.guid, COUNT(*) AS VISITS FROM '.$wpdb->prefix.'match_player M, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P, '.$wpdb->prefix.'player X WHERE P.ID = J.pid AND J.prefix = "p_" AND J.tid = X.p_id AND M.p_id = X.p_id AND X.t_id = '.$bblm_star_team.' AND M.t_id = '.$tid.' GROUP BY M.p_id ORDER BY P.post_title ASC';
+				if ($starplayers = $wpdb->get_results($starplayerssql)) {
+					print("			<h4>Star Players hired</h4>\n			<ul>\n");
+					foreach ($starplayers as $spv) {
+						print("				<li><a href=\"".$spv->guid."\" title=\"View the details of this Star Player\">".$spv->post_title."</a>");
+						if (1 < $spv->VISITS) {
+							print(" (x".$spv->VISITS.")");
+						}
+						print("</li>\n");
+					}
+					print("			</ul>\n");
 				}
+				/*		End of Star Players	*/
+
+				if ($ti->t_roster) {
+									print("<p><a href=\"".$rosterlink."/\" title=\"View the teams full roster \">View Full Roster &gt;&gt;</a></p>");
+				}
+
 			}
 			else {
 				print("<div class=\"info\">\n	<p>No players have been found for this team.</p>\n	</div>\n");

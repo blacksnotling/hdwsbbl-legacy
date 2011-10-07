@@ -4,32 +4,14 @@ Template Name: View Race
 */
 /*
 *	Filename: bb.view.race.php
-*	Version: 1.2
-*	Description: Page template to view a races details.
-*/
-/* -- Change History --
-20080218 - 0.0a - Intital creation of file. a quick and dirty solution.
-20080226 - 0.1a - Moved into a new directory sturucture.
-20080329 - 0.1b - Added positions after it was created in DB. moved into Beta
-20080415 - 1.0b - bit of a tidy up and converting into th new format. Also added basic list of teams for this race.
-20080416 - 1.1b - added the details div around the content
-20080521 - 1.2b - ensured that only the correct hdwsbbl teams where listed (IE t.show = 1).
-20080613 - 1.3b -  added zebra striping and breadcrumbs to the page.
-20080615 - 1.4b - Added Table classes and renamed template display name at top
-20080707 - 1.4.1b - fixed a small validation error
-20080730 - 1.0 - bump to Version 1 for public release.
-20080805 - 1.1 - Formatted rr cost and restricted position SQL
-20090712 - 1.1.1 - Added DYK code to page
-20100123 - 1.2 - Updated the prefix for the custom bb tables in the Database (tracker [225])
-20100831 - 1.2.1 - changed the sorting of the positions and added pos_id to the <tr>'s
-
+*	Description: Page template to view the details of a race.
 */
 ?>
 <?php get_header(); ?>
 	<?php if (have_posts()) : ?>
 		<?php while (have_posts()) : the_post(); ?>
 		<div id="breadcrumb">
-			<p><a href="<?php echo get_option('home'); ?>" title="Back to the front of the HDWSBBL">HDWSBBL</a> &raquo; <a href="<?php echo get_option('home'); ?>/races/" title="Back to the team listing">Races</a> &raquo; <?php the_title(); ?></p>
+			<p><a href="<?php echo get_option('home'); ?>" title="Back to the front of the HDWSBBL">HDWSBBL</a> &raquo; <a href="<?php echo get_option('home'); ?>/races/" title="Back to the Race listing">Races</a> &raquo; <?php the_title(); ?></p>
 		</div>
 			<div class="entry">
 				<h2><?php the_title(); ?></h2>
@@ -54,7 +36,7 @@ Template Name: View Race
 					//we only want to continue if the above selection returned something.
 					print("<h3>Positions available for Race</h3>\n");
 					//Grab Positions
-					$positionsql = 'SELECT * FROM '.$wpdb->prefix.'position WHERE pos_status = 1 AND r_id = '.$race_id.' ORDER by pos_limit DESC';
+					$positionsql = 'SELECT * FROM '.$wpdb->prefix.'position WHERE pos_status = 1 AND r_id = '.$race_id.' ORDER by pos_cost ASC';
 					if ($positions = $wpdb->get_results($positionsql)) {
 						$zebracount = 1;
 						print("<table>\n	<tr>\n		<th>Name</th>\n		<th>Limit</th>\n		<th class=\"tbl_stat\">MA</th>\n		<th class=\"tbl_stat\">ST</th>\n		<th class=\"tbl_stat\">AG</th>\n		<th class=\"tbl_stat\">AV</th>\n		<th>Skills</th>\n		<th>Cost</th>\n	</tr>\n");
@@ -73,6 +55,26 @@ Template Name: View Race
 					else {
 						print("	<div class=\"info\">\n		<p>Sorry, but no positions have been filled out for this race</p>\n	</div>\n");
 					}
+
+					//Availible Star Players
+					$starplayersql = 'SELECT P.post_title, P.guid, X.p_ma, X.p_st, X.p_ag, X.p_av, X.p_skills, X.p_cost FROM '.$wpdb->prefix.'race2star S, '.$wpdb->prefix.'posts P, '.$wpdb->prefix.'bb2wp J, '.$wpdb->prefix.'player X WHERE J.pid = P.ID AND J.prefix = \'p_\' AND J.tid = S.p_id AND X.p_id = S.p_id AND S.r_id = '.$race_id.' AND X.p_status = 1 ORDER BY P.post_title ASC LIMIT 0, 30 ';
+					if ($starplayer = $wpdb->get_results($starplayersql)) {
+						$zebracount = 1;
+						print("<h3>Star Players available for Race</h3>\n");
+						print("<table>\n	<tr>\n		<th>Name</th>\n		<th class=\"tbl_stat\">MA</th>\n		<th class=\"tbl_stat\">ST</th>\n		<th class=\"tbl_stat\">AG</th>\n		<th class=\"tbl_stat\">AV</th>\n		<th>Skills</th>\n		<th>Cost</th>\n	</tr>\n");
+						foreach ($starplayer as $star) {
+							if ($zebracount % 2) {
+								print("		<tr>\n");
+							}
+							else {
+								print("	<tr class=\"tbl_alt\">\n");
+							}
+							print("		<td><a href=\"".$star->guid."\" title=\"See more details of this player\">".$star->post_title."</a></td>\n		<td>".$star->p_ma."</td>\n		<td>".$star->p_st."</td>\n		<td>".$star->p_ag."</td>\n		<td>".$star->p_av."</td>\n		<td class=\"tbl_skills\">".$star->p_skills."</td>\n		<td>".number_format($star->p_cost)."gp</td>\n	</tr>\n");
+							$zebracount++;
+						}
+						print("</table>\n");
+					}
+
 
 					print("<h3>Teams belonging to this Race</h3>\n");
 					$teamsql = 'SELECT T.t_name, P.guid FROM '.$wpdb->prefix.'team T, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE T.t_id = J.tid AND J.prefix = \'t_\' AND J.pid = P.ID AND T.t_show = 1 AND T.r_id = '.$race_id.' ORDER by T.t_name ASC';
