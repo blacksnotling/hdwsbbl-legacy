@@ -3,7 +3,7 @@
 Plugin Name: Blood Bowl League Manager System (BBLM)
 Plugin URI: http://www.hdwsbbl.co.uk/
 Description: Everthing you need to run a Blood Bowl League via Wordpress!
-Version: 1.4.1
+Version: 1.5
 Author: Blacksnotling
 Author URI: http://www.hdwsbbl.co.uk/
 */
