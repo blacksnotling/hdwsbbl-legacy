@@ -11,11 +11,11 @@ Template Name: View Team
 	<?php if (have_posts()) : ?>
 		<?php while (have_posts()) : the_post(); ?>
 		<div id="breadcrumb">
-			<p><a href="<?php echo get_option('home'); ?>" title="Back to the front of the HDWSBBL">HDWSBBL</a> &raquo; <a href="<?php echo get_option('home'); ?>/teams/" title="Back to the team listing">Teams</a> &raquo; <?php the_title(); ?></p>
+			<p><a href="<?php echo home_url(); ?>" title="Back to the front of the HDWSBBL">HDWSBBL</a> &raquo; <a href="<?php echo home_url(); ?>/teams/" title="Back to the team listing">Teams</a> &raquo; <?php the_title(); ?></p>
 		</div>
 			<div class="entry">
 				<h2><?php the_title(); ?></h2>
-<?
+<?php
 		$teaminfosql = 'SELECT T.*, J.tid AS teamid, R.r_name, L.guid AS racelink, U.display_name, W.post_title AS stad, W.guid AS stadlink FROM '.$wpdb->prefix.'team T, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P, '.$wpdb->users.' U, '.$wpdb->prefix.'race R, '.$wpdb->prefix.'bb2wp K, '.$wpdb->posts.' L, '.$wpdb->prefix.'bb2wp Q, '.$wpdb->posts.' W WHERE T.stad_id = Q.tid AND Q.prefix = \'stad_\' AND Q.pid = W.ID AND T.r_id = K.tid AND K.prefix = \'r_\' AND K.pid = L.ID AND T.ID = U.ID AND R.r_id = T.r_id AND T.t_id = J.tid AND J.prefix = \'t_\' AND J.pid = P.ID AND P.ID = '.$post->ID;
 		if ($ti = $wpdb->get_row($teaminfosql)) {
 				$tid = $ti->teamid;
@@ -28,10 +28,10 @@ Template Name: View Team
 				//Determine if a custom logo is present
 				$filename = $_SERVER['DOCUMENT_ROOT']."/images/teams/".$ti->t_sname."_big.gif";
 				if (file_exists($filename)) {
-					$timg = "<img src=\"".get_option('home')."/images/teams/".$ti->t_sname."_big.gif\" alt=\"".$ti->t_sname." Logo\" />";
+					$timg = "<img src=\"".home_url()."/images/teams/".$ti->t_sname."_big.gif\" alt=\"".$ti->t_sname." Logo\" />";
 				}
 				else {
-					$timg = "<img src=\"".get_option('home')."/images/races/race".$ti->r_id.".gif\" alt=\"".$ti->r_name." Logo\" />";
+					$timg = "<img src=\"".home_url()."/images/races/race".$ti->r_id.".gif\" alt=\"".$ti->r_name." Logo\" />";
 				}
 		}
 ?>
@@ -462,7 +462,7 @@ Template Name: View Team
 			   <li><strong>Debut:</strong> <a href="<?php print($sd->guid); ?>" title="Read more on <?php print($sd->post_title); ?>"><?php print($sd->post_title); ?></a></li>
 			   <li><strong>Race:</strong> <a href="<?php print($ti->racelink); ?>" title="Read more about <?php print($ti->r_name); ?> teams"><?php print($ti->r_name); ?></a></li>
 			  </ul>
-<?
+<?php
 				if ($ti->t_roster) {
 					print("			  <ul>\n			   <li><a href=\"".$rosterlink."/\" title=\"View the teams full roster \">View Full Roster &gt;&gt;</a></li>\n			  </ul>\n");
 				}

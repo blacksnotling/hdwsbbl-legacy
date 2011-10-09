@@ -4,32 +4,7 @@ Template Name: View Player
 */
 /*
 *	Filename: bb.view.player.php
-*	Version: 1.4
 *	Description: Page template to view a players details
-*/
-/* -- Change History --
-20080406 - 0.1b - Intital creation of file..
-20080411 - 0.2b - Added a mising closing > on a th
-20080416 - 0.3b - moved the player descrition to be below the initial chracteristics.
-20080418 - 0.4b - Various bug fixing and re-formatting.
-20080623 - 0.5b - gave this page some lovin. I removed the sidebar and tidied up a few bits and bobs
-20080624 - 0.6b - fully implemented the sidebar and added awards. just a fw more bits to clear up
-20080625 - 1.0b - Version 1 Beta reached.
-20080702 - 1.0.1b - added some thead and tbody tags to the sortable tables
-20080718 - 1.0.2b - added a skills class to the player overview to reduce the text size
-20080719 - 1.1b - fixed the player rank swith at last! in match history, MNG is  now a Y not a 1
-20080730 - 1.0 - bump to Version 1 for public release.
-20090712 - 1.0.1 - Added DYK code to page
-20090827 - 1.1.1r1 - If one has been entered the player image is shown. the "other players does not show this player"
-				 - If the player is a captain (or was) then it is mentioend in the sidebar
-20090830 - 1.1.1r2 - fixed the debut date. it now only appears when the player has actually played a game!
-			   - If the player has died, list their obituary
-20090831 - 1.2 - If the player is a killer, it lists who they have killed!
-20091230 - 1.3 - Fixed the debut date. the pid was hardcoaded as player 1 hence the wrong date!
-				 The obituary box now only displays when a player has died. it was always being displayed for inactive players due to a missing bracket
-				 The "killer" title no longer appears if the player has only killed themself!
-20100123 - 1.4 - Updated the prefix for the custom bb tables in the Database (tracker [225])
-
 */
 get_header(); ?>
 	<?php if (have_posts()) : ?>
@@ -45,7 +20,7 @@ get_header(); ?>
 				$pspp = $pd->p_spp;
 ?>
 		<div id="breadcrumb">
-			<p><a href="<?php echo get_option('home'); ?>" title="Back to the front of the HDWSBBL">HDWSBBL</a> &raquo; <a href="<?php echo get_option('home'); ?>/teams/" title="Back to the team listing">Teams</a> &raquo; <a href="<?php print($pd->TeamLink); ?>" title="Read more on <?php print($pd->TeamName); ?>"><?php print($pd->TeamName); ?></a> &raquo; <?php the_title(); ?></p>
+			<p><a href="<?php echo home_url(); ?>" title="Back to the front of the HDWSBBL">HDWSBBL</a> &raquo; <a href="<?php echo home_url(); ?>/teams/" title="Back to the team listing">Teams</a> &raquo; <a href="<?php print($pd->TeamLink); ?>" title="Read more on <?php print($pd->TeamName); ?>"><?php print($pd->TeamName); ?></a> &raquo; <?php the_title(); ?></p>
 		</div>
 <?php
 			} //end of if playersql
@@ -482,7 +457,7 @@ get_header(); ?>
 			if (!empty($pd->p_img)) {
 				//if the player has an image set, display it.
 ?>
-			<li class="sidelogo"><img src="<?php print(get_option('home')); ?>/images/players/<?php print($pd->p_img); ?>" alt="Picture of <?php the_title(); ?>" /></li>
+			<li class="sidelogo"><img src="<?php print(home_url()); ?>/images/players/<?php print($pd->p_img); ?>" alt="Picture of <?php the_title(); ?>" /></li>
 <?php
 			}
 ?>
@@ -518,7 +493,7 @@ get_header(); ?>
 			if ($has_played) {
 ?>
 			<li class="sideawards"><h2>Major Awards</h2>
-<?
+<?php
 			//note that both SQL strings are above
 			if (($sawards = $wpdb->get_results($seasonsql)) || ($cawards = $wpdb->get_results($playerchampionshipssql))) {
 				print("<ul>\n");

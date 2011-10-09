@@ -4,14 +4,14 @@ Template Name: Star Players race View
 */
 /*
 *	Filename: page-star-players.php
-*	Description: .Page to display the Star Players of the league. This replace the view team for this page.
+*	Description: Page to display the Star Players of the league. This replace the view team for this page.
 */
 ?>
 <?php get_header(); ?>
 	<?php if (have_posts()) : ?>
 		<?php while (have_posts()) : the_post(); ?>
 		<div id="breadcrumb">
-			<p><a href="<?php echo get_option('home'); ?>" title="Back to the front of the HDWSBBL">HDWSBBL</a> &raquo; <a href="<?php echo get_option('home'); ?>/races/" title="Back to the Race listing">Races</a> &raquo; <?php the_title(); ?></p>
+			<p><a href="<?php echo home_url(); ?>" title="Back to the front of the HDWSBBL">HDWSBBL</a> &raquo; <a href="<?php echo home_url(); ?>/races/" title="Back to the Race listing">Races</a> &raquo; <?php the_title(); ?></p>
 		</div>
 			<div>
 				<h2><?php the_title(); ?></h2>

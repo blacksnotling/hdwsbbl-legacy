@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="<?php bloginfo('html_type'); ?>; charset=<?php bloginfo('charset'); ?>" />
 <meta name="verify-v1" content="J9bPx/TvWuo23XUXc0nYCJFSmgUPTSk08c1uZQRsOjw=" />
 <title><?php wp_title('-','true','right'); ?> HDWSBBL</title>
-<script type="text/javascript" src="<?php bloginfo('template_directory'); ?>/includes/jquery.js"></script>
+<script type="text/javascript" src="<?php echo get_template_directory_uri(); ?>/includes/jquery.js"></script>
 <link rel="shortcut icon" href="<?php echo get_template_directory_uri(); ?>/favicon.ico" />
 <?php if (is_home()) { ?>
 <link rel="stylesheet" href="<?php echo get_template_directory_uri(); ?>/main.css?0909" type="text/css" media="screen" />
@@ -113,7 +113,7 @@ $(document).ready(function(){
 ?>
 	<div id="tagline"><p>Causing Havoc in the old world since 2506</p></div>
 	<div id="header" onclick="location.href='<?php echo home_url(); ?>';" style="cursor: pointer;">
-		<h1><a href="<?php echo get_option('home'); ?>" title="Go to the main page of <?php bloginfo('name'); ?>"><?php bloginfo('name'); ?></a></h1>
+		<h1><a href="<?php echo home_url(); ?>" title="Go to the main page of <?php bloginfo('name'); ?>"><?php bloginfo('name'); ?></a></h1>
 		<p><?php bloginfo('description'); ?></p>
 	</div>
 	<div id="navcontainer">

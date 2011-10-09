@@ -4,20 +4,14 @@ Template Name: Did You Know Listing.
 */
 /*
 *	Filename: bb.core.dyk.php
-*	Version: 1.1b
 *	Description: .Page template to display the DYK listing
-*/
-/* -- Change History --
-20090201 - 1.0 - Initial creation of file.
-20100123 - 1.1 - Updated the prefix for the custom bb tables in the Database (tracker [225])
-
 */
 ?>
 <?php get_header(); ?>
 	<?php if (have_posts()) : ?>
 		<?php while (have_posts()) : the_post(); ?>
 		<div id="breadcrumb">
-			<p><a href="<?php echo get_option('home'); ?>" title="Back to the front of the HDWSBBL">HDWSBBL</a> &raquo; <?php the_title(); ?></p>
+			<p><a href="<?php echo home_url(); ?>" title="Back to the front of the HDWSBBL">HDWSBBL</a> &raquo; <?php the_title(); ?></p>
 		</div>
 			<div class="entry">
 				<h2><?php the_title(); ?></h2>

@@ -4,24 +4,14 @@ Template Name: List Awards
 */
 /*
 *	Filename: bb.core.awards.php
-*	Version: 1.2
-*	Description: .Page template to display
-*/
-/* -- Change History --
-20080606 - 1.0 - Initial creation of file.
-20090712 - 1.0.1 - Added DYK code to page
-20090830 - 1.1 - Moved the site under statistics
-			   - removed the qualified award from the listing
-			   - cleaned up the sql of the pages.
-20100123 - 1.2 - Updated the prefix for the custom bb tables in the Database (tracker [225])
-
+*	Description: .Page template to display the Awards of the league
 */
 ?>
 <?php get_header(); ?>
 	<?php if (have_posts()) : ?>
 		<?php while (have_posts()) : the_post(); ?>
 		<div id="breadcrumb">
-			<p><a href="<?php echo get_option('home'); ?>" title="Back to the front of the HDWSBBL">HDWSBBL</a> &raquo; <a href="<?php echo get_option('home'); ?>/stats" title="Back to the main Statistics page">Statistics</a> &raquo; <?php the_title(); ?></p>
+			<p><a href="<?php echo home_url(); ?>" title="Back to the front of the HDWSBBL">HDWSBBL</a> &raquo; <a href="<?php echo home_url(); ?>/stats" title="Back to the main Statistics page">Statistics</a> &raquo; <?php the_title(); ?></p>
 		</div>
 			<div class="entry">
 				<h2><?php the_title(); ?></h2>
