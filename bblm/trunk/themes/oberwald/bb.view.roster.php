@@ -4,26 +4,13 @@ Template Name: Team Roster
 */
 /*
 *	Filename: bb.view.roster.php
-*	Version: 1.3
-*	Description: .Page template to display
-*/
-/* -- Change History --
-20080622 - 1.0b - Initial creation of file.
-20080623 - 1.0.1b - Fixed some validation errors
-20080722 - 1.1b - changed MNG from 1 to Y, added some more number formattion
-20080730 - 1.0 - bump to Version 1 for public release.
-20090117 - 1.1 - Changed title tag to have roster name then hdwsbbl
-			   - Added Injuries to the roster
-			   - The Team Captain (if assigned) is highlighted.
-20090331 - 1.2 - The Roster will display the team logo if present and the race logo if not
-20090824 - 1.2.1 - re-arranged the HTML title tag as it began with arrows and was annoying me!
-20100123 - 1.3 - Updated the prefix for the custom bb tables in the Database (tracker [225])
+*	Description: .Page template to display a teams Roster
 */
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="en">
 <head profile="http://gmpg.org/xfn/11">
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta http-equiv="Content-Type" content="<?php bloginfo('html_type'); ?>; charset=<?php bloginfo('charset'); ?>" />
 <title><?php wp_title(); ?> - HDWSBBL </title>
 <?php wp_head(); ?>
 <style type="text/css">
@@ -107,7 +94,7 @@ a:hover, a:active {
 	<?php if (have_posts()) : ?>
 		<?php while (have_posts()) : the_post(); ?>
 
-<?
+<?php
 		$teaminfosql = 'SELECT T.*, J.tid AS teamid, R.r_name, R.r_rrcost, L.guid AS racelink, U.display_name, W.post_title AS stad, W.guid AS stadlink, H.guid AS TeamLink, H.post_title AS TeamName FROM '.$wpdb->prefix.'team T, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P, '.$wpdb->users.' U, '.$wpdb->prefix.'race R, '.$wpdb->prefix.'bb2wp K, '.$wpdb->posts.' L, '.$wpdb->prefix.'bb2wp Q, '.$wpdb->posts.' W, '.$wpdb->prefix.'bb2wp Y, '.$wpdb->posts.' H WHERE T.t_id = Y.tid AND Y.prefix = \'t_\' AND Y.pid = H.ID AND Y.tid = J.tid AND T.stad_id = Q.tid AND Q.prefix = \'stad_\' AND Q.pid = W.ID AND T.r_id = K.tid AND K.prefix = \'r_\' AND K.pid = L.ID AND T.ID = U.ID AND R.r_id = T.r_id AND T.t_id = J.tid AND J.prefix = \'roster\' AND J.pid = P.ID AND P.ID = '.$post->ID;
 		if ($ti = $wpdb->get_row($teaminfosql)) {
 				$tid = $ti->teamid;
@@ -120,7 +107,7 @@ a:hover, a:active {
 ?>
 		<h1>Roster for <a href="<?php print($ti->TeamLink); ?>" title="Read more about <?php print($ti->TeamName); ?>"><?php print($ti->TeamName); ?></a></h1>
 
-<?
+<?php
 		}
 ?>
 <table border="0">
@@ -272,12 +259,12 @@ a:hover, a:active {
 	$filename = $_SERVER['DOCUMENT_ROOT']."/images/teams/".$ti->t_sname."_big.gif";
 	if (file_exists($filename)) {
 ?>
-  <td colspan="3" rowspan="7" class="tbl_logo"><img src="<?php print(get_option('home')); ?>/images/teams/<?php print($ti->t_sname); ?>_big.gif" alt="Team Logo" /></td>
+  <td colspan="3" rowspan="7" class="tbl_logo"><img src="<?php print(home_url()); ?>/images/teams/<?php print($ti->t_sname); ?>_big.gif" alt="Team Logo" /></td>
 <?php
 	}
 	else {
 ?>
-  <td colspan="3" rowspan="7" class="tbl_logo"><img src="<?php print(get_option('home')); ?>/images/races/race<?php print($ti->r_id); ?>.gif" alt="<?php print($ti->r_name); ?> Logo" /></td>
+  <td colspan="3" rowspan="7" class="tbl_logo"><img src="<?php print(home_url()); ?>/images/races/race<?php print($ti->r_id); ?>.gif" alt="<?php print($ti->r_name); ?> Logo" /></td>
 <?php
 	}
 ?>
@@ -338,7 +325,7 @@ a:hover, a:active {
 		</div> <!-- End of #maincontent -->
 	</div> <!-- End of #pagecontent -->
 	<div id="footer">
-				<p>Unique content is &copy; <a href="<?php echo get_option('home'); ?>" title="Visit the homepage of the HDWSBBL">HDWSBBL</a> 2006 - present.</p>
+				<p>Unique content is &copy; <a href="<?php echo home_url(); ?>" title="Visit the homepage of the HDWSBBL">HDWSBBL</a> 2006 - present.</p>
 				<p>Blood Bowl concept and miniatures are &copy; Games Workshop LTD used without permission.</p>
 				<?php wp_footer(); ?>
 	</div> <!-- End of #footer -->

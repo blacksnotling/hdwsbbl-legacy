@@ -4,34 +4,14 @@ Template Name: List Teams
 */
 /*
 *	Filename: bb.core.teams.php
-*	Version: 1.4.1
 *	Description: Page template to list the teams.
-*/
-/* -- Change History --
-20080405 - 0.1a - Intital creation of file
-20080419 - 0.2a - changed the sql so only hdwsbbl teams are shown.
-20080429 - 0.1b - moved into beta. improved SQL (race details and sorted by type, active, name from wp tbl notbb tbl)
-20080505 - 1.0b - Moved the teams into a table and split them by Type and Status
-20080604 - 1.0b - Added Team Value to the table
-20080610 - 1.1b - removed rogue | at bottom of page and added some casses to the tables. also added some classes to the tables
-20080611 - 1.1.1b - Some smal formatting changes
-20080730 - 1.0 - bump to Version 1 for public release.
-20080915 - 1.0 (0.1b) - Added tbody and thead so that the table is stable when being sorted.
-			   - Each team has its race logo by its side.
-20081226 - 1.1 - finished cup code, reformatted css for team table, added games played and if the team has a custom small image it is displayed insted of the generic race logo.
-20090330 - 1,2 - Editied to filter out non hdwsbbl details
-20090331 - 1.3 - Fixed the bug that was stopping the custom image from displaying
-				 implemented DYK on the page
-20100123 - 1.4 - Updated the prefix for the custom bb tables in the Database (tracker [225])
-20100831 - 1.4.1 - Added the t_id to the TR value of the table and impreoved image Alt text
-
 */
 ?>
 <?php get_header(); ?>
 	<?php if (have_posts()) : ?>
 		<?php while (have_posts()) : the_post(); ?>
 		<div id="breadcrumb">
-			<p><a href="<?php echo get_option('home'); ?>" title="Back to the front of the HDWSBBL">HDWSBBL</a> &raquo; Teams</p>
+			<p><a href="<?php echo home_url(); ?>" title="Back to the front of the HDWSBBL">HDWSBBL</a> &raquo; Teams</p>
 		</div>
 			<div class="entry">
 				<h2><?php the_title(); ?></h2>
@@ -103,10 +83,10 @@ if ($teams = $wpdb->get_results($teamsql)) {
 		//$filename = $_SERVER['DOCUMENT_ROOT']."/".$site_dir."/images/teams/".$team->t_sname."_small.gif";
 		$filename = $_SERVER['DOCUMENT_ROOT']."/images/teams/".$team->t_sname."_small.gif";
 		if (file_exists($filename)) {
-			print("<img src=\"".get_option('home')."/images/teams/".$team->t_sname."_small.gif\" alt=\"".$team->t_sname." Logo\" />");
+			print("<img src=\"".home_url()."/images/teams/".$team->t_sname."_small.gif\" alt=\"".$team->t_sname." Logo\" />");
 		}
 		else {
-			print("<img src=\"".get_option('home')."/images/races/race".$team->r_id."_small_fade.gif\" alt=\"".$team->r_name." Race Logo\" />");
+			print("<img src=\"".home_url()."/images/races/race".$team->r_id."_small_fade.gif\" alt=\"".$team->r_name." Race Logo\" />");
 		}
 		print("</td>\n		<td><a href=\"".$team->guid."\" title=\"View more informaton about ".$team->post_title."\">".$team->post_title."</a></td>\n		<td>".$team->r_name."</td>\n		<td>".number_format($team->t_tv)."gp</td>\n");
 
@@ -124,7 +104,7 @@ if ($teams = $wpdb->get_results($teamsql)) {
 		if ($cups = $wpdb->get_results($cupscountsql)) {
 			print("		<td class=\"tbl_teamcup\">");
 			foreach ($cups as $cup) {
-			print("<img src=\"".get_option('home')."/images/misc/cup".$cup->a_id."-".$cup->ANUM.".gif\" alt=\"".$cup->ANUM." ".$cup->a_name." Trophy\" />");
+			print("<img src=\"".home_url()."/images/misc/cup".$cup->a_id."-".$cup->ANUM.".gif\" alt=\"".$cup->ANUM." ".$cup->a_name." Trophy\" />");
 			}
 			print("</td>\n	</tr>\n");
 		}
