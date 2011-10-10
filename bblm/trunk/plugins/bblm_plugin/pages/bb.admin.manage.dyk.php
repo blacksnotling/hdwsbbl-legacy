@@ -1,14 +1,7 @@
 <?php
 /*
 *	Filename: bb.admin.manage.dyk.php
-*	Version: 1.1
 *	Description: Management page for "Did You Know"
-*/
-/* -- Change History --
-20090130 - 0.1b - Initial creation of file. Frame work Laid out.
-20090131 - 0.2b - Added the De/activation bit, added the addition bit and began work on editing a DYK!
-20090831 - 1.0 - Extended the title fiele to match that of the one in the DB!, added cancel links
-20100123 - 1.1 - Updated the prefix for the custom bb tables in the Database (tracker [224])
 */
 
 //Check the file is not being accessed directly
@@ -158,7 +151,7 @@ if ("edit" == $_GET['action']) {
 	<p>There comes a time when a Did You Know is no longer relevant. If this is the case you can deactivate it and remove
 	it from the sire. On the flip side, when a Did You Know is ready you can activate it from here and make it appear on the site.</p>
 
-	<p>The Did You Know is displayed below for refrence. If you want to de/activate this Did You Know then press the button below. Alternativly if you wish to cancel this then please <a href="<?php bloginfo('url'); ?>/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.manage.dyk.php" title="Return to the Did You Know Management screen">return to the Did You Know Management screen</a>.</p>
+	<p>The Did You Know is displayed below for refrence. If you want to de/activate this Did You Know then press the button below. Alternativly if you wish to cancel this then please <a href="<?php echo home_url(); ?>/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.manage.dyk.php" title="Return to the Did You Know Management screen">return to the Did You Know Management screen</a>.</p>
 <?php
 		$dyksql = 'SELECT dyk_show, dyk_title, dyk_desc FROM '.$wpdb->prefix.'dyk WHERE dyk_id ='.$did;
 		$dd = $wpdb->get_row($dyksql);
@@ -171,7 +164,7 @@ if ("edit" == $_GET['action']) {
 ?>
 		<p><?php print(wpautop($dd->dyk_desc)); ?></p>
 	</div>
-	<form name="bblm_activatedyk" method="post" id="post" action="<?php bloginfo('url'); ?>/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.manage.dyk.php">
+	<form name="bblm_activatedyk" method="post" id="post" action="<?php echo home_url(); ?>/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.manage.dyk.php">
 
 	<input type="hidden" name="bblm_did" value="<?php print($did); ?>">
 	<input type="hidden" name="bblm_dshow" value="<?php print($dd->dyk_show); ?>">
@@ -198,10 +191,10 @@ if ("edit" == $_GET['action']) {
 ?>
 	<h3>Edit this Did you Know</h3>
 	<p>From this screen you can edit a Did You Know. Below is the Did You Know that you selected for editing. When happy with the text then press the "Save Changes" button.</p>
-	<p>As always, if you wish to cancel this then please <a href="<?php bloginfo('url'); ?>/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.manage.dyk.php" title="Return to the Did You Know Management screen">return to the Did You Know Management screen</a>.</p>
+	<p>As always, if you wish to cancel this then please <a href="<?php echo home_url(); ?>/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.manage.dyk.php" title="Return to the Did You Know Management screen">return to the Did You Know Management screen</a>.</p>
 	<p><strong>Note:</strong> If you wish to remove the title of the Did You Know, set the title below to "none".</p>
 
-	<form name="bblm_editdyk" method="post" id="post" action="<?php bloginfo('url'); ?>/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.manage.dyk.php">
+	<form name="bblm_editdyk" method="post" id="post" action="<?php echo home_url(); ?>/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.manage.dyk.php">
 
 	<p><label for="bblm_dtitle">Title:</label>
 	<input type="text" name="bblm_dtitle" size="25" value="<?php print($dd->dyk_title); ?>" maxlength="55"></p>
@@ -218,7 +211,7 @@ if ("edit" == $_GET['action']) {
 
 	<input type="hidden" name="bblm_did" value="<?php print($did); ?>">
 	<p class="submit">
-		<input type="submit" name="bblm_edit_dyk" value="Save Changes" title="Save Changes"/> or <a href="<?php bloginfo('url');?>/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.manage.dyk.php" title="Create a new Did You Know">Cancel</a>.
+		<input type="submit" name="bblm_edit_dyk" value="Save Changes" title="Save Changes"/> or <a href="<?php echo home_url();?>/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.manage.dyk.php" title="Create a new Did You Know">Cancel</a>.
 	</p>
 	</form>
 <?php
@@ -233,10 +226,10 @@ else if ("add" == $_GET['action']) {
 	<p>Use the below form to add a new Did You Know to the system. By default the Did You Know will not appear in the listings
 	stright away. This is to give you a chance to review and catch any errors. The Did You Know can be activated from the
 	main Did You Know Management Screen,</p>
-	<p>As always, if you wish to cancel this then please <a href="<?php bloginfo('url'); ?>/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.manage.dyk.php" title="Return to the Did You Know Management screen">return to the Did You Know Management screen</a>.</p>
+	<p>As always, if you wish to cancel this then please <a href="<?php echo home_url(); ?>/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.manage.dyk.php" title="Return to the Did You Know Management screen">return to the Did You Know Management screen</a>.</p>
 	<p><strong>Note:</strong> If you don't want the Did You Know to have a title then leave the "none" in place.</p>
 
-	<form name="bblm_adddyk" method="post" id="post" action="<?php bloginfo('url'); ?>/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.manage.dyk.php">
+	<form name="bblm_adddyk" method="post" id="post" action="<?php echo home_url(); ?>/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.manage.dyk.php">
 
 	<p><label for="bblm_dtitle">Title:</label>
 	<input type="text" name="bblm_dtitle" size="25" value="none" maxlength="55"></p>
@@ -252,7 +245,7 @@ else if ("add" == $_GET['action']) {
 	</ul>
 
 	<p class="submit">
-		<input type="submit" name="bblm_add_dyk" value="Add Did You Know" title="Add Did You Know"/> or <a href="<?php bloginfo('url');?>/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.manage.dyk.php" title="Create a new Did You Know">Cancel</a>.
+		<input type="submit" name="bblm_add_dyk" value="Add Did You Know" title="Add Did You Know"/> or <a href="<?php echo home_url();?>/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.manage.dyk.php" title="Create a new Did You Know">Cancel</a>.
 	</p>
 	</form>
 <?php
@@ -310,7 +303,7 @@ else {
 ?>
 
 	<ul>
-		<li><a href="<?php bloginfo('url');?>/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.manage.dyk.php&action=add" title="Create a new Did You Know">Create a new Did You Know</a></li>
+		<li><a href="<?php echo home_url();?>/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.manage.dyk.php&action=add" title="Create a new Did You Know">Create a new Did You Know</a></li>
 	</ul>
 
 <?php
@@ -339,7 +332,7 @@ else {
 			}
 ?>
 			<td><?php print("$d->dyk_id"); ?></td>
-			<td><a href="<?php bloginfo('url');?>/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.manage.dyk.php&action=edit&item=dyk&id=<?php print("$d->dyk_id"); ?>" title="Edit this Did You Know"><?php if ("none" !== $d->dyk_title) {print("$d->dyk_title");} else { print("Edit"); } ?></a></td>
+			<td><a href="<?php echo home_url();?>/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.manage.dyk.php&action=edit&item=dyk&id=<?php print("$d->dyk_id"); ?>" title="Edit this Did You Know"><?php if ("none" !== $d->dyk_title) {print("$d->dyk_title");} else { print("Edit"); } ?></a></td>
 			<td><?php print(wp_trim_excerpt("$d->dyk_desc")); ?></td>
 <?php
 			if ($d->dyk_type) {
@@ -349,14 +342,10 @@ else {
 				print("			<td>Fact</td>\n");
 			}
 			if ($d->dyk_show) {
-				print("			<td><a href=\"");
-				bloginfo('url');
-				print("/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.manage.dyk.php&action=edit&item=activate&id=".$d->dyk_id."\" title=\"Deactivate this Did You Know\">Deactivate</td>\n");
+				print("			<td><a href=\"".home_url()."/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.manage.dyk.php&action=edit&item=activate&id=".$d->dyk_id."\" title=\"Deactivate this Did You Know\">Deactivate</td>\n");
 			}
 			else {
-				print("			<td><a href=\"");
-				bloginfo('url');
-				print("/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.manage.dyk.php&action=edit&item=activate&id=".$d->dyk_id."\" title=\"Activate this Did You Know\">Activate</td>\n");
+				print("			<td><a href=\"".home_url()."/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.manage.dyk.php&action=edit&item=activate&id=".$d->dyk_id."\" title=\"Activate this Did You Know\">Activate</td>\n");
 			}
 			print("		</tr>\n");
 
@@ -374,7 +363,7 @@ else {
 
 ?>
 	<ul>
-		<li><a href="<?php bloginfo('url');?>/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.manage.dyk.php&action=add" title="Create a new Did You Know">Create a new Did You Know</a></li>
+		<li><a href="<?php echo home_url();?>/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.manage.dyk.php&action=add" title="Create a new Did You Know">Create a new Did You Know</a></li>
 	</ul>
 <?php
 }//end of final else

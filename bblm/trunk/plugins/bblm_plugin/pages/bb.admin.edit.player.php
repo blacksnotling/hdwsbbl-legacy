@@ -1,26 +1,7 @@
 <?php
 /*
 *	Filename: bb.admin.edit.player.php
-*	Version: 1.3
 *	Description: the core edit player screen
-*/
-/* -- Change History --
-20080808 - 0.1b - Initial creation of file.
-20080809 - 0.2b - Implemented edit player stats
-20080811 - 0.3b - Finished edit player match history
-20080812 - 0.4b - bit of a tidy and added ink to add.player
-20080813 - 0.5b - made the links on the main screen context sensitive (ie remove payer only links if the player is active)
-				- Also added in a link to hire a Journeyman permanetly
-20080822 - 0.6b - made some more links context sensitive
-				- Implemented the set player iage stuff
-				- rolled in add.journeyman
-				- rolled in rename.player
-20090120 - 0.7b - incorperated new update_tv() function. cleaned up some of the code around the retirement of players.
-20090129 - 1.0 - Bump to V1 (Should have been done at bblm1.1 launch 3 days ago!)
-20090818 - 1.1 - revised the remove player part, adding more options and features. Also expanded the information when hiring a JM and did a general tidy up to account for the changes to WordPress
-20090819 - 1.1.1 - Added another option (Wizard, W) to the retire player screen.
-20091130 - 1.2 - incorporated the new update_player function to adjust the players SPP in the bb_player table automatically if a match record has changed
-20100308 - 1.3 - Updated the prefix for the custom bb tables in the Database (tracker [224])
 */
 
 //Check the file is not being accessed directly
@@ -124,9 +105,7 @@ else {
 		else {
 			print("Player has been Removed from the team. Farewell.");
 		}
- 		print(" <a href=\"");
-		bloginfo('url');
-		print("/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.edit.player.php&action=select&item=none&id=".$bblm_player."\" title=\"View the list of players on the team\">Select another player</a> from this team");
+ 		print(" <a href=\".echo home_url()."/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.edit.player.php&action=select&item=none&id=".$bblm_player."\" title=\"View the list of players on the team\">Select another player</a> from this team");
 	}
 	else {
 		print("Something went wrong");
@@ -236,7 +215,7 @@ else if (isset($_POST['bblm_pimg_update'])) {
 <?php
 	if ($sucess) {
 ?>
-			Player Image has been set. <a href="<?php bloginfo('url');?>/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.edit.player.php" title="Edit player details">Back to the team select screen</a>
+			Player Image has been set. <a href="<?php echo home_url();?>/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.edit.player.php" title="Edit player details">Back to the team select screen</a>
 <?php
 	}
 	else {
@@ -315,7 +294,7 @@ else if (isset($_POST['bblm_stat_update'])) {
 <?php
 	if ($sucess) {
 ?>
-			Player has been updated. <a href="<?php bloginfo('url');?>/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.edit.player.php" title="Edit player details">Back to the team select screen</a>
+			Player has been updated. <a href="<?php echo home_url();?>/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.edit.player.php" title="Edit player details">Back to the team select screen</a>
 <?php
 	}
 	else {
@@ -389,7 +368,7 @@ else if ("edit" == $_GET['action']) {
 		</dl>
 		<input type="hidden" name="bblm_pid" size="5" value="<?php print($pid); ?>" id="bblm_pid" maxlength="5">
 		<p class="submit">
-		<input type="submit" name="bblm_stat_update" value="Update Player" title="Update Player"/> or <a href="<?php bloginfo('url'); ?>/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.edit.player.php&action=select&item=none&id=<?php print($p->t_id); ?>" title="Cancel this and select another player">Cancel</a>
+		<input type="submit" name="bblm_stat_update" value="Update Player" title="Update Player"/> or <a href="<?php echo home_url(); ?>/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.edit.player.php&action=select&item=none&id=<?php print($p->t_id); ?>" title="Cancel this and select another player">Cancel</a>
 		</p>
 	</form>
 <?php
@@ -486,7 +465,7 @@ else if ("edit" == $_GET['action']) {
 		else {
 			print("<p>The current payer image is below. You can use the form below it to change this if you wish. If you are happy with the current image then navigate away from the page.</p>\n");
 ?>
-			<p><img src="<?php bloginfo('url'); ?>/images/players/<?php print($eximg); ?>" alt="The Players Custom Image" /></p>
+			<p><img src="<?php echo home_url(); ?>/images/players/<?php print($eximg); ?>" alt="The Players Custom Image" /></p>
 <?php
 		}
 
@@ -609,7 +588,7 @@ else if ("edit" == $_GET['action']) {
 	<input type="hidden" name="bblm_cost" size="6" value="<?php print($jm->p_cost); ?>">
 
 	<p class="submit">
-		<input type="submit" name="bblm_journeyman_add" tabindex="4" value="Hire Journeyman" title="Hire Journeyman"/> or <a href="<?php bloginfo('url'); ?>/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.edit.player.php&action=select&item=none&id=<?php print($jm->t_id); ?>" title="Cancel this and select another player">Cancel</a>
+		<input type="submit" name="bblm_journeyman_add" tabindex="4" value="Hire Journeyman" title="Hire Journeyman"/> or <a href="<?php echo home_url(); ?>/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.edit.player.php&action=select&item=none&id=<?php print($jm->t_id); ?>" title="Cancel this and select another player">Cancel</a>
 	</p>
 
 	</form>
@@ -617,9 +596,7 @@ else if ("edit" == $_GET['action']) {
 		}
 		//Player is not actually a Journeyman!
 		else {
-			print("<div id=\"updated\" class=\"updated fade\">\n<p>This Player isn't actually a Journeyman! Please try again by <a href=\"");
-			bloginfo('url');
-			print("/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.edit.player.php&action=select&item=none&id=".$jm->t_id."\" title=\"View the list of players on the team\">selecting a different player</a>.</p>\n</div>\n");
+			print("<div id=\"updated\" class=\"updated fade\">\n<p>This Player isn't actually a Journeyman! Please try again by <a href=\"".home_url()."/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.edit.player.php&action=select&item=none&id=".$jm->t_id."\" title=\"View the list of players on the team\">selecting a different player</a>.</p>\n</div>\n");
 		}
 
 
@@ -852,42 +829,29 @@ else {
 					print("					<tr>\n");
 				}
 
-				print("		   <td>".$p->p_id."</a></td>\n		   <td><a href=\"");
+				print("		   <td>".$p->p_id."</a></td>\n		   <td><a href=\"".home_url()."/wp-admin/page.php?action=edit&post=".$p->ID."\">#".$p->p_num." - ".$p->post_title."</a> - ".$p->pos_name."</td>\n");
 
-				bloginfo('url');
-				print("/wp-admin/page.php?action=edit&post=".$p->ID."\">#".$p->p_num." - ".$p->post_title."</a> - ".$p->pos_name."</td>\n");
-
-				print("							<td><a href=\"");
-				bloginfo('url');
-				print("/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.edit.player.php&action=edit&item=stats&id=".$p->p_id."\" title=\"Edit the Player Stats\">Edit Stats</a></td>\n");
+				print("							<td><a href=\"".home_url()."/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.edit.player.php&action=edit&item=stats&id=".$p->p_id."\" title=\"Edit the Player Stats\">Edit Stats</a></td>\n");
 
 				//we now check to see how many games this player has played
 				$pgamessql = 'SELECT COUNT(*) from '.$wpdb->prefix.'match_player where p_id = '.$p->p_id;
 				$pgames = $wpdb->get_var($pgamessql);
 				if (0 < $pgames) {
 					//Player had been in a match so we can edit the match history
-					print("							<td><a href=\"");
-					bloginfo('url');
-					print("/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.edit.player.php&action=edit&item=mhistory&id=".$p->p_id."\" title=\"Edit the Player Stats\">Match History</a></td>\n");
+					print("							<td><a href=\"".home_url()."/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.edit.player.php&action=edit&item=mhistory&id=".$p->p_id."\" title=\"Edit the Player Stats\">Match History</a></td>\n");
 				}
 				else {
 					print("							<td>-</td>");
 				}
 
-				print("							<td><a href=\"");
-				bloginfo('url');
-				print("/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.edit.player.php&action=edit&item=image&id=".$p->p_id."\" title=\"Set a custom image for this player\">Set Image</a></td>\n");
+				print("							<td><a href=\"".home_url()."/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.edit.player.php&action=edit&item=image&id=".$p->p_id."\" title=\"Set a custom image for this player\">Set Image</a></td>\n");
 
-				print("							<td><a href=\"");
-				bloginfo('url');
-				print("/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.edit.player.php&action=edit&item=rename&id=".$p->p_id."\" title=\"Rename this player\">Rename</a></td>\n");
+				print("							<td><a href=\"".home_url()."/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.edit.player.php&action=edit&item=rename&id=".$p->p_id."\" title=\"Rename this player\">Rename</a></td>\n");
 
 
 				if ($p->p_status) {
 					//player is still active so this link needs to be shown
-					print("							<td><a href=\"");
-					bloginfo('url');
-					print("/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.edit.player.php&action=edit&item=remove&id=".$p->p_id."\" title=\"Remove this player\">Remove</a></td>\n");
+					print("							<td><a href=\"".home_url()."/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.edit.player.php&action=edit&item=remove&id=".$p->p_id."\" title=\"Remove this player\">Remove</a></td>\n");
 				}
 				else {
 					print("							<td>-</td>");
@@ -895,9 +859,7 @@ else {
 
 				if ((1 == $p->pos_id) && ($p->p_status)) {
 					//player is a Journeyman so a hire link can be dispayed if they are active
-					print("							<td><a href=\"");
-					bloginfo('url');
-					print("/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.edit.player.php&action=edit&item=jmstatus&id=".$p->p_id."\" title=\"Hire this player\">Hire</a></td>\n");
+					print("							<td><a href=\"".home_url()."/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.edit.player.php&action=edit&item=jmstatus&id=".$p->p_id."\" title=\"Hire this player\">Hire</a></td>\n");
 				}
 				else {
 					print("							<td>-</td>");
@@ -912,14 +874,14 @@ else {
 ?>
 		<h3>Related Links</h3>
 		<ul>
-			<li><a href="<?php bloginfo('url');?>/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.add.player.php&action=add&item=none&id=<?php print($p->t_id); ?>" title="Add a new player to the team">Add a Player to this team</a></li>
-			<li><a href="<?php bloginfo('url');?>/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.edit.player.php" title="Edit Select another team">Select another team</a></li>
+			<li><a href="<?php echo home_url();?>/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.add.player.php&action=add&item=none&id=<?php print($p->t_id); ?>" title="Add a new player to the team">Add a Player to this team</a></li>
+			<li><a href="<?php echo home_url();?>/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.edit.player.php" title="Edit Select another team">Select another team</a></li>
 		</ul>
 <?php
 	}
 	else {
 		print("<p><strong>There are no known players on this team!</strong> ");
-?>		<a href="<?php bloginfo('url');?>/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.edit.player.php" title="Edit Select another team">Select another team</a></li>
+?>		<a href="<?php echo home_url();?>/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.edit.player.php" title="Edit Select another team">Select another team</a></li>
 <?php
 	}
 

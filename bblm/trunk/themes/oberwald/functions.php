@@ -29,7 +29,7 @@ function bblm_display_dyk() {
 				}
 ?>
 			<?php print(wpautop($d->dyk_desc)); ?>
-			<p class="dykfooter"><a href="<?php bloginfo('url'); ?>/did-you-know" title="View More <?php if ($d->dyk_type) { print("Did You Knows"); } else { print("Facts"); } ?>">View More <?php if ($d->dyk_type) { print("Did You Knows"); } else { print("Facts"); } ?></a></p>
+			<p class="dykfooter"><a href="<?php echo home_url(); ?>/did-you-know" title="View More <?php if ($d->dyk_type) { print("Did You Knows"); } else { print("Facts"); } ?>">View More <?php if ($d->dyk_type) { print("Did You Knows"); } else { print("Facts"); } ?></a></p>
 		</div>
 <?php
 }

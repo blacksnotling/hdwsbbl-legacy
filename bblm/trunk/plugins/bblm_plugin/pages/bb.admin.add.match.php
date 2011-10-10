@@ -343,9 +343,7 @@ if ($_POST['bblm_fid']) {
 	<p>
 	<?php
 	if ($sucess) {
-		print("Match has been recorded. <a href=\"".$bblm_guid."\" title=\"View the match page\">View page</a> or Enter the <a href=\"");
-		bloginfo('url');
-		print("/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.add.match_player.php\" title=\"Enter the player actions for the match\">player actions for the match</a>");
+		print("Match has been recorded. <a href=\"".$bblm_guid."\" title=\"View the match page\">View page</a> or Enter the <a href=\"".home_url()."/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.add.match_player.php\" title=\"Enter the player actions for the match\">player actions for the match</a>");
 	}
 	else {
 		print("Something went wrong");
@@ -521,7 +519,7 @@ if(isset($_POST['bblm_matchcomp_select'])) {
 	}
 	else {
 		?>
-		<td colspan="3">There are currently no teams in this competition! Please <a href="<?php bloginfo('url');?>/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.edit.comp_team.php" title="Assign teams to a Competition">Add some first</a></td></tr>
+		<td colspan="3">There are currently no teams in this competition! Please <a href="<?php echo home_url();?>/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.edit.comp_team.php" title="Assign teams to a Competition">Add some first</a></td></tr>
 		<?php
 
 	}

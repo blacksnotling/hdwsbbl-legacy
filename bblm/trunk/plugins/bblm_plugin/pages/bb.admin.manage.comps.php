@@ -1,14 +1,7 @@
 <?php
 /*
 *	Filename: bb.admin.manage.comps.php
-*	Version: 0.3b
 *	Description: Management page for Competitions
-*/
-/* -- Change History --
-20091130 - 0.1a - Initial creation of file. Frame work Laid out.
-20091201 - 0.1b - The default list is showing correctly
-20091227 - 0.2b - Completed the initial work to get the edit comp bit working (tracker [198])
-20100123 - 0.3b - Updated the prefix for the custom bb tables in the Database (tracker [224])
 */
 
 //Check the file is not being accessed directly
@@ -96,9 +89,9 @@ if ("edit" == $_GET['action']) {
 ?>
 	<h3>Edit Settings - <?php print($cc->post_title); ?></h3>
 	<p>From this screen you can edit a Competition. Below is the information for the competition that you selected for editing. When happy with your changes press the "Save Changes" button.</p>
-	<p>As always, if you wish to cancel this then please <a href="<?php bloginfo('url'); ?>/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.manage.comps.php" title="Return to the Competition Management screen">return to the Competition Management screen</a>.</p>
+	<p>As always, if you wish to cancel this then please <a href="<?php echo home_url(); ?>/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.manage.comps.php" title="Return to the Competition Management screen">return to the Competition Management screen</a>.</p>
 
-	<form name="bblm_editcompsettings_frm" method="post" id="post" action="<?php bloginfo('url'); ?>/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.manage.comps.php">
+	<form name="bblm_editcompsettings_frm" method="post" id="post" action="<?php echo home_url(); ?>/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.manage.comps.php">
 		<div id="col-right"><div class="col-wrap"><div class="form-wrap">
 			<h4>Competition Information</h4>
 			<ul>
@@ -152,7 +145,7 @@ if ("edit" == $_GET['action']) {
 		<input id="bblm_editcomp_id" name="bblm_editcomp_id" type="hidden" value="<?php print($cid); ?>" maxlength="4" />
 
 		<p class="submit">
-			<input type="submit" name="bblm_editcomp_submit" id="bblm_editcomp_submit" value="Save Changes" title="Save changes to the competition"> or <a href="<?php bloginfo('url'); ?>/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.manage.comps.php" title="Cancel and return to the Competition Management Screen">Cancel</a>
+			<input type="submit" name="bblm_editcomp_submit" id="bblm_editcomp_submit" value="Save Changes" title="Save changes to the competition"> or <a href="<?php echo home_url(); ?>/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.manage.comps.php" title="Cancel and return to the Competition Management Screen">Cancel</a>
 		</p>
 	</form>
 <?php
@@ -160,7 +153,7 @@ if ("edit" == $_GET['action']) {
 		else {
 ?>
 		<h3>Edit Settings - Error!</h3>
-		<p><strong>We could not find the competition you selected! Please please <a href="<?php bloginfo('url'); ?>/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.manage.comps.php" title="Return to the Competition Management screen">return to the Competition Management screen</a> and select a Competition from there.</strong></p>
+		<p><strong>We could not find the competition you selected! Please please <a href="<?php echo home_url(); ?>/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.manage.comps.php" title="Return to the Competition Management screen">return to the Competition Management screen</a> and select a Competition from there.</strong></p>
 <?php
 		}
 	}
@@ -233,7 +226,7 @@ else {
 ?>
 <!--
 	<ul>
-		<li><a href="<?php bloginfo('url');?>/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.manage.comps.php&action=add" title="Create a new Did You Know">Create a new Did You Know</a></li>
+		<li><a href="<?php echo home_url();?>/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.manage.comps.php&action=add" title="Create a new Did You Know">Create a new Did You Know</a></li>
 	</ul>
 -->
 
@@ -264,8 +257,8 @@ else {
 			}
 ?>
 			<td><?php print($c->c_id); ?></td>
-			<td><a href="<?php print(bloginfo('url')); ?>/wp-admin/page.php?action=edit&post=<?php print($c->ID); ?>" title="Edit the description of <?php print($c->post_title); ?>"><?php print($c->post_title); ?></a></td>
-			<td><a href="<?php print(bloginfo('url')); ?>/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.manage.comps.php&action=edit&item=comp&id=<?php print($c->c_id); ?>" title="Edit the Settings of <?php print($c->post_title); ?>">Edit Settings</a></td>
+			<td><a href="<?php echo home_url(); ?>/wp-admin/page.php?action=edit&post=<?php print($c->ID); ?>" title="Edit the description of <?php print($c->post_title); ?>"><?php print($c->post_title); ?></a></td>
+			<td><a href="<?php echo home_url(); ?>/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.manage.comps.php&action=edit&item=comp&id=<?php print($c->c_id); ?>" title="Edit the Settings of <?php print($c->post_title); ?>">Edit Settings</a></td>
 			<td>Edit / Add Teams</td>
 <?php
 			if ($c->c_active) {
@@ -294,7 +287,7 @@ else {
 
 ?>
 <!--	<ul>
-		<li><a href="<?php bloginfo('url');?>/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.manage.dyk.php&action=add" title="Create a new Did You Know">Create a new Did You Know</a></li>
+		<li><a href="<?php echo home_url();?>/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.manage.dyk.php&action=add" title="Create a new Did You Know">Create a new Did You Know</a></li>
 	</ul>
 -->
 <?php

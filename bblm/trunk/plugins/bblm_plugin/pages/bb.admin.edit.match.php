@@ -1,17 +1,7 @@
 <?php
 /*
 *	Filename: bb.admin.edit.match.php
-*	Version: 1.2
 *	Description: Link page to add.edit match reports, coachs comments and match trivia.
-*/
-/* -- Change History --
-20080526 - 0.1b - Initial creation of file.
-20080719 - 0.2b - added the edit button for match comments
-20080730 - 1.0 - bump to Version 1 for public release.
-20080804 - 1.1 - consolidated edit,match_comments and edit.match_trivia into one page. re-designed the main table to match WP styles.
-20080806 - 1.1.1 - added stripslashes to the output of the coaches comments (for editing)
-20100308 - 1.2 - Updated the prefix for the custom bb tables in the Database (tracker [224])
-
 */
 ?>
 <div class="wrap">
@@ -46,7 +36,7 @@ if (isset($_POST['bblm_trivia_edit'])) {
 		<?php
 		if ($sucess) {
 ?>
-			Trivia has been updated. <a href="<?php bloginfo('url');?>/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.edit.match.php" title="Edit match details">Back to the match edit screen</a>
+			Trivia has been updated. <a href="<?php echo home_url();?>/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.edit.match.php" title="Edit match details">Back to the match edit screen</a>
 <?php
 		}
 		else {
@@ -83,7 +73,7 @@ if (isset($_POST['bblm_comment_edit'])) {
 		<?php
 		if ($sucess) {
 ?>
-			Trivia has been updated. <a href="<?php bloginfo('url');?>/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.edit.match.php" title="Edit match details">Back to the match edit screen</a>
+			Trivia has been updated. <a href="<?php echo home_url();?>/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.edit.match.php" title="Edit match details">Back to the match edit screen</a>
 <?php
 		}
 		else {
@@ -194,26 +184,15 @@ if (isset($_POST['bblm_comment_edit'])) {
 					print("					<tr>\n");
 				}
 
-				print("		   <td>".$m->m_id."</a></td>\n		   <td><a href=\"");
+				print("		   <td>".$m->m_id."</a></td>\n		   <td><a href=\"".home_url()."/wp-admin/page.php?action=edit&post=".$m->ID."\">".date("d.m.y", $m->mdate)." ".$m->post_title."</a> (".$m->c_name." - ".$m->div_name.") [ ".$m->m_teamAtd." - ".$m->m_teamBtd." (".$m->m_teamAcas." - ".$m->m_teamBcas.")]</td>\n");
 
-				bloginfo('url');
-				print("/wp-admin/page.php?action=edit&post=".$m->ID."\">".date("d.m.y", $m->mdate)." ".$m->post_title."</a> (".$m->c_name." - ".$m->div_name.") [ ".$m->m_teamAtd." - ".$m->m_teamBtd." (".$m->m_teamAcas." - ".$m->m_teamBcas.")]</td>\n");
+				print("<td><a href=\"".home_url()."/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.edit.match.php&action=edit&item=comment&id=".$m->m_id."\" title=\"Edit the Coaches Comments\">Edit Comments</a></td>\n");
 
-				print("<td><a href=\"");
-				bloginfo('url');
-				print("/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.edit.match.php&action=edit&item=comment&id=".$m->m_id."\" title=\"Edit the Coaches Comments\">Edit Comments</a></td>\n");
+				print("<td><a href=\"".home_url()."/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.edit.match.php&action=edit&item=trivia&id=".$m->m_id."\" title=\"Edit the Coaches Comments\">Edit Trivia</a></td>\n");
 
-				print("<td><a href=\"");
-				bloginfo('url');
-				print("/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.edit.match.php&action=edit&item=trivia&id=".$m->m_id."\" title=\"Edit the Coaches Comments\">Edit Trivia</a></td>\n");
+/*			print("<td><form method=\"post\" action=\"".home_url()."/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.edit.match_comment.php\"><input type=\"hidden\" name=\"mtrivia\" value=\"".$m->m_id."\"><input type=\"submit\" name=\"bblm_comment_select\" class=\"bblm_table_submit\" value=\"Edit\"/></form></td>\n");*/
 
-/*			print("<td><form method=\"post\" action=\"");
-			bloginfo('url');
-			print("/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.edit.match_comment.php\"><input type=\"hidden\" name=\"mtrivia\" value=\"".$m->m_id."\"><input type=\"submit\" name=\"bblm_comment_select\" class=\"bblm_table_submit\" value=\"Edit\"/></form></td>\n");*/
-
-/*			print("<td><form method=\"post\" action=\"");
-			bloginfo('url');
-			print("/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.edit.match_trivia.php\"><input type=\"hidden\" name=\"mtrivia\" value=\"".$m->m_id."\"><input type=\"submit\" name=\"bblm_trivia_select\" class=\"bblm_table_submit\" value=\"Edit\"/></form></td>\n");*/
+/*			print("<td><form method=\"post\" action=\"".home_url()."/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.edit.match_trivia.php\"><input type=\"hidden\" name=\"mtrivia\" value=\"".$m->m_id."\"><input type=\"submit\" name=\"bblm_trivia_select\" class=\"bblm_table_submit\" value=\"Edit\"/></form></td>\n");*/
 
 				print("<td><a href=\"".$m->guid."\" title=\"View the match page\">View</a></td>		 </tr>\n");
 				$zebracount++;

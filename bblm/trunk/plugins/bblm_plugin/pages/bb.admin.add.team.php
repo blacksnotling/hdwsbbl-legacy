@@ -138,7 +138,7 @@ else if(isset($_POST['bblm_race_select'])) {
 		}
 ?>
 		</select><br />
-		Forgotten? - <a href="<?php bloginfo('url');?>/wp-admin/user-new.php" title="Add a new user now">Add  new user to the site!</a> - You will have to reload this page after adding a new one.</td>
+		Forgotten? - <a href="<?php echo home_url();?>/wp-admin/user-new.php" title="Add a new user now">Add  new user to the site!</a> - You will have to reload this page after adding a new one.</td>
 	</tr>
 	<tr valign="top">
 		<th scope="row" valign="top"><label for="bblm_thcoach">Head Coach</label></th>
@@ -156,7 +156,7 @@ else if(isset($_POST['bblm_race_select'])) {
 		}
 ?>
 		</select><br />
-		Forgotten? - <a href="<?php bloginfo('url');?>/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.add.stadium.php" title="Add a new Stadium now">Add  new Stadium to the site!</a> - You will have to reload this page after adding a new one.</td>
+		Forgotten? - <a href="<?php echo home_url();?>/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.add.stadium.php" title="Add a new Stadium now">Add  new Stadium to the site!</a> - You will have to reload this page after adding a new one.</td>
 	</tr>
 	<tr valign="top">
 		<th scope="row" valign="top"><label for="bblm_roster">Generate Roster?</label></th>
