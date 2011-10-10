@@ -211,7 +211,7 @@ function widget_bblm_restricted_cat_init() {
 		//print("</ul>\n");
 
 ?>
-		<form action="<?php bloginfo('url'); ?>/" method="get">
+		<form action="<?php echo home_url(); ?>/" method="get">
 <?php
 	$select = wp_dropdown_categories('orderby=name&title_li=&hide_empty=1&depth=1&echo=0&exclude='.$restricted);
 	$select = preg_replace("#<select([^>]*)>#", "<select$1 onchange='return this.form.submit()'>", $select);

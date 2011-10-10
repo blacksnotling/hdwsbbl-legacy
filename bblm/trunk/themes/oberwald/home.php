@@ -233,7 +233,7 @@ else {
 
 		<div class="main-content">
 		<h2>News Topics</h2>
-		<form action="<?php bloginfo('url'); ?>/" method="get">
+		<form action="<?php echo home_url(); ?>/" method="get">
 <?php
 	$select = wp_dropdown_categories('orderby=name&hide_empty=1&exclude=13&depth=1&echo=0');
 	$select = preg_replace("#<select([^>]*)>#", "<select$1 onchange='return this.form.submit()'>", $select);

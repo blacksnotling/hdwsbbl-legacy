@@ -1,17 +1,7 @@
 <?php
 /*
 *	Filename: bb.admin.edit.team.php
-*	Version: 1.2
 *	Description: the main page used to edit a team
-*/
-/* -- Change History --
-20080808 - 0.1b - Initial creation of file.
-20080812 - 0.2b - implemented edit team info and link to add.player
-20080813 - 0.2.1b - cosmetic change. page refered to as Manage Teams.
-020080822 - 0.3b - made the links context sensitive
-				- Implemented the set team captain stuff
-20090129 - 1.0 - Bump to V1 (Should have been done at bblm1.1 launch 3 days ago!)
-20100124 - 1.1 - Updated the prefix for the custom bb tables in the Database (tracker [224])
 */
 
 //Check the file is not being accessed directly
@@ -44,7 +34,7 @@ if (isset($_POST['bblm_tcap_update'])) {
 <?php
 	if ($sucess) {
 ?>
-			New Team Captain has been set. <a href="<?php bloginfo('url');?>/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.edit.team.php" title="Edit Team">Back to the Team edit screen</a>
+			New Team Captain has been set. <a href="<?php echo home_url();?>/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.edit.team.php" title="Edit Team">Back to the Team edit screen</a>
 <?php
 	}
 	else {
@@ -80,7 +70,7 @@ else if (isset($_POST['bblm_stat_update'])) {
 <?php
 	if ($sucess) {
 ?>
-			Team has been updated. <a href="<?php bloginfo('url');?>/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.edit.team.php" title="Edit Team">Back to the Team edit screen</a>
+			Team has been updated. <a href="<?php echo home_url();?>/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.edit.team.php" title="Edit Team">Back to the Team edit screen</a>
 <?php
 	}
 	else {
@@ -309,41 +299,30 @@ else {
 					print("					<tr>\n");
 				}
 
-				print("		   <td>".$t->t_id."</a></td>\n		   <td><a href=\"");
+				print("		   <td>".$t->t_id."</a></td>\n		   <td><a href=\"".home_url()."/wp-admin/page.php?action=edit&post=".$t->ID."\">".$t->post_title."</a> - ".$t->r_name."</td>\n");
 
-				bloginfo('url');
-				print("/wp-admin/page.php?action=edit&post=".$t->ID."\">".$t->post_title."</a> - ".$t->r_name."</td>\n");
-
-				print("							<td><a href=\"");
-				bloginfo('url');
-				print("/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.edit.team.php&action=edit&item=stats&id=".$t->t_id."\" title=\"Edit the Team Stats\">Edit Purchases</a></td>\n");
+				print("							<td><a href=\"".home_url()."/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.edit.team.php&action=edit&item=stats&id=".$t->t_id."\" title=\"Edit the Team Stats\">Edit Purchases</a></td>\n");
 
 				//we now check to see how players are on this team
 				$tplayerssql = 'SELECT COUNT(*) FROM '.$wpdb->prefix.'player WHERE t_id = '.$t->t_id;
 				$tplayers = $wpdb->get_var($tplayerssql);
 				if (0 < $tplayers) {
 					//we have players so display the link to edit them.
-					print("							<td><a href=\"");
-					bloginfo('url');
-					print("/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.edit.player.php&action=select&item=none&id=".$t->t_id."\" title=\"View the list of players on the team\">Edit Players</a></td>\n");
+					print("							<td><a href=\"".home_url()."/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.edit.player.php&action=select&item=none&id=".$t->t_id."\" title=\"View the list of players on the team\">Edit Players</a></td>\n");
 				}
 				else {
 					print("							<td>-</td>\n");
 				}
 
 				if ($t->t_active) {
-					print("							<td><a href=\"");
-					bloginfo('url');
-					print("/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.add.player.php&action=add&item=none&id=".$t->t_id."\" title=\"Add a new payer to the team\">Add Player</a></td>\n");
+					print("							<td><a href=\"".home_url()."/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.add.player.php&action=add&item=none&id=".$t->t_id."\" title=\"Add a new payer to the team\">Add Player</a></td>\n");
 				}
 				else {
 					print("							<td>-</td>\n");
 				}
 
 				if (0 < $tplayers) {
-					print("							<td><a href=\"");
-					bloginfo('url');
-					print("/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.edit.team.php&action=edit&item=captain&id=".$t->t_id."\" title=\"Set Team Captain\">Set Captain</a></td>\n");
+					print("							<td><a href=\"".home_url()."/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.edit.team.php&action=edit&item=captain&id=".$t->t_id."\" title=\"Set Team Captain\">Set Captain</a></td>\n");
 				}
 				else {
 					//There are no players so no point in defining a Captain
@@ -358,7 +337,7 @@ else {
 ?>
 	<h3>Related Links</h3>
 	<ul>
-		<li><a href="<?php bloginfo('url');?>/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.add.team.php" title="Add a new player to the team">Add a new team</a></li>
+		<li><a href="<?php echo home_url();?>/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.add.team.php" title="Add a new player to the team">Add a new team</a></li>
 	</ul>
 <?php
 	}
