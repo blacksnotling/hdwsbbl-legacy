@@ -24,7 +24,7 @@
 
 
 		<?php endwhile; else: ?>
-			<p><?php _e('Sorry, There where no items posted during this time period.' 'bblm' ); ?></p>
+			<p><?php _e('Sorry, There where no items posted during this time period.','bblm' ); ?></p>
 		<?php endif; ?>
 
 
