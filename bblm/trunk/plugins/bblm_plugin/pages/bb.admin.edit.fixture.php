@@ -1,15 +1,7 @@
 <?php
 /*
 *	Filename: bb.admin.edit.fixture.php
-*	Version: 1.1
 *	Description: Page used to manage fixtures that have been set up previously.
-*/
-/* -- Change History --
-20080723 - 0.1b - Initial creation of file.
-20080727 - 1.0b - Completion of file!
-20080730 - 1.0 - bump to Version 1 for public release.
-20100124 - 1.1 - Updated the prefix for the custom bb tables in the Database (tracker [224])
-
 */
 
 
@@ -25,9 +17,6 @@ if (!function_exists('add_action')) die('You cannot run this file directly. Naug
 	  ///////////////////////
 	 // Step 3: Update DB //
 	///////////////////////
-/*		print("<pre>\n");
-		print_r($_POST);
-		print("</pre>\n");*/
 
 		//Set initil values for loop
 		$p = 1;
@@ -43,10 +32,6 @@ if (!function_exists('add_action')) die('You cannot run this file directly. Naug
 			}
 			$p++;
 		}
-
-/*		foreach ($fixturesqla as $ps) {
-			print("<p>".$ps."</p>");
-		} */
 
 		foreach ($fixturesqla as $fs) {
 			if (FALSE !== $wpdb->query($fs)) {
@@ -71,14 +56,17 @@ if (!function_exists('add_action')) die('You cannot run this file directly. Naug
 ?>
 	<form name="bblm_editfixture" method="post" id="post">
 <?php
-/*		print("<pre>\n");
-		print_r($_POST);
-		print("</pre>\n");*/
 
 	$compnamesql = 'SELECT P.post_name FROM '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE P.ID = J.pid AND J.prefix = \'c_\' AND J.tid = '.$_POST['bblm_fcomp'].' LIMIT 1';
 	$divnamesql = 'SELECT div_name FROM '.$wpdb->prefix.'division WHERE div_id = '.$_POST['bblm_fdiv'];
 	$fixturessql = 'SELECT * FROM '.$wpdb->prefix.'fixture F WHERE F.f_complete = 0 AND F.c_id = '.$_POST['bblm_fcomp'].' AND F.div_id = '.$_POST['bblm_fdiv'].' ORDER BY F.f_date ASC';
-	$teamssql = 'SELECT P.post_title, C.t_id FROM '.$wpdb->prefix.'team_comp C, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE C.t_id = J.tid AND J.prefix = \'t_\' AND J.pid = P.ID AND C.c_id = '.$_POST['bblm_fcomp'].' AND C.div_id = '.$_POST['bblm_fdiv'].' ORDER BY P.post_title ASC';
+	//If the "Cross Division" has been selected, pull all the teams taking part in that comp
+	if ( 13 == $_POST['bblm_fdiv'] ) {
+		$teamssql = 'SELECT P.post_title, C.t_id FROM '.$wpdb->prefix.'team_comp C, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE C.t_id = J.tid AND J.prefix = \'t_\' AND J.pid = P.ID AND C.c_id = '.$_POST['bblm_fcomp'].' ORDER BY P.post_title ASC';
+	}
+	else {
+		$teamssql = 'SELECT P.post_title, C.t_id FROM '.$wpdb->prefix.'team_comp C, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE C.t_id = J.tid AND J.prefix = \'t_\' AND J.pid = P.ID AND C.c_id = '.$_POST['bblm_fcomp'].' AND C.div_id = '.$_POST['bblm_fdiv'].' ORDER BY P.post_title ASC';
+	}
 
 	$comp_name = $wpdb->get_var($compnamesql);
 	$div_name = $wpdb->get_var($divnamesql);
@@ -127,7 +115,7 @@ if (!function_exists('add_action')) die('You cannot run this file directly. Naug
 	}
 ?>
 	<p class="submit">
-	<input type="submit" name="bblm_edit_fixture" value="Submit changes" title="Submit changes"/>
+	<input type="submit" name="bblm_edit_fixture" value="Submit changes" title="Submit changes" class="button-primary" />
 	</p>
 	</form>
 <?php
@@ -141,8 +129,8 @@ else {
 
 	<p>Before we can begin, you must first select the Competition and Division that this the fixture is set up in:</p>
 	<table class="form-table">
-	<tr class="form-field form-required">
-		<th scope="row" valign="top"><label for="bblm_fcomp">Competition</label></th>
+	<tr valign="top">
+		<th scope="row"><label for="bblm_fcomp">Competition</label></th>
 		<td><select name="bblm_fcomp" id="bblm_fcomp">
 <?php
 		//$compsql = 'SELECT c_id, c_name FROM '.$wpdb->prefix.'comp WHERE c_active = 1 order by c_name';
@@ -156,8 +144,8 @@ else {
 		</select>
            <br />Only Competitions with Fixtures lined up will be displayed here</td>
 	</tr>
-	<tr class="form-field form-required">
-		<th scope="row" valign="top"><label for="bblm_fdiv">Division</label></th>
+	<tr valign="top">
+		<th scope="row"><label for="bblm_fdiv">Division</label></th>
 		<td><select name="bblm_fdiv" id="bblm_fdiv">
 <?php
 		$divsql = 'SELECT div_id, div_name FROM '.$wpdb->prefix.'division ORDER BY div_id';
@@ -172,9 +160,7 @@ else {
 	</table>
 
 
-	<p class="submit">
-	<input type="submit" name="bblm_select_fixture" tabindex="4" value="Display Fixtures" title="Display FIxtures for this selection"/>
-	</p>
+	<p class="submit"><input type="submit" name="bblm_select_fixture" value="Display Fixtures" title="Display FIxtures for this selection" class="button-primary" /></p>
 </form>
 <?php
 
