@@ -4,24 +4,12 @@ Plugin Name: bblm_sidebar widgits
 Plugin URI: http://www.hdwsbbl.co.uk/
 Description: Provides a list of "other pages" and cutom "topic/cat listing"
 Author: Blacksnotling
-Version: 1.4
+Version: 1.6
 Author URI: http://www.blacksnotling.com/
 */
 
 /*
 *	Filename: bb.widgets.core.sidebar.php
-*/
-/* -- Change History --
-20080227 - 0.1b - Intital creation of file.
-20080301 - 0.2b - Changed name of file and tidied up widgets
-20080609 - 0.3b - Added the List Competitions widget
-20080616 - 0.3.1b - added a missing </div to list comps
-20080730 - 1.0 - bump to Version 1 for public release.
-20080805 - 1.1 - converted the restricted cat widgit to a dropdown
-20080814 - 1.2 - fixed the date chacking below as the upcoming/active/recent status for comps was incorrect (formed 1.0.1)
-20090330 - 1,3 - Editied to filter out non hdwsbbl details
-20100123 - 1.4 - Updated the prefix for the custom bb tables in the Database (tracker [224])
-
 */
 
   //////////////////////////////
@@ -266,6 +254,24 @@ function bblm_remove_replaced_widgets() {
 
 add_action('widgets_init','bblm_remove_replaced_widgets',0);
 
+//Did You Know Function
+function bblm_display_dyk() {
+	global $wpdb;
 
+	$dyksql = 'SELECT dyk_id, dyk_type, dyk_title, dyk_desc FROM '.$wpdb->prefix.'dyk WHERE dyk_show = 1 ORDER BY rand() LIMIT 1';
+	$d = $wpdb->get_row($dyksql);
+?>
+		<div class="dykcontainer <?php if ($d->dyk_type) { print("dyktrivia"); } else { print("dykfact"); } ?>" id="dyk<?php print($d->dyk_id); ?>">
+			<h3 class="dykheader">HDWSBBL - <?php if($d->dyk_type) { print("Did You Know"); } else { print("Fact"); } ?></h3>
+<?php
+				if ("none" !== $d->dyk_title) {
+					print("			<h4>".$d->dyk_title."</h4>\n");
+				}
+?>
+			<?php print(wpautop($d->dyk_desc)); ?>
+			<p class="dykfooter"><a href="<?php echo home_url(); ?>/did-you-know" title="View More <?php if ($d->dyk_type) { print("Did You Knows"); } else { print("Facts"); } ?>">View More <?php if ($d->dyk_type) { print("Did You Knows"); } else { print("Facts"); } ?></a></p>
+		</div>
+<?php
+}
 
 ?>

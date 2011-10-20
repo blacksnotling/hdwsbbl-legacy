@@ -131,3 +131,6 @@ $(document).ready(function(){
 
 	<div id="pagecontent">
 		<div id="maincontent">
+		<div id="breadcrumb">
+			<p><?php oberwald_breadcrumb_root(); ?> <?php the_title(); ?></p>
+		</div>

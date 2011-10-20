@@ -1,40 +1,33 @@
 <?php get_header(); ?>
 	<?php if (have_posts()) : ?>
-		<div id="breadcrumb">
-			<p><a href="<?php echo home_url(); ?>" title="Back to the front of the HDWSBBL">HDWSBBL</a> &raquo; Search Results</p>
-		</div>
-<h2 class="pagetitle">Search Results</h2>
-		<ul class="subnav">
-			<?php next_posts_link('<li>&laquo; Previous Entries</li>') ?>
-			<?php previous_posts_link('<li>Next Entries &raquo;</li>') ?>
-		</ul>
-
-		<?php while (have_posts()) : the_post(); ?>
+	<h2 class="pagetitle"><h2 class="entry-title">Search Results for '<?php the_search_query() ?>'</h2></h2>
+	<?php while (have_posts()) : the_post(); ?>
 			<div class="entry">
-				<h2 id="post-<?php the_ID(); ?>"><a href="<?php the_permalink() ?>" rel="bookmark" title="Permanent Link to <?php the_title(); ?>"><?php the_title(); ?></a></h2>
-				<p class="postdate"><?php the_time('F jS, Y') ?> <!-- by <?php the_author(); ?> --></p>
+				<div id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
+					<h2 class="entry-title"><a href="<?php the_permalink() ?>" rel="bookmark" title="Permanent Link to <?php the_title(); ?>"><?php the_title(); ?></a></h2>
+					<p class="postdate"><?php oberwald_posted_on() ?></p>
 
-				<?php the_excerpt(); ?>
-				<p class="readmorelink">Continue Reading: <a href="<?php the_permalink() ?>" rel="bookmark" title="Permanent Link to <?php the_title(); ?>"><?php the_title(); ?> &raquo;</a></p>
+					<?php the_excerpt(); ?>
 
-				<p class="postmeta">Orignially posted under <?php the_category(',') ?> <strong>|</strong> <?php edit_post_link('Edit', ' <strong>[</strong> ', ' <strong>]</strong> '); ?>  <?php comments_popup_link('No Comments &#187;', '1 Comment &#187;', '% Comments &#187;'); ?></p>
+					<?php get_sidebar('entry'); ?>
 
+					<p class="postmeta"><?php oberwald_posted_in() ?> <?php edit_post_link('Edit', ' <strong>[</strong> ', ' <strong>]</strong> '); ?></p>
+				</div>
 			</div>
 
 
-		<?php endwhile; else: ?>
-			<h2>No search results for '<?php the_search_query() ?>'</h2>
-			<p>Sorry, but nothing was found that matched that search. For now the best thing to do is try again:</p>
+	<?php endwhile; else: ?>			<h2 class="entry-title">No search results for '<?php the_search_query() ?>'</h2>
+			<p>Sorry, but nothing was found that matched that search. For now the best thing to do is check your spelling or try a different word and try again:</p>
 			<p><?php get_search_form(); ?></p>
 		<?php endif; ?>
 
-<?php
-		//Did You Know Display Code
-		if (function_exists(bblm_display_dyk)) {
-			bblm_display_dyk();
-		}
-?>
-
+<?php if (  $wp_query->max_num_pages > 1 ) : ?>
+				<div id="nav-below" class="subnav">
+					<div class="nav-previous"><?php next_posts_link( __( '<span class="meta-nav">&laquo;</span> Older Entries', 'bblm' ) ); ?></div>
+					<div class="nav-next"><?php previous_posts_link( __( 'Newer Entries <span class="meta-nav">&raquo;</span>', 'bblm' ) ); ?></div>
+				</div><!-- #nav-below -->
+<?php endif; ?>
+<?php get_sidebar('content'); ?>
 
 <?php get_sidebar(); ?>
 <?php get_footer(); ?>

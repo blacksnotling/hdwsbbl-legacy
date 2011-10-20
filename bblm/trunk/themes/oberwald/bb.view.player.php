@@ -18,11 +18,6 @@ get_header(); ?>
 			//if ($player = $wpdb->get_results($playersql)) {
 			if ($pd = $wpdb->get_row($playersql)) {
 				$pspp = $pd->p_spp;
-?>
-		<div id="breadcrumb">
-			<p><a href="<?php echo home_url(); ?>" title="Back to the front of the HDWSBBL">HDWSBBL</a> &raquo; <a href="<?php echo home_url(); ?>/teams/" title="Back to the team listing">Teams</a> &raquo; <a href="<?php print($pd->TeamLink); ?>" title="Read more on <?php print($pd->TeamName); ?>"><?php print($pd->TeamName); ?></a> &raquo; <?php the_title(); ?></p>
-		</div>
-<?php
 			} //end of if playersql
 
 				switch ($pspp) {
@@ -63,8 +58,9 @@ get_header(); ?>
 				}
 		?>
 
-				<div class="entry">
-					<h2><?php the_title(); ?></h2>
+			<div class="entry">
+				<div id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
+					<h2 class="entry-title"><?php the_title(); ?></h2>
 
 					<table>
 						<tr>
@@ -90,7 +86,7 @@ get_header(); ?>
 					</table>
 <!-- <?php print($pspp); ?> -->
 					<div class="details playerdet">
-					<?php the_content('Read the rest of this entry &raquo;'); ?>
+						<?php the_content(); ?>
 					</div>
 
 <?php
@@ -415,19 +411,15 @@ get_header(); ?>
 						print("	<div class=\"info\">\n	 <p>This player has not made their Debut yet. Stay tuned for further developments.</p>\n	</div>\n");
 					}
 
-		//Did You Know Display Code
-		if (function_exists(bblm_display_dyk)) {
-			bblm_display_dyk();
-		}
 ?>
+					<?php get_sidebar('entry'); ?>
+
 					<p class="postmeta"><?php edit_post_link('Edit', ' <strong>[</strong> ', ' <strong>]</strong> '); ?></p>
 
 				</div>
+			</div>
 		<?php
 		endwhile; ?>
-
-
-
 	<?php endif; ?>
 
 <?php
@@ -449,6 +441,7 @@ get_header(); ?>
 	$playerchampionshipssql = 'SELECT A.a_name, P.post_title, P.guid FROM '.$wpdb->prefix.'player X, '.$wpdb->prefix.'awards A, '.$wpdb->prefix.'awards_team_comp B, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P, '.$wpdb->prefix.'match_player Z, '.$wpdb->prefix.'match V WHERE X.p_id = Z.p_id AND V.m_id = Z.m_id AND V.c_id = C.c_id AND X.t_id = B.t_id AND A.a_id = B.a_id AND a_cup = 1 AND B.c_id = C.c_id AND C.c_id = J.tid AND J.prefix = \'c_\' AND J.pid = P.ID AND A.a_id = 1 AND X.p_id = '.$pd->p_id.' GROUP BY C.c_id ORDER BY A.a_id ASC LIMIT 0, 30 ';
 ?>
 
+<?php get_sidebar('content'); ?>
 
 </div><!-- end of #maincontent -->
 	<div id="subcontent">

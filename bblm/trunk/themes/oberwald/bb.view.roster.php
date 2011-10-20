@@ -4,15 +4,14 @@ Template Name: Team Roster
 */
 /*
 *	Filename: bb.view.roster.php
-*	Description: .Page template to display a teams Roster
+*	Description: Page template to display a teams Roster
 */
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="en">
 <head profile="http://gmpg.org/xfn/11">
 <meta http-equiv="Content-Type" content="<?php bloginfo('html_type'); ?>; charset=<?php bloginfo('charset'); ?>" />
-<title><?php wp_title(); ?> - HDWSBBL </title>
-<?php wp_head(); ?>
+<title><?php wp_title('-','true','right'); ?> HDWSBBL</title>
 <style type="text/css">
 html * {
 	margin:0;
@@ -84,6 +83,7 @@ a:hover, a:active {
 	text-decoration: underline;
 }
 </style>
+<?php wp_head(); ?>
 </head>
 <body>
 
@@ -325,10 +325,10 @@ a:hover, a:active {
 		</div> <!-- End of #maincontent -->
 	</div> <!-- End of #pagecontent -->
 	<div id="footer">
-				<p>Unique content is &copy; <a href="<?php echo home_url(); ?>" title="Visit the homepage of the HDWSBBL">HDWSBBL</a> 2006 - present.</p>
-				<p>Blood Bowl concept and miniatures are &copy; Games Workshop LTD used without permission.</p>
-				<?php wp_footer(); ?>
+		<p>Unique content is &copy; HDWSBBL 2006 - present.</p>
+		<p>Blood Bowl concept and miniatures are &copy; Games Workshop LTD used without permission.</p>
 	</div> <!-- End of #footer -->
 </div> <!-- End of #wrapper -->
+<?php wp_footer(); ?>
 </body>
 </html>
