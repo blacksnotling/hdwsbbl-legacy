@@ -4,18 +4,17 @@ Template Name: List Awards
 */
 /*
 *	Filename: bb.core.awards.php
-*	Description: .Page template to display the Awards of the league
+*	Description: Page template to display the Awards of the league
 */
 ?>
 <?php get_header(); ?>
 	<?php if (have_posts()) : ?>
 		<?php while (have_posts()) : the_post(); ?>
-		<div id="breadcrumb">
-			<p><a href="<?php echo home_url(); ?>" title="Back to the front of the HDWSBBL">HDWSBBL</a> &raquo; <a href="<?php echo home_url(); ?>/stats" title="Back to the main Statistics page">Statistics</a> &raquo; <?php the_title(); ?></p>
-		</div>
 			<div class="entry">
-				<h2><?php the_title(); ?></h2>
-				<?php the_content('Read the rest of this entry &raquo;'); ?>
+				<div id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
+					<h2 class="entry-title"><?php the_title(); ?></h2>
+
+					<?php the_content(); ?>
 <?php
 			$awardssql = 'SELECT * FROM '.$wpdb->prefix.'awards WHERE a_id !=4 ORDER BY a_id ASC';
 			if ($awards = $wpdb->get_results($awardssql)) {
@@ -166,21 +165,18 @@ Template Name: List Awards
 			else {
 				print("	<div class=\"info\">\n		<p>There are currently no awards to be won in the HDWSBBL!</p>\n	</div>\n");
 			}
-
-		//Did You Know Display Code
-		if (function_exists(bblm_display_dyk)) {
-			bblm_display_dyk();
-		}
-
 ?>
+					<?php get_sidebar('entry'); ?>
 
-				<p class="postmeta"><?php edit_post_link('Edit', ' <strong>[</strong> ', ' <strong>]</strong> '); ?></p>
+					<p class="postmeta"><?php edit_post_link('Edit', ' <strong>[</strong> ', ' <strong>]</strong> '); ?></p>
 
+				</div>
 			</div>
 
 
 		<?php endwhile;?>
 	<?php endif; ?>
 
+<?php get_sidebar('content'); ?>
 <?php get_sidebar(); ?>
 <?php get_footer(); ?>

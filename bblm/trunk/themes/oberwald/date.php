@@ -2,44 +2,46 @@
 	<?php if (have_posts()) : ?>
 
 	<h2><?php if ( is_day() ) : ?>
-				<?php printf( __( 'Daily Archives: <span>%s</span>', 'bblm' ), get_the_date() ); ?>
+				<?php printf( __( 'Daily Archives: <span>%s</span>', 'oberwald' ), get_the_date() ); ?>
 <?php elseif ( is_month() ) : ?>
-				<?php printf( __( 'Monthly Archives: <span>%s</span>', 'bblm' ), get_the_date('F Y') ); ?>
+				<?php printf( __( 'Monthly Archives: <span>%s</span>', 'oberwald' ), get_the_date('F Y') ); ?>
 <?php elseif ( is_year() ) : ?>
-				<?php printf( __( 'Yearly Archives: <span>%s</span>', 'bblm' ), get_the_date('Y') ); ?>
+				<?php printf( __( 'Yearly Archives: <span>%s</span>', 'oberwld' ), get_the_date('Y') ); ?>
 <?php else : ?>
-				<?php _e( 'Blog Archives', 'bblm' ); ?>
+				<?php _e( 'Blog Archives', 'oberwald' ); ?>
 <?php endif; ?></h2>
 <?php rewind_posts();?>
-		<?php while (have_posts()) : the_post(); ?>
+	<?php while (have_posts()) : the_post(); ?>
 			<div class="entry">
-				<h2 id="post-<?php the_ID(); ?>"><a href="<?php the_permalink() ?>" rel="bookmark" title="Permanent Link to <?php the_title(); ?>"><?php the_title(); ?></a></h2>
-				<p class="postdate"><?php the_time('F jS, Y') ?> <!-- by <?php the_author(); ?> --></p>
+				<div id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
+					<h2 class="entry-title"><a href="<?php the_permalink() ?>" rel="bookmark" title="Permanent Link to <?php the_title(); ?>"><?php the_title(); ?></a></h2>
+					<p class="postdate"><?php oberwald_posted_on() ?></p>
+<?php 				if ( is_year() ) {
+						the_excerpt();
+					}
+					else {
+						the_content();
+					}
+?>
+					<?php get_sidebar('entry'); ?>
 
-				<?php the_content('Read the rest of this entry &raquo;'); ?>
-
-				<p class="postmeta">Originally posted in <?php the_category(',') ?> <strong>|</strong> <?php edit_post_link('Edit', ' <strong>[</strong> ', ' <strong>]</strong> '); ?>  <?php comments_popup_link('No Comments &#187;', '1 Comment &#187;', '% Comments &#187;'); ?></p>
-
+					<p class="postmeta"><?php oberwald_posted_in() ?> <?php edit_post_link('Edit', ' <strong>[</strong> ', ' <strong>]</strong> '); ?></p>
+				</div>
 			</div>
 
 
-		<?php endwhile; else: ?>
-			<p><?php _e('Sorry, There where no items posted during this time period.','bblm' ); ?></p>
-		<?php endif; ?>
+	<?php endwhile; else: ?>
+		<p><?php _e('Sorry, There where no items posted during this time period.','oberwald' ); ?></p>
+	<?php endif; ?>
 
 
-
-		<ul class="subnav">
-			<?php next_posts_link('<li>&laquo; Previous Entries</li>') ?>
-			<?php previous_posts_link('<li>Next Entries &raquo;</li>') ?>
-		</ul>
-<?php
-		//Did You Know Display Code
-		if (function_exists(bblm_display_dyk)) {
-			bblm_display_dyk();
-		}
-?>
-
+<?php if (  $wp_query->max_num_pages > 1 ) : ?>
+				<div id="nav-below" class="subnav">
+					<div class="nav-previous"><?php next_posts_link( __( '<span class="meta-nav">&laquo;</span> Older Entries', 'bblm' ) ); ?></div>
+					<div class="nav-next"><?php previous_posts_link( __( 'Newer Entries <span class="meta-nav">&raquo;</span>', 'bblm' ) ); ?></div>
+				</div><!-- #nav-below -->
+<?php endif; ?>
+<?php get_sidebar('content'); ?>
 
 <?php get_sidebar(); ?>
 <?php get_footer(); ?>

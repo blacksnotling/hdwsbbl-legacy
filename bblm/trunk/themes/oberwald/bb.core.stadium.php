@@ -10,12 +10,11 @@ Template Name: Stadium Listing
 <?php get_header(); ?>
 	<?php if (have_posts()) : ?>
 		<?php while (have_posts()) : the_post(); ?>
-		<div id="breadcrumb">
-			<p><a href="<?php echo home_url(); ?>" title="Back to the front of the HDWSBBL">HDWSBBL</a> &raquo; Stadiums</p>
-		</div>
 			<div class="entry">
-				<h2><?php the_title(); ?></h2>
-				<?php the_content('Read the rest of this entry &raquo;'); ?>
+				<div id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
+					<h2 class="entry-title"><?php the_title(); ?></h2>
+
+					<?php the_content(); ?>
 <?php
 				$stadiumsql = "SELECT P.post_title, P.guid FROM ".$wpdb->prefix."stadium R, ".$wpdb->posts." P, ".$wpdb->prefix."bb2wp J WHERE R.stad_id = J.tid AND P.ID = J.pid and J.prefix = 'stad_' ORDER BY P.post_title ASC";
 				if ($stadiums = $wpdb->get_results($stadiumsql)) {
@@ -28,23 +27,18 @@ Template Name: Stadium Listing
 				else {
 					print("	<div id=\"info\">\n	<p>There are no Stadiums currently set-up!</p>\n	</div>\n");
 }
-
-
-		//Did You Know Display Code
-		if (function_exists(bblm_display_dyk)) {
-			bblm_display_dyk();
-		}
 ?>
-				<p class="postmeta"><?php edit_post_link('Edit', ' <strong>[</strong> ', ' <strong>]</strong> '); ?></p>
+					<?php get_sidebar('entry'); ?>
 
+					<p class="postmeta"><?php edit_post_link('Edit', ' <strong>[</strong> ', ' <strong>]</strong> '); ?></p>
+
+				</div>
 			</div>
 
 
 		<?php endwhile;?>
 	<?php endif; ?>
 
+<?php get_sidebar('content'); ?>
 <?php get_sidebar(); ?>
 <?php get_footer(); ?>
-
-
-

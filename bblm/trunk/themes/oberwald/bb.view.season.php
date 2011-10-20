@@ -15,14 +15,12 @@ Template Name: View Season
 		$options = get_option('bblm_config');
 		$seasonink = get_permalink(htmlspecialchars($options['page_season'], ENT_QUOTES));
 ?>
-		<div id="breadcrumb">
-			<p><a href="<?php echo home_url(); ?>" title="Back to the front of the HDWSBBL">HDWSBBL</a> &raquo; <a href="<?php print($seasonink); ?>" title="Back to the Season listing">Seasons</a> &raquo; <?php the_title(); ?></p>
-		</div>
 			<div class="entry">
-				<h2><?php the_title(); ?></h2>
+				<div id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
+					<h2 class="entry-title"><?php the_title(); ?></h2>
 
 				<div class="details season">
-					<?php the_content('Read the rest of this entry &raquo;'); ?>
+					<?php the_content(); ?>
 				</div>
 <?php
 				//Grab the season ID for use in the database
@@ -377,19 +375,18 @@ Template Name: View Season
 				else {
 					print("	<div class=\"info\">\n		<p>No matches have been played in this Season yet. Stay tuned for further updates as the games start rolling in.</p>\n	</div>\n");
 				}
-
-		//Did You Know Display Code
-		if (function_exists(bblm_display_dyk)) {
-			bblm_display_dyk();
-		}
 ?>
-				<p class="postmeta"><?php edit_post_link('Edit', ' <strong>[</strong> ', ' <strong>]</strong> '); ?></p>
+					<?php get_sidebar('entry'); ?>
 
+					<p class="postmeta"><?php edit_post_link('Edit', ' <strong>[</strong> ', ' <strong>]</strong> '); ?></p>
+
+				</div>
 			</div>
 
 
 		<?php endwhile;?>
 	<?php endif; ?>
 
+<?php get_sidebar('content'); ?>
 <?php get_sidebar(); ?>
 <?php get_footer(); ?>

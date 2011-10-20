@@ -10,9 +10,6 @@ Template Name: View Star Player
 <?php get_header(); ?>
 	<?php if (have_posts()) : ?>
 		<?php while (have_posts()) : the_post(); ?>
-		<div id="breadcrumb">
-			<p><a href="<?php echo home_url(); ?>" title="Back to the front of the HDWSBBL">HDWSBBL</a> &raquo; <a href="<?php echo home_url(); ?>/teams/" title="Back to the team listing">Teams</a> &raquo; <a href="<?php echo home_url(); ?>/star-players/" title="See more Star Players">Star Players</a> &raquo; <?php the_title(); ?></p>
-		</div>
 		<?php
 			/*
 			Gather Information for page
@@ -20,10 +17,12 @@ Template Name: View Star Player
 			$playersql = 'SELECT P.p_id, P.t_id, P.p_ma, P.p_st, P.p_ag, P.p_av, P.p_spp, P.p_skills, P.p_cost FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'bb2wp J WHERE J.tid = P.p_id AND J.prefix = \'p_\' AND J.pid = '.$post->ID;
 			$pd = $wpdb->get_row($playersql);
 ?>
-		<h2><?php the_title(); ?></h2>
-		<div class="details">
-			<?php the_content('Read the rest of this entry &raquo;'); ?>
-		</div>
+		<div class="entry">
+			<div id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
+				<h2 class="entry-title"><?php the_title(); ?></h2>
+			<div class="details">
+				<?php the_content(); ?>
+			</div>
 			<table>
 				<tr>
 					<th class="tbl_name">Position</th>
@@ -297,22 +296,18 @@ Template Name: View Star Player
 			//Star has not made debut yet
 			print("					<div class=\"info\">\n						<p>This Star Player has not made their Debut yet. Stay tuned for further developments.</p>\n					</div>\n");
 		}
-
-
-
-		//Did You Know Display Code
-		if (function_exists(bblm_display_dyk)) {
-			bblm_display_dyk();
-		}
 ?>
+					<?php get_sidebar('entry'); ?>
 
-				<p class="postmeta"><?php edit_post_link('Edit', ' <strong>[</strong> ', ' <strong>]</strong> '); ?></p>
+					<p class="postmeta"><?php edit_post_link('Edit', ' <strong>[</strong> ', ' <strong>]</strong> '); ?></p>
 
+				</div>
 			</div>
 
 
 		<?php endwhile;?>
 	<?php endif; ?>
 
+<?php get_sidebar('content'); ?>
 <?php get_sidebar(); ?>
 <?php get_footer(); ?>

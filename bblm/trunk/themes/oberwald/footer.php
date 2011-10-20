@@ -7,11 +7,11 @@
 			<div id="footerimg">
 				<p>In association with: <img src="<?php echo get_template_directory_uri(); ?>/images/slysports.gif" alt="Sly Sports Logo" /><br/>
 				Powered by <a href="http://www.wordpress.org/" title="WordPress">WordPress</a></p>
-				<?php wp_footer(); ?>
 			</div>
 		</div> <!-- End of #footer -->
 
 	</div> <!-- End of #pagecontent -->
 </div> <!-- End of #wrapper -->
+<?php wp_footer(); ?>
 </body>
 </html>

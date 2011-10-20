@@ -10,12 +10,11 @@ Template Name: List Seasons
 <?php get_header(); ?>
 	<?php if (have_posts()) : ?>
 		<?php while (have_posts()) : the_post(); ?>
-		<div id="breadcrumb">
-			<p><a href="<?php echo home_url(); ?>" title="Back to the front of the HDWSBBL">HDWSBBL</a> &raquo; Seasons</p>
-		</div>
 			<div class="entry">
-				<h2><?php the_title(); ?></h2>
-				<?php the_content('Read the rest of this entry &raquo;'); ?>
+				<div id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
+					<h2 class="entry-title"><?php the_title(); ?></h2>
+
+					<?php the_content(); ?>
 <?php
 				$seasonsql = 'SELECT S.sea_active, P.guid, P.post_title FROM '.$wpdb->prefix.'season S, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE S.sea_id = J.tid AND J.prefix = \'sea_\' AND J.pid = P.ID ORDER BY sea_active DESC, sea_sdate DESC';
 				if ($seasons = $wpdb->get_results($seasonsql)) {
@@ -32,20 +31,18 @@ Template Name: List Seasons
 				else {
 					print("<p>There are no Seasons currently set-up!</p>\n");
 }
-
-
-		//Did You Know Display Code
-		if (function_exists(bblm_display_dyk)) {
-			bblm_display_dyk();
-		}
 ?>
-				<p class="postmeta"><?php edit_post_link('Edit', ' <strong>[</strong> ', ' <strong>]</strong> '); ?></p>
+					<?php get_sidebar('entry'); ?>
 
+					<p class="postmeta"><?php edit_post_link('Edit', ' <strong>[</strong> ', ' <strong>]</strong> '); ?></p>
+
+				</div>
 			</div>
 
 
 		<?php endwhile;?>
 	<?php endif; ?>
 
+<?php get_sidebar('content'); ?>
 <?php get_sidebar(); ?>
 <?php get_footer(); ?>

@@ -10,10 +10,9 @@ Template Name: View Match
 <?php get_header(); ?>
 	<?php if (have_posts()) : ?>
 		<?php while (have_posts()) : the_post(); ?>
-		<div id="breadcrumb">
-			<p><a href="<?php echo home_url(); ?>" title="Back to the front of the HDWSBBL">HDWSBBL</a> &raquo; <a href="<?php echo home_url(); ?>/matches/" title="Back to the result listing">Results</a> &raquo; <?php the_title(); ?></p>
-		</div>
+
 			<div class="entry">
+				<div id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
 
 
 <?php
@@ -50,7 +49,7 @@ Template Name: View Match
 				}
 
 ?>
-			<h2><a href="<?php print($tA->t_guid); ?>" title="Read more on <?php print($tA->t_name); ?>"><?php print($tA->t_name); ?></a> vs <a href="<?php print($tB->t_guid); ?>" title="Read more on <?php print($tB->t_name); ?>"><?php print($tB->t_name); ?></a></h2>
+			<h2 class="entry-title"><a href="<?php print($tA->t_guid); ?>" title="Read more on <?php print($tA->t_name); ?>"><?php print($tA->t_name); ?></a> vs <a href="<?php print($tB->t_guid); ?>" title="Read more on <?php print($tB->t_name); ?>"><?php print($tB->t_name); ?></a></h2>
 		<!--<p><?php print($post->ID); ?> - <?php print($m->m_id); ?></p>-->
 
 				<table>
@@ -108,7 +107,7 @@ Template Name: View Match
 
 				<h3>Match Report</h3>
 				<div class="details">
-					<?php the_content('Read the rest of this entry &raquo;'); ?>
+					<?php the_content(); ?>
 				</div>
 
 
@@ -349,19 +348,19 @@ Template Name: View Match
 				</table>
 <?php
 		} //end of if match SQL
-
-		//Did You Know Display Code
-		if (function_exists(bblm_display_dyk)) {
-			bblm_display_dyk();
-		}
 ?>
-				<p class="postmeta"><?php edit_post_link('Edit', ' <strong>[</strong> ', ' <strong>]</strong> '); ?></p>
+					<?php get_sidebar('entry'); ?>
 
+					<p class="postmeta"><?php edit_post_link('Edit', ' <strong>[</strong> ', ' <strong>]</strong> '); ?></p>
+
+				</div>
 			</div>
 
 
 		<?php endwhile;?>
 	<?php endif; ?>
+
+<?php get_sidebar('content'); ?>
 
 </div><!-- end of #maincontent -->
 <?php

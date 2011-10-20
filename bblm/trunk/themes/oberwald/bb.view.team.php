@@ -10,11 +10,9 @@ Template Name: View Team
 <?php get_header(); ?>
 	<?php if (have_posts()) : ?>
 		<?php while (have_posts()) : the_post(); ?>
-		<div id="breadcrumb">
-			<p><a href="<?php echo home_url(); ?>" title="Back to the front of the HDWSBBL">HDWSBBL</a> &raquo; <a href="<?php echo home_url(); ?>/teams/" title="Back to the team listing">Teams</a> &raquo; <?php the_title(); ?></p>
-		</div>
 			<div class="entry">
-				<h2><?php the_title(); ?></h2>
+				<div id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
+					<h2 class="entry-title"><?php the_title(); ?></h2>
 <?php
 		$teaminfosql = 'SELECT T.*, J.tid AS teamid, R.r_name, L.guid AS racelink, U.display_name, W.post_title AS stad, W.guid AS stadlink FROM '.$wpdb->prefix.'team T, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P, '.$wpdb->users.' U, '.$wpdb->prefix.'race R, '.$wpdb->prefix.'bb2wp K, '.$wpdb->posts.' L, '.$wpdb->prefix.'bb2wp Q, '.$wpdb->posts.' W WHERE T.stad_id = Q.tid AND Q.prefix = \'stad_\' AND Q.pid = W.ID AND T.r_id = K.tid AND K.prefix = \'r_\' AND K.pid = L.ID AND T.ID = U.ID AND R.r_id = T.r_id AND T.t_id = J.tid AND J.prefix = \'t_\' AND J.pid = P.ID AND P.ID = '.$post->ID;
 		if ($ti = $wpdb->get_row($teaminfosql)) {
@@ -36,7 +34,7 @@ Template Name: View Team
 		}
 ?>
 				<div class="details team">
-					<?php the_content('Read the rest of this entry &raquo;'); ?>
+					<?php the_content(); ?>
 				</div>
 <?php
 			//Set default value to flag if the team has played a game or not
@@ -405,20 +403,19 @@ Template Name: View Team
 
 				}//end of count stats
 			}//end of if plyed a match
-
-		//Did You Know Display Code
-		if (function_exists(bblm_display_dyk)) {
-			bblm_display_dyk();
-		}
 ?>
+					<?php get_sidebar('entry'); ?>
 
-				<p class="postmeta"><?php edit_post_link('Edit', ' <strong>[</strong> ', ' <strong>]</strong> '); ?></p>
+					<p class="postmeta"><?php edit_post_link('Edit', ' <strong>[</strong> ', ' <strong>]</strong> '); ?></p>
 
+				</div>
 			</div>
 
 
 		<?php endwhile;?>
 	<?php endif; ?>
+
+<?php get_sidebar('content'); ?>
 
 </div><!-- end of #maincontent -->
 <?php
