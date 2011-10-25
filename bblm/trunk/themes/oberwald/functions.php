@@ -117,7 +117,6 @@ add_filter( 'get_the_excerpt', 'oberwald_custom_excerpt_more' );
 /** Register sidebars by running bblm_widgets_init() on the widgets_init hook. */
 add_action( 'widgets_init', 'oberwald_widgets_init' );
 
-if ( ! function_exists( 'oberwald_posted_on' ) ) :
 /**
  * Prints HTML with meta information for the current post date/time and author.
  *
@@ -131,9 +130,7 @@ function oberwald_posted_on() {
 		)
 	);
 }
-endif;
 
-if ( ! function_exists( 'bblm_posted_in' ) ) :
 /**
  * Prints HTML with meta information for the current post (category, tags and permalink).
  *
@@ -141,39 +138,60 @@ if ( ! function_exists( 'bblm_posted_in' ) ) :
 function oberwald_posted_in() {
 	// Retrieves tag list of current post, separated by commas.
 	$tag_list = get_the_tag_list( '', ', ' );
-	$team_list = get_the_term_list( $post->ID, 'post_teams', '', ', ', '' );
-	$comp_list = get_the_term_list( $post->ID, 'post_competitions', '', ', ', '' );
-	if ( $tag_list && $team_list && $comp_list ) {
-		$posted_in = __( 'This entry was posted in %1$s and tagged %2$s. It mentions %5$s in the %6$s. &lt;<a href="%3$s" title="Permalink to %4$s" rel="bookmark">Permalink</a>&gt;.', 'oberwald' );
-	} else if ( $tag_list && $team_list ) {
-		$posted_in = __( 'This entry was posted in %1$s and tagged %2$s. It mentions %5$s. &lt;<a href="%3$s" title="Permalink to %4$s" rel="bookmark">Permalink</a>&gt;.', 'oberwald' );
-	} else if ( $tag_list && $comp_list ) {
-		$posted_in = __( 'This entry was posted in %1$s and tagged %2$s. It discusses the %6$s. &lt;<a href="%3$s" title="Permalink to %4$s" rel="bookmark">Permalink</a>&gt;.', 'oberwald' );
-	} else if ( $tag_list ) {
-		$posted_in = __( 'This entry was posted in %1$s and tagged %2$s. &lt;<a href="%3$s" title="Permalink to %4$s" rel="bookmark">Permalink</a>&gt;.', 'oberwald' );
-	} else if ( $comp_list && $team_list ) {
-		$posted_in = __( 'This entry was posted in %1$s. It mentions %5$s in the %6$s. &lt;<a href="%3$s" title="Permalink to %4$s" rel="bookmark">Permalink</a>&gt;.', 'oberwald' );
-	} else if ( $team_list ) {
-		$posted_in = __( 'This entry was posted in %1$s. It mentions %5$s. &lt;<a href="%3$s" title="Permalink to %4$s" rel="bookmark">Permalink</a>&gt;.', 'oberwald' );
-	} else if ( $comp_list ) {
-		$posted_in = __( 'This entry was posted in %1$s. It discusses the %6$s. &lt;<a href="%3$s" title="Permalink to %4$s" rel="bookmark">Permalink</a>&gt;.', 'oberwald' );
-	} elseif ( is_object_in_taxonomy( get_post_type(), 'category' ) ) {
-		$posted_in = __( 'This entry was posted in %1$s. &lt;<a href="%3$s" title="Permalink to %4$s" rel="bookmark">Permalink</a>&gt;.', 'oberwald' );
-	} else {
-		$posted_in = __( '&lt;<a href="%3$s" title="Permalink to %4$s" rel="bookmark">Permalink</a>&gt;.', 'oberwald' );
+
+	if ( taxonomy_exists('post_teams') && taxonomy_exists('post_competitions') ) {
+		//If the custom BBLM taxonomy exist
+		$team_list = get_the_term_list( $post->ID, 'post_teams', '', ', ', '' );
+		$comp_list = get_the_term_list( $post->ID, 'post_competitions', '', ', ', '' );
+		if ( $tag_list && $team_list && $comp_list ) {
+			$posted_in = __( 'This entry was posted in %1$s and tagged %2$s. It mentions %5$s in the %6$s. &lt;<a href="%3$s" title="Permalink to %4$s" rel="bookmark">Permalink</a>&gt;.', 'oberwald' );
+		} else if ( $tag_list && $team_list ) {
+			$posted_in = __( 'This entry was posted in %1$s and tagged %2$s. It mentions %5$s. &lt;<a href="%3$s" title="Permalink to %4$s" rel="bookmark">Permalink</a>&gt;.', 'oberwald' );
+		} else if ( $tag_list && $comp_list ) {
+			$posted_in = __( 'This entry was posted in %1$s and tagged %2$s. It discusses the %6$s. &lt;<a href="%3$s" title="Permalink to %4$s" rel="bookmark">Permalink</a>&gt;.', 'oberwald' );
+		} else if ( $tag_list ) {
+			$posted_in = __( 'This entry was posted in %1$s and tagged %2$s. &lt;<a href="%3$s" title="Permalink to %4$s" rel="bookmark">Permalink</a>&gt;.', 'oberwald' );
+		} else if ( $comp_list && $team_list ) {
+			$posted_in = __( 'This entry was posted in %1$s. It mentions %5$s in the %6$s. &lt;<a href="%3$s" title="Permalink to %4$s" rel="bookmark">Permalink</a>&gt;.', 'oberwald' );
+		} else if ( $team_list ) {
+			$posted_in = __( 'This entry was posted in %1$s. It mentions %5$s. &lt;<a href="%3$s" title="Permalink to %4$s" rel="bookmark">Permalink</a>&gt;.', 'oberwald' );
+		} else if ( $comp_list ) {
+			$posted_in = __( 'This entry was posted in %1$s. It discusses the %6$s. &lt;<a href="%3$s" title="Permalink to %4$s" rel="bookmark">Permalink</a>&gt;.', 'oberwald' );
+		} elseif ( is_object_in_taxonomy( get_post_type(), 'category' ) ) {
+			$posted_in = __( 'This entry was posted in %1$s. &lt;<a href="%3$s" title="Permalink to %4$s" rel="bookmark">Permalink</a>&gt;.', 'oberwald' );
+		} else {
+			$posted_in = __( '&lt;<a href="%3$s" title="Permalink to %4$s" rel="bookmark">Permalink</a>&gt;.', 'oberwald' );
+		}
+		// Prints the string, replacing the placeholders.
+		printf(
+			$posted_in,
+			get_the_category_list( ', ' ),
+			$tag_list,
+			get_permalink(),
+			the_title_attribute( 'echo=0' ),
+			$team_list,
+			$comp_list
+		);
 	}
-	// Prints the string, replacing the placeholders.
-	printf(
-		$posted_in,
-		get_the_category_list( ', ' ),
-		$tag_list,
-		get_permalink(),
-		the_title_attribute( 'echo=0' ),
-		$team_list,
-		$comp_list
-	);
+	else {
+		//The custom BBLM taxonomy don't exist
+		if ( $tag_list ) {
+			$posted_in = __( 'This entry was posted in %1$s and tagged %2$s. &lt;<a href="%3$s" title="Permalink to %4$s" rel="bookmark">Permalink</a>&gt;.', 'oberwald' );
+		} elseif ( is_object_in_taxonomy( get_post_type(), 'category' ) ) {
+			$posted_in = __( 'This entry was posted in %1$s. &lt;<a href="%3$s" title="Permalink to %4$s" rel="bookmark">Permalink</a>&gt;.', 'oberwald' );
+		} else {
+			$posted_in = __( '&lt;<a href="%3$s" title="Permalink to %4$s" rel="bookmark">Permalink</a>&gt;.', 'oberwald' );
+		}
+		// Prints the string, replacing the placeholders.
+		printf(
+			$posted_in,
+			get_the_category_list( ', ' ),
+			$tag_list,
+			get_permalink(),
+			the_title_attribute( 'echo=0' )
+		);
+	}
 }
-endif;
 
 function oberwald_breadcrumb_root() {
 	//displays the initial tezt for all breadcrumb links
