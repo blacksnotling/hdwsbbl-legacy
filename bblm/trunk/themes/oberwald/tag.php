@@ -1,7 +1,7 @@
 <?php get_header(); ?>
 	<?php if (have_posts()) : ?>
 
-		<h2><?php single_cat_title('News Items in: '); ?></h2>
+		<h2><?php printf( __( 'Tag Archives: %s', 'oberwald' ), '<span>' . single_tag_title( '', false ) . '</span>' ); ?></h2>
 
 		<?php while (have_posts()) : the_post(); ?>
 			<div class="entry">
@@ -9,7 +9,7 @@
 					<h2 class="entry-title"><a href="<?php the_permalink() ?>" rel="bookmark" title="Permanent Link to <?php the_title(); ?>"><?php the_title(); ?></a></h2>
 					<p class="postdate"><?php oberwald_posted_on() ?></p>
 
-					<?php the_content(); ?>
+					<?php the_excerpt(); ?>
 
 					<?php wp_link_pages( array( 'before' => '<div class="page-link">' . __( 'Pages:', 'bblm' ), 'after' => '</div>' ) ); ?>
 
@@ -21,7 +21,7 @@
 
 
 		<?php endwhile; else: ?>
-					<p><?php _e('Sorry, no posts have been posted under this topic.', 'oberwald'); ?></p>
+					<p><?php _e('Sorry, no posts have been posted under this tag.', 'oberwald'); ?></p>
 		<?php endif; ?>
 
 <?php if (  $wp_query->max_num_pages > 1 ) : ?>
