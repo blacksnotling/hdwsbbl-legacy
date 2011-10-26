@@ -162,6 +162,15 @@ li.lastnav {
 .mcomment {
 	display:none;
 }
+.nav-previous {
+	float: left;
+	width: 50%;
+}
+.nav-next {
+	float: right;
+	text-align: right;
+	width: 50%;
+}
 /***** Sub Content (Sidebar) *****/
 #subcontent {
 	float: right;
@@ -316,7 +325,7 @@ form#post, form#statstable {
 	width: 75%;
 	text-align: center;
 }
-/* wp default image styles */
+/* wp default styles */
 img.alignleft {
 	float:left;
 	padding-right: 10px;
@@ -326,6 +335,36 @@ img.alignright {
 	float:right;
 	padding-left: 10px;
 	padding-bottom: 10px;
+}
+.entry .aligncenter, img.aligncenter {
+	clear: both;
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+	padding-bottom: 10px;
+}
+.entry .wp-caption {
+	background: #ddd url(images/bg_detail.gif) top repeat-y;
+	line-height: 18px;
+	margin-bottom: 20px;
+	padding: 4px;
+	text-align: center;
+	border: 1px solid #aaa;
+}
+.entry .wp-caption img {
+	margin: 5px 5px 0;
+}
+.entry .wp-caption p.wp-caption-text {
+	color: #888;
+	margin: 5px;
+}
+.entry .wp-caption p.wp-caption-text, dd.gallery-caption {
+	font-size: smaller;
+}
+.entry .sticky {
+	border-top: 1px solid #aaa;
+	padding: 0.2em 0.2em 0 0.2em;
+	margin-bottom: 0.2em;
 }
 li.active {
 	background: url(images/star.gif) no-repeat 100% 0;

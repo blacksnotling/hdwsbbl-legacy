@@ -193,6 +193,15 @@ function oberwald_posted_in() {
 	}
 }
 
+/**
+ * A simple wrapper function to display the number of comments.
+ * A wrapper function is used so that if the text needs to be updated in the future I only hve to change it in one place.
+ *
+ */
+function oberwald_comments_link() {
+	comments_popup_link('No Comments &#187;', '1 Comment &#187;', '% Comments &#187;');
+}
+
 function oberwald_breadcrumb_root() {
 	//displays the initial tezt for all breadcrumb links
 ?>

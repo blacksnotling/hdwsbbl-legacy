@@ -7,6 +7,8 @@
 
 					<?php the_content(); ?>
 
+					<?php wp_link_pages( array( 'before' => '<div class="page-link">' . __( 'Pages:', 'bblm' ), 'after' => '</div>' ) ); ?>
+
 					<?php get_sidebar('entry'); ?>
 
 					<p class="postmeta"><?php edit_post_link('Edit', ' <strong>[</strong> ', ' <strong>]</strong> '); ?></p>
