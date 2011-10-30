@@ -82,7 +82,7 @@ add_filter( 'get_the_excerpt', 'oberwald_custom_excerpt_more' );
  function oberwald_widgets_init() {
 	register_sidebar(array(
 		'name'=> __( 'sidebar-posts', 'oberwald' ),
-		'description' => __( 'Appears on most pages in the sidebar area', 'oberwald' ),
+		'description' => __( 'Appears at the top of the sidebar area for all non-warzone pages and posts (unless the teamplate blocks it).', 'oberwald' ),
         'before_widget' => '<li id="%1$s" class="widget %2$s">',
         'after_widget' => '</li>',
         'before_title' => '<h2>',
@@ -90,7 +90,15 @@ add_filter( 'get_the_excerpt', 'oberwald_custom_excerpt_more' );
     ));
 	register_sidebar(array(
 		'name'=> __( 'sidebar-common', 'oberwald' ),
-		'description' => __( 'Appears on ALL Pages in the sidebar area', 'oberwald' ),
+		'description' => __( 'Appears below the page / post specific content on ALL Pages in the sidebar area.', 'oberwald' ),
+        'before_widget' => '<li id="%1$s" class="widget %2$s">',
+        'after_widget' => '</li>',
+        'before_title' => '<h2>',
+        'after_title' => '</h2>',
+    ));
+	register_sidebar(array(
+		'name'=> __( 'sidebar-warzone', 'oberwald' ),
+		'description' => __( 'Appears at the top of the sidebar for all WarZone pages (posts / category / warzone page).', 'oberwald' ),
         'before_widget' => '<li id="%1$s" class="widget %2$s">',
         'after_widget' => '</li>',
         'before_title' => '<h2>',
