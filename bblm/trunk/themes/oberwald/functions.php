@@ -217,6 +217,20 @@ function oberwald_breadcrumb_root() {
 <?php
 }
 
+/**
+ * Add specific CSS class by filter to body_class
+ *
+ */
+add_filter('body_class','oberwald_add_body_class');
+
+function oberwald_add_body_class($classes) {
+	if ( is_category( 'warzone' ) || is_page('warzone') || ( in_category( 'warzone' ) && is_single() ) ) {
+		// add 'section-warzone' to the $classes array if it is part of the Warzone section
+		$classes[] = 'section-warzone';
+	}
+	return $classes;
+}
+
 function TimeAgoInWords($from_time, $include_seconds = false) {
 //http://yoast.com/wordpress-functions-supercharge-theme/
   $to_time = time();

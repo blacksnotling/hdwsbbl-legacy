@@ -107,28 +107,6 @@ function bs_remove_warzone_cat( $notused )
   }
 }
 
-
-add_filter('single_template', 'cpt_custom_post_template');
-
-function cpt_custom_post_template($template) {
-    global $wp_query;
-    global $warzone_category;
-
-    $post = $wp_query->post;
-    $id = $warzone_category;
-
-    // If a template exists for this post ID, load it.
-//    if ( file_exists(TEMPLATEPATH . "/single-{$id}.php") )
-//        return TEMPLATEPATH . "/single-{$id}.php";
-
-    // Add custom checks here.  For example, give posts different templates
-    // depending on what categories they are in.
-	if ( in_category($id) && file_exists(TEMPLATEPATH . '/single-'.$id.'.php') )
-      return TEMPLATEPATH . '/single-'.$id.'.php';
-
-    return $template;
-}
-
 /************ Update TV function. Version 0.2 (20100123) **********/
 function bblm_update_tv($tid) {
 	global $wpdb;

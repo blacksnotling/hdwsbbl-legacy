@@ -84,14 +84,14 @@ $(document).ready(function(){
 </script>
 <?php
 	} //end of if NOT is_home
-	if ($iswarzonepage) { ?>
-<link rel="stylesheet" href="<?php echo get_template_directory_uri(); ?>/warzone.css?0909" type="text/css" media="screen" />
+	if ( is_category( 'warzone' ) || is_page('warzone') || ( in_category( 'warzone' ) && is_single() ) ) { ?>
+<link rel="stylesheet" href="<?php echo get_template_directory_uri(); ?>/warzone.css?1011" type="text/css" media="screen" />
 <?php
 	}
 	else { ?>
-<link rel="stylesheet" href="<?php bloginfo('stylesheet_url'); ?>?0909" type="text/css" media="screen" />
+<link rel="stylesheet" type="text/css" media="all" href="<?php bloginfo( 'stylesheet_url' ); ?>?1011" />
 <?php
-	} //end of if else cat 13 (warzone) ?>
+	} //end of if else cat warzone ?>
 <link rel="stylesheet" href="<?php echo get_template_directory_uri(); ?>/print.css" type="text/css" media="print" />
 <link rel="alternate" type="application/rss+xml" title="<?php bloginfo('name'); ?> RSS Feed" href="<?php bloginfo('rss2_url'); ?>" />
 <link rel="pingback" href="<?php bloginfo('pingback_url'); ?>" />
@@ -104,7 +104,7 @@ $(document).ready(function(){
 ?>
 <?php wp_head(); ?>
 </head>
-<body <?php body_class( $class ); ?>>
+<body <?php body_class(); ?>>
 <?php
 	//Begin the custom wrapper class for the front page
 	if ($ismainpage) {
