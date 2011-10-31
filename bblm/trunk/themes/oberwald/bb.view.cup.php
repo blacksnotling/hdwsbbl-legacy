@@ -373,8 +373,6 @@ Template Name: View Cup
 					print("	<div class=\"info\">\n		<p>No Competitions or matches have been played for this Championship Cup. Stay tuned for future updates.</p>\n	</div>\n");
 				}
 ?>
-					<?php get_sidebar('entry'); ?>
-
 					<p class="postmeta"><?php edit_post_link('Edit', ' <strong>[</strong> ', ' <strong>]</strong> '); ?></p>
 
 				</div>
@@ -384,6 +382,5 @@ Template Name: View Cup
 		<?php endwhile;?>
 	<?php endif; ?>
 
-<?php get_sidebar('content'); ?>
 <?php get_sidebar(); ?>
 <?php get_footer(); ?>

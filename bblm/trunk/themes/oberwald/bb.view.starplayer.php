@@ -297,8 +297,6 @@ Template Name: View Star Player
 			print("					<div class=\"info\">\n						<p>This Star Player has not made their Debut yet. Stay tuned for further developments.</p>\n					</div>\n");
 		}
 ?>
-					<?php get_sidebar('entry'); ?>
-
 					<p class="postmeta"><?php edit_post_link('Edit', ' <strong>[</strong> ', ' <strong>]</strong> '); ?></p>
 
 				</div>
@@ -308,6 +306,5 @@ Template Name: View Star Player
 		<?php endwhile;?>
 	<?php endif; ?>
 
-<?php get_sidebar('content'); ?>
 <?php get_sidebar(); ?>
 <?php get_footer(); ?>

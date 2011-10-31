@@ -119,8 +119,6 @@ Template Name: Star Players Team View
 			print("				<div class=\"info\">\n					<p>No Star Players have been hired by any teams, yet...</p>\n				</div>\n");
 		}
 ?>
-					<?php get_sidebar('entry'); ?>
-
 					<p class="postmeta"><?php edit_post_link('Edit', ' <strong>[</strong> ', ' <strong>]</strong> '); ?></p>
 
 				</div>
@@ -130,6 +128,5 @@ Template Name: Star Players Team View
 		<?php endwhile;?>
 	<?php endif; ?>
 
-<?php get_sidebar('content'); ?>
 <?php get_sidebar(); ?>
 <?php get_footer(); ?>

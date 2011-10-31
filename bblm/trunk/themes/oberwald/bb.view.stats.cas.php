@@ -304,8 +304,6 @@ Template Name: Statistics - CAS
 					print("	<div class=\"info\">\n		<p>No teams have made any Kills!</p>\n	</div>\n");
 				}
 ?>
-					<?php get_sidebar('entry'); ?>
-
 					<p class="postmeta"><?php edit_post_link('Edit', ' <strong>[</strong> ', ' <strong>]</strong> '); ?></p>
 
 				</div>
