@@ -27,7 +27,6 @@
 					<div class="nav-next"><?php previous_posts_link( __( 'Newer Entries <span class="meta-nav">&raquo;</span>', 'bblm' ) ); ?></div>
 				</div><!-- #nav-below -->
 <?php endif; ?>
-<?php get_sidebar('content'); ?>
 
 <?php get_sidebar(); ?>
 <?php get_footer(); ?>

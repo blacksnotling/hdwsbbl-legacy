@@ -16,8 +16,6 @@ Template Name: X.X
 
 					<?php the_content(); ?>
 
-					<?php get_sidebar('entry'); ?>
-
 					<p class="postmeta"><?php edit_post_link('Edit', ' <strong>[</strong> ', ' <strong>]</strong> '); ?></p>
 
 				</div>
@@ -27,6 +25,5 @@ Template Name: X.X
 		<?php endwhile;?>
 	<?php endif; ?>
 
-<?php get_sidebar('content'); ?>
 <?php get_sidebar(); ?>
 <?php get_footer(); ?>

@@ -349,8 +349,6 @@ Template Name: View Match
 <?php
 		} //end of if match SQL
 ?>
-					<?php get_sidebar('entry'); ?>
-
 					<p class="postmeta"><?php edit_post_link('Edit', ' <strong>[</strong> ', ' <strong>]</strong> '); ?></p>
 
 				</div>
@@ -433,14 +431,13 @@ Template Name: View Match
 <?php
 	} //end of if $playeractions
 
-if ( !function_exists('dynamic_sidebar') || !dynamic_sidebar('sidebar-common') ) : ?>
-			<li><h2 class="widgettitle">Opps</h2>
+		if ( !dynamic_sidebar('sidebar-common') ) : ?>
+			<li><h2 class="widgettitle">Search</h2>
 			  <ul>
-			   <li>Something has gone wrong and you have lost your widget settings. better log in quick and fix it!</li>
+			   <li><?php get_search_form(); ?></li>
 			  </ul>
 			</li>
-<?php endif;
-?>
+		<?php endif; ?>
 
 		</ul>
 	</div><!-- end of #subcontent -->

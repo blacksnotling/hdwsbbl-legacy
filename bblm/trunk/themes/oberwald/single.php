@@ -11,8 +11,6 @@
 
 					<?php wp_link_pages( array( 'before' => '<div class="page-link">' . __( 'Pages:', 'bblm' ), 'after' => '</div>' ) ); ?>
 
-					<?php get_sidebar('entry'); ?>
-
 					<p class="postmeta"><?php oberwald_posted_in() ?> <?php edit_post_link('Edit', ' <strong>[</strong> ', ' <strong>]</strong> '); ?></p>
 				</div>
 			</div>
@@ -20,8 +18,6 @@
 
 		<?php endwhile; ?>
 		<?php endif; ?>
-
-<?php get_sidebar('content'); ?>
 
 <?php get_sidebar(); ?>
 <?php get_footer(); ?>

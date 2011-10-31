@@ -376,8 +376,6 @@ Template Name: View Season
 					print("	<div class=\"info\">\n		<p>No matches have been played in this Season yet. Stay tuned for further updates as the games start rolling in.</p>\n	</div>\n");
 				}
 ?>
-					<?php get_sidebar('entry'); ?>
-
 					<p class="postmeta"><?php edit_post_link('Edit', ' <strong>[</strong> ', ' <strong>]</strong> '); ?></p>
 
 				</div>
@@ -387,6 +385,5 @@ Template Name: View Season
 		<?php endwhile;?>
 	<?php endif; ?>
 
-<?php get_sidebar('content'); ?>
 <?php get_sidebar(); ?>
 <?php get_footer(); ?>

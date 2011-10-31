@@ -323,8 +323,6 @@ Template Name: Statistics - Misc
 					print("	<div class=\"info\">\n		<p>No players have been assigned an MVP!!</p>\n	</div>\n");
 				}
 ?>
-					<?php get_sidebar('entry'); ?>
-
 					<p class="postmeta"><?php edit_post_link('Edit', ' <strong>[</strong> ', ' <strong>]</strong> '); ?></p>
 
 				</div>
@@ -334,6 +332,5 @@ Template Name: Statistics - Misc
 		<?php endwhile;?>
 	<?php endif; ?>
 
-<?php get_sidebar('content'); ?>
 <?php get_sidebar(); ?>
 <?php get_footer(); ?>

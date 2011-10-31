@@ -6,13 +6,10 @@
 					<p>It looks like the page you are looking for has moved or the link you where given was incorrect. Please feel free to use the search box below to find what you are looking for:</p>
 					<p><?php get_search_form(); ?></p>
 
-					<?php get_sidebar('entry'); ?>
-
 					<p class="postmeta"></p>
 
 				</div>
 			</div>
 
-<?php get_sidebar('content'); ?>
 <?php get_sidebar(); ?>
 <?php get_footer(); ?>

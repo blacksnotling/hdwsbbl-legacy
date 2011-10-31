@@ -105,14 +105,6 @@ add_filter( 'get_the_excerpt', 'oberwald_custom_excerpt_more' );
         'after_title' => '</h2>',
     ));
 	register_sidebar(array(
-		'name'=> __( 'post-bottom', 'oberwald' ),
-		'description' => __( 'Appears at the bottom of full posts', 'oberwald' ),
-        'before_widget' => '<div id="%1$s" class="post-bottom-dynamic %2$s">',
-        'after_widget' => '</div>',
-        'before_title' => '<h3>',
-        'after_title' => '</h3>',
-    ));
-	register_sidebar(array(
 		'name'=> __( 'maincontent-bottom', 'oberwald' ),
 		'description' => __( 'Appears at the bottom of the maincontent - above the footer', 'oberwald' ),
         'before_widget' => '<div id="%1$s" class="content-bottom-dynamic %2$s">',
