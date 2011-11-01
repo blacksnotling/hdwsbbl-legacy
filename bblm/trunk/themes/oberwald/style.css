@@ -466,51 +466,6 @@ th.tbl_teamcup {
 td.tbl_teamcup {
 	text-align: left;
 }
-/***** Comments - old *********/
-/* Old and no longer valid
-form label {
-	font-size: 90%;
-}
-#commentform input {
-	width: 170px;
-	padding: 2px;
-	margin: 5px 5px 1px 0;
-}
-
-#commentform textarea {
-	width: 100%;
-	padding: 2px;
-}
-#commentform #submit {
-	margin: 0;
-	float: right;
-	background-color:#ddd;
-	border:1px solid #999;	
-}
-#commentform p {
-	margin: 5px 0;
-}
-.commentlist {
-	border-top:1px solid #136284;
-	list-style: none;
-}
-.commentlist cite {
-	font-weight: bold;
-}
-.commentlist li {
-	border-bottom:1px solid #136284;
-	margin-left:-10px;
-	padding:3px 5px;
-}
-.commentmeta {
-	border-bottom:1px solid #ddd;
-}
-.commenttime {
-	border-top:1px solid #ddd;
-}
-.comment_alt {
-	background-color: #eee;
-}*/
 /***** Comments *********/
 #comments {
     padding:19px 0 38px 0;
@@ -578,15 +533,20 @@ form label {
 .comment-navigation span {
     margin-right:0.5em;
 }
-form label {
+form p label {
 	font-size: 90%;
+	width: 70px;
+	display: inline-block;
+	padding: 0;
+}
+form p.comment-form-url label {
+	width: 81px;
 }
 form input {
 	width: 170px;
 	padding: 2px;
 	margin: 5px 5px 1px 0;
 }
-
 form textarea {
 	width: 100%;
 	padding: 2px;
@@ -599,6 +559,18 @@ form #submit {
 }
 form p {
 	margin: 5px 0;
+}
+form .required {
+	color: #ff4b33;
+	font-weight: bold;
+}
+#form .form-allowed-tags {
+	color: #888;
+	font-size: 12px;
+	line-height: 18px;
+}
+#form .form-allowed-tags code {
+	font-size: 11px;
 }
 /***** Did You Knows *****/
 div.dykcontainer {

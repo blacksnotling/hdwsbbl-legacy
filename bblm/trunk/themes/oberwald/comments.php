@@ -1,109 +1,66 @@
-<?php // Do not delete these lines
-//V2. based of the new WP comments template from 2.7 and from http://themeshaper.com/wordpress-theme-comments-template-tutorial/
-// Do not delete these lines
-	if (!empty($_SERVER['SCRIPT_FILENAME']) && 'comments.php' == basename($_SERVER['SCRIPT_FILENAME']))
-		die ('Please do not load this page directly. Thanks!');
-
-	if ( post_password_required() ) { ?>
-		<p class="nocomments">This post is password protected. Enter the password to view comments.</p>
-	<?php
-		return;
-	}
-?>
-
-<!-- You can start editing here. -->
-<div id="comments-list">
-
-<?php if ( have_comments() ) : ?>
-	<h3 id="comments"><?php comments_number('No Responses', 'One Response', '% Responses' );?> to &#8220;<?php the_title(); ?>&#8221;</h3>
-
-<?php /* If there are enough comments, build the comment navigation  */ ?>
-<?php $total_pages = get_comment_pages_count(); if ( $total_pages > 1 ) : ?>
-                                        <div id="comments-nav-above" class="comments-navigation">
-                                                                <div class="paginated-comments-links"><?php paginate_comments_links(); ?></div>
-                                        </div><!-- #comments-nav-above -->
-<?php endif; ?>
-
-<?php /* An ordered list of our custom comments callback, custom_comments(), in functions.php   */ ?>
-			<ol>
-<?php wp_list_comments('type=comment&callback=custom_comments'); ?>
-			</ol>
-
-<?php /* If there are enough comments, build the comment navigation */ ?>
-<?php $total_pages = get_comment_pages_count(); if ( $total_pages > 1 ) : ?>
-                                <div id="comments-nav-below" class="comments-navigation">
-                                                <div class="paginated-comments-links"><?php paginate_comments_links(); ?></div>
-                </div><!-- #comments-nav-below -->
-<?php endif; ?>
-
- <?php else : // this is displayed if there are no comments so far ?>
-
-	<?php if ( comments_open() ) : ?>
-		<!-- If comments are open, but there are no comments. -->
-
-	 <?php else : // comments are closed ?>
-		<!-- If comments are closed. -->
-		<p class="nocomments">Comments are closed.</p>
-
-	<?php endif; ?>
-<?php endif; ?>
-
-</div><!-- end of .comments-list -->
-
-<?php if ( comments_open() ) : ?>
-
-<div id="respond">
-
-<h3 id="respond">Make your opinion known:</h3>
-<div class="info">
-	<p>Please note that the site reserves the right to edit or remove any comment without prior notice.</p>
-</div>
-
-<div class="cancel-comment-reply">
-	<small><?php cancel_comment_reply_link(); ?></small>
-</div>
-
-<?php if ( get_option('comment_registration') && !is_user_logged_in() ) : ?>
-<p>You must be <a href="<?php echo wp_login_url( get_permalink() ); ?>">logged in</a> to post a comment.</p>
-<?php else : ?>
-
-<form action="<?php echo get_option('siteurl'); ?>/wp-comments-post.php" method="post" id="commentform">
-
-<?php if ( is_user_logged_in() ) : ?>
-
-<p>Logged in as <a href="<?php echo get_option('siteurl'); ?>/wp-admin/profile.php"><?php echo $user_identity; ?></a>. <a href="<?php echo wp_logout_url(get_permalink()); ?>" title="Log out of this account">Log out &raquo;</a></p>
-
-<?php else : ?>
-
-<p><input type="text" name="author" id="author" value="<?php echo esc_attr($comment_author); ?>" size="22" tabindex="1" <?php if ($req) echo "aria-required='true'"; ?> />
-<label for="author">Your Name <?php if ($req) echo "(required)"; ?></label></p>
-
-<p><input type="text" name="email" id="email" value="<?php echo esc_attr($comment_author_email); ?>" size="22" tabindex="2" <?php if ($req) echo "aria-required='true'"; ?> />
-<label for="email">e-Mail (will not be published) <?php if ($req) echo "(required)"; ?></label></p>
-
-<p><input type="text" name="url" id="url" value="<?php echo esc_attr($comment_author_url); ?>" size="22" tabindex="3" />
-<label for="url">Your Website</label></p>
-
-<?php endif; ?>
-
-<!--<p><small><strong>XHTML:</strong> You can use these tags: <code><?php echo allowed_tags(); ?></code></small></p>-->
-
-<p><textarea name="comment" id="comment" cols="100%" rows="10" tabindex="4"></textarea></p>
-
-<p><input name="submit" type="submit" id="submit" tabindex="5" value="Submit Comment" />
-<?php comment_id_fields(); ?>
-</p>
-<?php do_action('comment_form', $post->ID); ?>
 <?php
-	if (function_exists(show_subscription_checkbox)) {
-	//if the subscrive-to-comments plugin is active, have the option available
-		show_subscription_checkbox();
-	}
+/**
+ * The template for displaying Comments.
+ */
+ //V3. based of the new WP comments template from the twentyeleven theme
 ?>
+	<div id="comments-list">
+	<?php if ( post_password_required() ) : ?>
+		<p class="nopassword"><?php _e( 'This post is password protected. Enter the password to view any comments.', 'Oberwald' ); ?></p>
+	</div><!-- #comments -->
+	<?php
+			/* Stop the rest of comments.php from being processed,
+			 * but don't kill the script entirely -- we still have
+			 * to fully load the template.
+			 */
+			return;
+		endif;
+	?>
 
-</form>
+	<?php // You can start editing here -- including this comment! ?>
 
-<?php endif; // If registration required and not logged in ?>
-</div>
+	<?php if ( have_comments() ) : ?>
+		<h3 id="comments">
+			<?php
+				printf( _n( '1 response to &ldquo;%2$s&rdquo;', '%1$s responses to &ldquo;%2$s&rdquo;', get_comments_number(), 'oberwald' ),
+					number_format_i18n( get_comments_number() ), '<span>' . get_the_title() . '</span>' );
+			?>
+		</h3>
 
-<?php endif; // if you delete this the sky will fall on your head ?>
+		<?php if ( get_comment_pages_count() > 1 && get_option( 'page_comments' ) ) : // are there comments to navigate through ?>
+		<nav id="comment-nav-above">
+			<h1 class="assistive-text"><?php _e( 'Comment navigation', 'oberwald' ); ?></h1>
+			<div class="nav-previous"><?php previous_comments_link( __( '&larr; Older Comments', 'oberwald' ) ); ?></div>
+			<div class="nav-next"><?php next_comments_link( __( 'Newer Comments &rarr;', 'oberwald' ) ); ?></div>
+		</nav>
+		<?php endif; // check for comment navigation ?>
+
+		<ol>
+			<?php
+				/* Loop through and list the comments. Tell wp_list_comments()
+				 * to use oberwald_comment() to format the comments.
+				 */
+				wp_list_comments( array( 'callback' => 'oberwald_comment' ) );
+			?>
+		</ol>
+
+		<?php if ( get_comment_pages_count() > 1 && get_option( 'page_comments' ) ) : // are there comments to navigate through ?>
+		<nav id="comment-nav-below">
+			<h1 class="assistive-text"><?php _e( 'Comment navigation', 'oberwald' ); ?></h1>
+			<div class="nav-previous"><?php previous_comments_link( __( '&larr; Older Comments', 'oberwald' ) ); ?></div>
+			<div class="nav-next"><?php next_comments_link( __( 'Newer Comments &rarr;', 'oberwald' ) ); ?></div>
+		</nav>
+		<?php endif; // check for comment navigation ?>
+
+	<?php
+		/* If there are no comments and comments are closed, let's leave a little note, shall we?
+		 * But we don't want the note on pages or post types that do not support comments.
+		 */
+		elseif ( ! comments_open() && ! is_page() && post_type_supports( get_post_type(), 'comments' ) ) :
+	?>
+		<div class="info"><p><?php _e( 'Comments are closed.', 'oberwald' ); ?></p></div>
+	<?php endif; ?>
+
+	<?php comment_form(); ?>
+
+</div><!-- #comments -->
