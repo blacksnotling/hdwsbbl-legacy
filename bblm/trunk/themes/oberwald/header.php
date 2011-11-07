@@ -84,14 +84,8 @@ $(document).ready(function(){
 </script>
 <?php
 	} //end of if NOT is_home
-	if ( is_category( 'warzone' ) || is_page('warzone') || ( in_category( 'warzone' ) && is_single() ) ) { ?>
-<link rel="stylesheet" href="<?php echo get_template_directory_uri(); ?>/warzone.css?1011" type="text/css" media="screen" />
-<?php
-	}
-	else { ?>
-<link rel="stylesheet" type="text/css" media="all" href="<?php bloginfo( 'stylesheet_url' ); ?>?011111" />
-<?php
-	} //end of if else cat warzone ?>
+?>
+<link rel="stylesheet" type="text/css" media="all" href="<?php bloginfo( 'stylesheet_url' ); ?>?061111" />
 <link rel="stylesheet" href="<?php echo get_template_directory_uri(); ?>/print.css" type="text/css" media="print" />
 <link rel="alternate" type="application/rss+xml" title="<?php bloginfo('name'); ?> RSS Feed" href="<?php bloginfo('rss2_url'); ?>" />
 <link rel="pingback" href="<?php bloginfo('pingback_url'); ?>" />
