@@ -6,6 +6,7 @@
 <title><?php wp_title('-','true','right'); ?> HDWSBBL</title>
 <script type="text/javascript" src="<?php echo get_template_directory_uri(); ?>/includes/jquery.js"></script>
 <link rel="shortcut icon" href="<?php echo get_template_directory_uri(); ?>/favicon.ico" />
+<link href='http://fonts.googleapis.com/css?family=Graduate' rel='stylesheet' type='text/css'>
 <?php if (is_home()) { ?>
 <link rel="stylesheet" href="<?php echo get_template_directory_uri(); ?>/main.css?0909" type="text/css" media="screen" />
 <script type="text/javascript" src="<?php echo get_template_directory_uri(); ?>/includes/ui.tabs.js"></script>
@@ -85,7 +86,7 @@ $(document).ready(function(){
 <?php
 	} //end of if NOT is_home
 ?>
-<link rel="stylesheet" type="text/css" media="all" href="<?php bloginfo( 'stylesheet_url' ); ?>?061111" />
+<link rel="stylesheet" type="text/css" media="all" href="<?php bloginfo( 'stylesheet_url' ); ?>?1503" />
 <link rel="stylesheet" href="<?php echo get_template_directory_uri(); ?>/print.css" type="text/css" media="print" />
 <link rel="alternate" type="application/rss+xml" title="<?php bloginfo('name'); ?> RSS Feed" href="<?php bloginfo('rss2_url'); ?>" />
 <link rel="pingback" href="<?php bloginfo('pingback_url'); ?>" />
@@ -100,8 +101,9 @@ $(document).ready(function(){
 </head>
 <body <?php body_class(); ?>>
 <?php
-	//Begin the custom wrapper class for the front page
-	if ($ismainpage) {
+	if(is_home()){ ?>
+<div id="home-wrapper">
+<?php	}else if ($ismainpage) {
 ?>
 <div id="main-wrapper">
 <?php
@@ -132,6 +134,14 @@ $(document).ready(function(){
 
 	<div id="pagecontent">
 		<div id="maincontent">
+<?php 	if (is_home()) {
+		}
+		else {
+			//Dont print the breadcrumbs on the home page
+?>
 		<div id="breadcrumb">
 			<p><?php oberwald_breadcrumb_root(); ?> <?php the_title(); ?></p>
 		</div>
+<?php
+		}
+?>
