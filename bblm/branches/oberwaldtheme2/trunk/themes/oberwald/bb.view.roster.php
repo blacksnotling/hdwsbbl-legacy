@@ -6,12 +6,17 @@ Template Name: Team Roster
 *	Filename: bb.view.roster.php
 *	Description: Page template to display a teams Roster
 */
+$options = get_option('bblm_config');
+$bblm_league_name = htmlspecialchars($options['league_name'], ENT_QUOTES);
+if ( strlen($bblm_league_name) < 1) {
+	$bblm_league_name = "league";
+}
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="en">
 <head profile="http://gmpg.org/xfn/11">
 <meta http-equiv="Content-Type" content="<?php bloginfo('html_type'); ?>; charset=<?php bloginfo('charset'); ?>" />
-<title><?php wp_title('-','true','right'); ?> HDWSBBL</title>
+<title><?php wp_title('-','true','right'); ?> <?php print ($bblm_league_name); ?></title>
 <style type="text/css">
 html * {
 	margin:0;

@@ -6,6 +6,11 @@ Template Name: View Star Player
 *	Filename: bb.view.starplayer.php
 *	Description: .Page to display a Star Player.
 */
+$options = get_option('bblm_config');
+$bblm_league_name = htmlspecialchars($options['league_name'], ENT_QUOTES);
+if ( strlen($bblm_league_name) < 1) {
+	$bblm_league_name = "league";
+}
 ?>
 <?php get_header(); ?>
 	<?php if (have_posts()) : ?>
@@ -65,7 +70,7 @@ Template Name: View Star Player
 		if ($s = $wpdb->get_row($careerstatssql)) {
 			//The Star has played a match so continue
 ?>
-			<h3>HDWSBBL Statistics</h3>
+			<h3><?php print ($bblm_league_name); ?> Statistics</h3>
 			<table>
 				<tr>
 					<th class="tbl_title">Career Total</th>

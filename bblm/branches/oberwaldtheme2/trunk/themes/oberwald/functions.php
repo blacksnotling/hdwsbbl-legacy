@@ -204,8 +204,15 @@ function oberwald_comments_link() {
 
 function oberwald_breadcrumb_root() {
 	//displays the initial tezt for all breadcrumb links
+
+	$options = get_option('bblm_config');
+	$bblm_league_name = htmlspecialchars($options['league_name'], ENT_QUOTES);
+	if ( strlen($bblm_league_name) < 1) {
+		$bblm_league_name = "league";
+	}
+
 ?>
-<a href="<?php echo home_url(); ?>" title="Back to the front of the HDWSBBL">HDWSBBL</a> &raquo;
+<a href="<?php echo home_url(); ?>" title="Back to the front of the <?php print ($bblm_league_name); ?>"><?php print ($bblm_league_name); ?></a> &raquo;
 <?php
 }
 

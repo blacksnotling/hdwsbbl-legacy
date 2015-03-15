@@ -6,6 +6,11 @@ Template Name: View Team
 *	Filename: bb.view.team.php
 *	Description: Page template to display
 */
+$options = get_option('bblm_config');
+$bblm_league_name = htmlspecialchars($options['league_name'], ENT_QUOTES);
+if ( strlen($bblm_league_name) < 1) {
+	$bblm_league_name = "league";
+}
 ?>
 <?php get_header(); ?>
 	<?php if (have_posts()) : ?>
@@ -45,7 +50,7 @@ Template Name: View Team
 			if ($oh = $wpdb->get_row($overallsql)) {
 				if (NULL == $oh->OP) {
 					$has_played = 0;
-					print("	<div class=\"info\">\n		<p>This Team has not yet made their debut in the HDWSBBL. Stay tuned to see how this team develops.</p>\n	</div>\n");
+					print("	<div class=\"info\">\n		<p>This Team has not yet made their debut in the ".$bblm_league_name.". Stay tuned to see how this team develops.</p>\n	</div>\n");
 				}
 				else {
 ?>
@@ -511,7 +516,7 @@ Template Name: View Team
 
 			$otherteamssql = 'SELECT P.post_title, P.guid FROM '.$wpdb->prefix.'team T, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE T.t_id = J.tid AND J.prefix = \'t_\' AND J.pid = P.ID AND T.t_show = 1 AND T.t_id != '.$tid.' AND T.type_id = 1 ORDER BY RAND() LIMIT 5';
 			if ($oteam = $wpdb->get_results($otherteamssql)) {
-				print("<li>\n	<h2>Other Teams in the HDWSBBL</h2>\n	<ul>\n");
+				print("<li>\n	<h2>Other Teams in the ".$bblm_league_name."</h2>\n	<ul>\n");
 				foreach ($oteam as $ot) {
 					print("	<li><a href=\"".$ot->guid."\" title=\"Read more about ".$ot->post_title."\">".$ot->post_title."</a></li>\n");
 				}

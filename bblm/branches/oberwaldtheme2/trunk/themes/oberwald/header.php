@@ -1,9 +1,16 @@
+<?php
+$options = get_option('bblm_config');
+$bblm_league_name = htmlspecialchars($options['league_name'], ENT_QUOTES);
+if ( strlen($bblm_league_name) < 1) {
+	$bblm_league_name = "league";
+}
+?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html <?php language_attributes(); ?>>
 <head profile="http://gmpg.org/xfn/11">
 <meta http-equiv="Content-Type" content="<?php bloginfo('html_type'); ?>; charset=<?php bloginfo('charset'); ?>" />
 <meta name="verify-v1" content="J9bPx/TvWuo23XUXc0nYCJFSmgUPTSk08c1uZQRsOjw=" />
-<title><?php wp_title('-','true','right'); ?> HDWSBBL</title>
+<title><?php wp_title('-','true','right'); ?> <?php print ($bblm_league_name); ?></title>
 <script type="text/javascript" src="<?php echo get_template_directory_uri(); ?>/includes/jquery.js"></script>
 <link rel="shortcut icon" href="<?php echo get_template_directory_uri(); ?>/favicon.ico" />
 <link href='http://fonts.googleapis.com/css?family=Graduate' rel='stylesheet' type='text/css'>
@@ -123,12 +130,12 @@ $(document).ready(function(){
 		<ul id="navigation">
 			<li><a href="<?php echo home_url(); ?>/news/" title="Visit the News Section">News</a></li>
 			<li><a href="<?php echo home_url(); ?>/warzone/" title="Visit the Warzone Section">Warzone</a></li>
-			<li><a href="<?php echo home_url(); ?>/teams/" title="View the teams of the HDWSBBL">Teams</a></li>
+			<li><a href="<?php echo home_url(); ?>/teams/" title="View the teams of the <?php print ($bblm_league_name); ?>">Teams</a></li>
 			<li><a href="<?php echo home_url(); ?>/competitions/" title="View the gruling competitions">Competitions</a></li>
 			<li><a href="<?php echo home_url(); ?>/matches/" title="All the results">Results</a></li>
 			<li><a href="<?php echo home_url(); ?>/stats/" title="All the Statistics">Stats</a></li>
 			<li><a href="<?php echo home_url(); ?>/fixtures/" title="View the upcoming Matches">Fixtures</a></li>
-			<li><a href="<?php echo home_url(); ?>/about/" title="About the HDWSBBL">About</a></li>
+			<li><a href="<?php echo home_url(); ?>/about/" title="About the <?php print ($bblm_league_name); ?>">About</a></li>
 		</ul>
 	</div>
 

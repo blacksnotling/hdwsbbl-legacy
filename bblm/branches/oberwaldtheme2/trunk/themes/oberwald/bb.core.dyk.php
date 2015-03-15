@@ -6,6 +6,11 @@ Template Name: Did You Know Listing.
 *	Filename: bb.core.dyk.php
 *	Description: .Page template to display the DYK listing
 */
+$options = get_option('bblm_config');
+$bblm_league_name = htmlspecialchars($options['league_name'], ENT_QUOTES);
+if ( strlen($bblm_league_name) < 1) {
+	$bblm_league_name = "league";
+}
 ?>
 <?php get_header(); ?>
 	<?php if (have_posts()) : ?>
@@ -22,7 +27,7 @@ Template Name: Did You Know Listing.
 			foreach ($dyks as $d) {
 ?>
 				<div class="dykcontainer <?php if ($d->dyk_type) { print("dyktrivia"); } else { print("dykfact"); } ?>" id="dyk<?php print($d->dyk_id); ?>">
-					<h3 class="dykheader">HDWSBBL - <?php if($d->dyk_type) { print("Did You Know"); } else { print("Fact"); } ?></h3>
+					<h3 class="dykheader"><?php print ($bblm_league_name); ?> - <?php if($d->dyk_type) { print("Did You Know"); } else { print("Fact"); } ?></h3>
 <?php
 				if ("none" !== $d->dyk_title) {
 					print("					<h4>".$d->dyk_title."</h4>\n");

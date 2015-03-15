@@ -278,7 +278,7 @@ else {
 ///////////////////////////
 ?>
 <form name="bblm_playeroptions" method="post" id="post">
-	<p>Below are all the teams in the HDWSBBL. Please select one of the options below to continue with your request.</p>
+	<p>Below are all the teams in the League. Please select one of the options below to continue with your request.</p>
 
 <?php
 
