@@ -1,11 +1,11 @@
 /*
 Name: main.css
 Purpose: Additional Styles required for the main page of the Oberwald theme
-Version: 20080707
+Version: 20140314
 */
 #main-sub {
 	float:left;
-	width:700px;
+	width:100%;
 }
 #main-sub hr {
 	height: 10px;
@@ -25,6 +25,7 @@ Version: 20080707
 	border-bottom: 1px solid #ddd;
 	padding-bottom: 3px;
 	text-indent: 24px;
+	line-height:26px;
 	background: url(images/ball.gif) no-repeat 2px 1px;
 }
 #main-sub div div ul {
@@ -32,39 +33,52 @@ Version: 20080707
 	padding: 0 0.6em 0 15px;
 	list-style-position: inside;
 }
+#main-sub .column .main-content{min-height:250px;}
+#main-sub .column div{min-height:250px;}
+
 #main-left {
 	float:left;
-	width: 220px;
+	width: 302px;
 }
 #main-middle {
 	float:left;
-	width: 235px;
-	margin-left: 10px;
+	width: 302px;
+	margin: 0 11px;
 }
 #main-right {
 	float:left;
-	width: 220px;
-	margin-left: 10px;
+	width: 302px;
 }
 /*** tab styling ***/
 
 #main-tabs {
-	width: 700px;
+	width: 100%;
 	margin-bottom: 10px;
 	display:block;
 }
 #fragments {
-	background: #ddd url(images/bg_detail.gif) top repeat-y;
+	background-image: linear-gradient(left , rgb(235,233,250) 0%, rgb(255,255,255) 72%);
+	background-image: -o-linear-gradient(left , rgb(235,233,250) 0%, rgb(255,255,255) 72%);
+	background-image: -moz-linear-gradient(left , rgb(235,233,250) 0%, rgb(255,255,255) 72%);
+	background-image: -webkit-linear-gradient(left , rgb(235,233,250) 0%, rgb(255,255,255) 72%);
+	background-image: -ms-linear-gradient(left , rgb(235,233,250) 0%, rgb(255,255,255) 72%);
+	background-image: -webkit-gradient(
+		linear,
+		left top,
+		right top,
+		color-stop(0, rgb(235,233,250)),
+		color-stop(0.72, rgb(255,255,255))
+	);
 	float:left;
-	width:550px;
+	width:700px;
 	padding:10px;
-	height: 250px;
+	height: 246px;
 	border: 1px solid #aaa;
 }
 #main-tabs #main-tabs-links {
 	background-color: #036;
 	float:right;
-	width:125px;
+	width:200px;
 	padding: 0;
 	margin: 0;
 	list-style-type: none;
@@ -80,9 +94,10 @@ Version: 20080707
 	border-left: 1px solid #000;
 	color: #accae6;
 	display: block;
-	padding: 10px 0 10px 8px;
+	padding: 13px 0 12px 8px;
 	text-decoration: none; 
 	height: 1%;
+	font-family: 'Graduate', cursive;
 }
 #main-tabs-links li.ui-tabs-selected a, #main-tabs-links li a:hover, #main-tabs-links li a:focus { 
 	background: #244f91 url(images/bg_nav_hover.jpg) top repeat-x;

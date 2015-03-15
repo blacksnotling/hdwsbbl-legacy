@@ -46,12 +46,11 @@ else {
 
 				<!-- start of #fragment-1 content -->
 			<div class="entry">
-				<h2>Latest News: <a href="<?php the_permalink() ?>" rel="bookmark" title="Permanent Link to <?php the_title(); ?>"><?php the_title(); ?></a></h2>
+				<h2>Latest News: <br /><a href="<?php the_permalink() ?>" rel="bookmark" title="Permanent Link to <?php the_title(); ?>"><?php the_title(); ?></a></h2>
 				<?php $last_news = TimeAgoInWords(strtotime($post->post_date)); ?>
 				<p class="postdate"><?php the_time('F jS, Y') ?> (<?php print($last_news); ?>) (<?php comments_popup_link('No Comments &#187;', '1 Comment &#187;', '% Comments &#187;'); ?>) <!-- by <?php the_author(); ?> --></p>
 
 				<?php the_excerpt(); ?>
-				<p class="readmorelink">Continue Reading: <a href="<?php the_permalink() ?>" rel="bookmark" title="Permanent Link to <?php the_title(); ?>"><?php the_title(); ?> &raquo;</a></p>
 
 		<?php endwhile; ?>
 		<?php endif; ?>
@@ -64,12 +63,11 @@ else {
 				<!-- start of #fragment-2 content -->
 <?php $recent = new WP_Query("cat=".$warzone_category."&showposts=1"); while($recent->have_posts()) : $recent->the_post();?>
 			<div class="entry">
-				<h2>Warzone Latest: <a href="<?php the_permalink() ?>" rel="bookmark" title="Permanent Link to <?php the_title(); ?>"><?php the_title(); ?></a></h2>
+				<h2>Warzone Latest: <br /><a href="<?php the_permalink() ?>" rel="bookmark" title="Permanent Link to <?php the_title(); ?>"><?php the_title(); ?></a></h2>
 				<?php $last_warzone = TimeAgoInWords(strtotime($post->post_date)); ?>
 				<p class="postdate"><?php the_time('F jS, Y') ?> (<?php print($last_warzone); ?>) (<?php comments_popup_link('No Comments &#187;', '1 Comment &#187;', '% Comments &#187;'); ?>) <!-- by <?php the_author(); ?> --></p>
 
 				<?php the_excerpt(); ?>
-				<p class="readmorelink">Continue Reading: <a href="<?php the_permalink() ?>" rel="bookmark" title="Permanent Link to <?php the_title(); ?>"><?php the_title(); ?> &raquo;</a></p>
 
 			</div>
 <?php endwhile; ?>
@@ -224,24 +222,6 @@ else {
 		<p><a href="<?php echo home_url(); ?>/news/" title="View full News Archive">View full News Archive &raquo;</a></p>
 		</div>
 
-		<div class="main-content">
-		<h2>News Archive</h2>
-			<select name="archive-dropdown" onChange='document.location.href=this.options[this.selectedIndex].value;'>
-				<option value=""><?php echo attribute_escape(__('Select Month')); ?></option>
-				<?php wp_get_archives('type=monthly&format=option&show_post_count=1'); ?> </select>
-		</div>
-
-		<div class="main-content">
-		<h2>News Topics</h2>
-		<form action="<?php echo home_url(); ?>/" method="get">
-<?php
-	$select = wp_dropdown_categories('orderby=name&hide_empty=1&exclude=13&depth=1&echo=0');
-	$select = preg_replace("#<select([^>]*)>#", "<select$1 onchange='return this.form.submit()'>", $select);
-	echo $select;
-?>
-	<noscript><input type="submit" value="View" /></noscript>
-	</form>
-		</div>
 	</div><!-- end of main-left-->
 
 	<div id="main-middle" class="column">
@@ -264,13 +244,6 @@ else {
 		<p><a href="<?php echo home_url(); ?>/warzone/" title="View full Warzone archive">View full Warzone Archive &raquo;</a></p>
 		</div>
 
-		<div class="main-content">
-		<h2>RSS Feeds</h2>
-		<ul>
-			<li><a href="<?php bloginfo('rss2_url'); ?>">News</a></li>
-			<li><a href="<?php bloginfo('comments_rss2_url'); ?>">Comments</a></li>
-		</ul>
-		</div>
 
 	</div><!-- end of main-middle-->
 
@@ -281,39 +254,9 @@ else {
 		<!-- note, no container div due to widget printing them -->
 			<?php widget_bblm_listcomps(array()) ?>
 
-
-		<div class="main-content">
-		<h2>Other Content</h2>
-			<ul>
-<?php
-			$options = get_option('widget_bblm_othertopics');
-			$topics = $options['topics'];
-
-			$url_parts = parse_url(get_bloginfo('home'));
-			wp_list_pages('sort_column=menu_order&title_li=&include='.$topics ); ?>
-
-			</ul>
-		</div>
-
-		<div class="main-content">
-		<h2>Search Box</h2>
-			<p><?php include (TEMPLATEPATH . '/searchform.php'); ?></p>
-		</div>
-
-<!--		<div class="main-content">
-		<h2>Featured Player</h2>
-		</div> -->
-
 	</div><!-- end of main-right-->
 
 </div><!-- end of #main-sub -->
-
-<?php
-		//Did You Know Display Code
-		if (function_exists(bblm_display_dyk)) {
-			bblm_display_dyk();
-		}
-?>
 
 </div><!-- end of #maincontent -->
 
