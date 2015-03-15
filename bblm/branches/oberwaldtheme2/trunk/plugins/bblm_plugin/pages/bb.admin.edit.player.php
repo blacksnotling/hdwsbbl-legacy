@@ -105,7 +105,7 @@ else {
 		else {
 			print("Player has been Removed from the team. Farewell.");
 		}
- 		print(" <a href=\".echo home_url()."/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.edit.player.php&action=select&item=none&id=".$bblm_player."\" title=\"View the list of players on the team\">Select another player</a> from this team");
+ 		print(" <a href=\".home_url()."/wp-admin/admin.php?page=bblm_plugin/pages/bb.admin.edit.player.php&action=select&item=none&id=".$bblm_player."\" title=\"View the list of players on the team\">Select another player</a> from this team");
 	}
 	else {
 		print("Something went wrong");
@@ -184,7 +184,7 @@ $playersql = "UPDATE `'.$wpdb->prefix.'player` SET `pos_id` = '".$_POST['bblm_po
 
 		$linksql = "SELECT J.pid FROM ".$wpdb->prefix."player P, ".$wpdb->prefix."bb2wp J WHERE P.p_id = J.tid AND J.prefix = 'p_' AND P.p_id = ".$_POST['bblm_player'];
 	$wppage_id = $wpdb->get_var($linksql);
-		print("Journeyman has been hired. You may wish to <a href=\"".get_bloginfo('wpurl')."/wp-admin/page.php?action=edit&post=".$wppage_id."\" title=\"Edit the players description\">edit the players description</a> to take this into account!");
+		print("Journeyman has been hired. You may wish to <a href=\"".echo home_url()."/wp-admin/page.php?action=edit&post=".$wppage_id."\" title=\"Edit the players description\">edit the players description</a> to take this into account!");
 	}
 	else {
 		print("Something went wrong");

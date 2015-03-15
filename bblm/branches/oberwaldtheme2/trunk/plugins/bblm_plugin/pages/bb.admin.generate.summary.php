@@ -46,7 +46,7 @@ if(isset($_POST['bblm_sum_create'])) {
 		$bblm_page_slug = sanitize_title("s".$_POST['bblm_sseano']."-wk".$_POST['bblm_sweekno']."-".$bblm_safe_input['stitle']);
 
 		//generate GUID
-		$bblm_guid = get_bloginfo('wpurl');
+		$bblm_guid = home_url();
 		$bblm_guid .= "/warzone/";
 		$bblm_guid .= $bblm_page_slug;
 
@@ -61,7 +61,6 @@ if(isset($_POST['bblm_sum_create'])) {
 
 		//Finally, we construct the sql
 		$postsql = 'INSERT INTO '.$wpdb->posts.' (`ID`, `post_author`, `post_date`, `post_date_gmt`, `post_content`, `post_title`, `post_category`, `post_excerpt`, `post_status`, `comment_status`, `ping_status`, `post_password`, `post_name`, `to_ping`, `pinged`, `post_modified`, `post_modified_gmt`, `post_content_filtered`, `post_parent`, `guid`, `menu_order`, `post_type`, `post_mime_type`, `comment_count`) VALUES (\'\', \''.$user_ID.'\', \''.$bblm_date_now.'\', \''.$bblm_date_now.'\', \''.$bblm_page_content.'\', \''.$bblm_page_title.'\', \'0\', \'\', \'draft\', \'open\', \'open\', \'\', \''.$bblm_page_slug.'\', \'\', \'\', \''.$bblm_date_now.'\', \''.$bblm_date_now.'\', \'\', \'0\', \''.$bblm_guid.'\', \'0\', \'post\', \'\', \'0\')';
-		//print("<p>".$postsql."</p>");
 
 		if (FALSE !== $wpdb->query($postsql)) {
 			$bblm_post_number = $wpdb->insert_id;//captured from SQL string
