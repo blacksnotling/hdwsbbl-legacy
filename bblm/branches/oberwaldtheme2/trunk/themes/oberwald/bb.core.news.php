@@ -6,13 +6,18 @@ Template Name: News Front Page
 *	Filename: bb.core.news.php
 *	Description: The Template for the front page of the news section
 */
+$options = get_option('bblm_config');
+$bblm_league_name = htmlspecialchars($options['league_name'], ENT_QUOTES);
+if ( strlen($bblm_league_name) < 1) {
+	$bblm_league_name = "league";
+}
 ?>
 <?php get_header(); ?>
 	<?php if (have_posts()) : ?>
 
 		<h2>Latest News</h2>
 		<div id="breadcrumb">
-			<p><a href="<?php echo home_url(); ?>" title="Back to the front of the HDWSBBL">HDWSBBL</a> &raquo; News</p>
+			<p><a href="<?php echo home_url(); ?>" title="Back to the front of the <?php print ($bblm_league_name); ?>"><?php print ($bblm_league_name); ?></a> &raquo; News</p>
 		</div>
 		<ul class="subnav">
 			<li><a href="<?php echo home_url(); ?>/page/2/" title="View Previous News Items">&laquo; Previous Entries</a></li>

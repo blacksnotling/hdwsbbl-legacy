@@ -80,7 +80,7 @@ if(isset($_POST['bblm_stadium_submit'])) {
 
 
 	<h3>Existing Stadiums</h3>
-	<p>The following Stadiums already exist in the HDWSBBL:</p>
+	<p>The following Stadiums already exist in the League:</p>
 	<?php
 	$namesql = 'SELECT S.* FROM '.$wpdb->prefix.'stadium S, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P WHERE S.stad_id = J.tid AND J.prefix = \'stad_\' AND J.pid = P.ID ORDER BY S.stad_name';
 	if ($names = $wpdb->get_results($namesql)) {

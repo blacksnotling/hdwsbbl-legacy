@@ -6,6 +6,11 @@ Template Name: List Awards
 *	Filename: bb.core.awards.php
 *	Description: Page template to display the Awards of the league
 */
+$options = get_option('bblm_config');
+$bblm_league_name = htmlspecialchars($options['league_name'], ENT_QUOTES);
+if ( strlen($bblm_league_name) < 1) {
+	$bblm_league_name = "league";
+}
 ?>
 <?php get_header(); ?>
 	<?php if (have_posts()) : ?>
@@ -163,7 +168,7 @@ Template Name: List Awards
 				} // end of for each
 			}
 			else {
-				print("	<div class=\"info\">\n		<p>There are currently no awards to be won in the HDWSBBL!</p>\n	</div>\n");
+				print("	<div class=\"info\">\n		<p>There are currently no awards to be won in the ".$bblm_league_name."!</p>\n	</div>\n");
 			}
 ?>
 					<p class="postmeta"><?php edit_post_link('Edit', ' <strong>[</strong> ', ' <strong>]</strong> '); ?></p>

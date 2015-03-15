@@ -1,5 +1,11 @@
 <?php
 global $wp;
+
+$options = get_option('bblm_config');
+$bblm_league_name = htmlspecialchars($options['league_name'], ENT_QUOTES);
+if ( strlen($bblm_league_name) < 1) {
+	$bblm_league_name = "league";
+}
 /*	print("<pre>");
 	print_r($wp);
 	print("</pre>");*/
@@ -38,7 +44,7 @@ else {
 
 ?>
 
-		<h2>Welcome to the HDWSBBL</h2>
+		<h2>Welcome to the <?php print ($bblm_league_name); ?></h2>
 
 		<div id="main-tabs">
 			<div id="fragments">

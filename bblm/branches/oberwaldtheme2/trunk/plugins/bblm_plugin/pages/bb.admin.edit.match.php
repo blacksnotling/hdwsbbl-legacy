@@ -167,7 +167,7 @@ if (isset($_POST['bblm_comment_edit'])) {
 	else {
 		//Display main form
 ?>
-	<p>Below is a list of matches in the HDWSBBL. Select the match title to edit the report or use the other links to edit the Coaches comments or match trivia.</p>
+	<p>Below is a list of matches in the League. Select the match title to edit the report or use the other links to edit the Coaches comments or match trivia.</p>
 
 <?php
 		$matchsql = 'SELECT UNIX_TIMESTAMP(M.m_date) AS mdate, M.m_id, M.m_gate, M.m_teamAtd, M.m_teamBtd, M.m_teamAcas, M.m_teamBcas, P.guid, P.post_title, S.sea_name, C.c_name, Z.guid AS cguid, D.div_name, P.ID, M.m_id FROM '.$wpdb->prefix.'match M, '.$wpdb->prefix.'comp C, '.$wpdb->prefix.'season S, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' P, '.$wpdb->prefix.'division D, '.$wpdb->prefix.'bb2wp Y, '.$wpdb->posts.' Z WHERE C.c_id = Y.tid AND Y.prefix = \'c_\' AND Y.pid = Z.ID AND M.div_id = D.div_id AND C.sea_id = S.sea_id AND M.c_id = C.c_id AND M.m_id = J.tid AND J.prefix = \'m_\' AND J.pid = P.ID ORDER BY S.sea_id DESC, M.c_id DESC, D.div_id ASC, M.m_date DESC';

@@ -673,7 +673,7 @@ else if ("edit" == $_GET['action']) {
 				//No match result was returned. We still need to establish team id
 				$playerdetailssql = 'SELECT Z.post_title, Y.pos_name, P.t_id FROM '.$wpdb->prefix.'player P, '.$wpdb->prefix.'position Y, '.$wpdb->prefix.'bb2wp J, '.$wpdb->posts.' Z WHERE P.p_id = J.tid AND J.prefix = \'p_\' AND J.pid = Z.ID AND Y.pos_id = P.pos_id AND P.p_id = '.$pid;
 				$pd = $wpdb->get_row($playerdetailssql);
-				print(" <tr>\n  	<td>".$pd->post_title."</td>\n  	<td>".$pd->pos_name."</td>\n  	<td colspan=\"7\">According to the HDWSBBL Archives, this player has done Nothing!</td>\n </tr>\n			</tbody>\n		</table>\n");
+				print(" <tr>\n  	<td>".$pd->post_title."</td>\n  	<td>".$pd->pos_name."</td>\n  	<td colspan=\"7\">According to the League Archives, this player has done Nothing!</td>\n </tr>\n			</tbody>\n		</table>\n");
 				$t_id = $pd->t_id;
 
 			}
