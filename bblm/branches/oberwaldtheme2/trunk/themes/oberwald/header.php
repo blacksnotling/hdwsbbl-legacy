@@ -110,7 +110,7 @@ $(document).ready(function(){
 <?php
 	if(is_home()){ ?>
 <div id="home-wrapper">
-<?php	}else if ($ismainpage) {
+<?php	}else if (isset($ismainpage)) {
 ?>
 <div id="main-wrapper">
 <?php
